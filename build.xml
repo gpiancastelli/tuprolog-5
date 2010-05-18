@@ -1,0 +1,224 @@
+<?xml version="1.0"?>
+
+<project name="tuProlog-5" default="do-release">
+	
+	<property name="tuprolog.version" value="2.1.1"/>
+
+	<target name="test">
+		<junit printsummary="on">
+			<classpath>
+				<pathelement location="${classes.dir}"/>
+			</classpath>
+			<batchtest fork="yes">
+				<fileset dir="${test.src.dir}/unit">
+					<include name="**/*TestCase.java"/>
+				</fileset>
+			</batchtest>
+			<!-- Not sure these two will work... -->
+			<batchtest fork="yes">
+				<fileset dir="${test.src.dir}/iso">
+					<include name="ISOAcceptanceSuite.java"/>
+				</fileset>
+			</batchtest>
+			<batchtest fork="yes">
+				<fileset dir="${test.src.dir}/other">
+					<include name="OtherPredicatesSuite.java"/>
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+
+	<property name="classes.dir" value="bin"/>
+
+	<property name="test.src.dir" value="test"/>	
+	
+	<property name="src.dir" value="src"/>
+	<property name="build.dir" value="build"/>
+
+	<property name="alice.tuprolog.package" value="alice/tuprolog"/>
+	<property name="alice.util.package" value="alice/util"/>
+
+	<target name="compile">
+		<mkdir dir="${build.dir}"/>
+		<javac srcdir="${src.dir}" destdir="${build.dir}" />
+	</target>
+
+	<target name="build" depends="compile">
+		<tstamp/>
+		<jar jarfile="2p-${tuprolog.version}-${DSTAMP}.jar">
+			<fileset dir="${build.dir}" />
+			<fileset dir="${src.dir}">
+				<include name="**/*.gif" />
+				<include name="**/*.png" />
+			</fileset>
+			<manifest>
+				<attribute name="Main-Class" value="alice.tuprolog.ui.CUIConsole" />
+			</manifest>
+		</jar>
+		<delete dir="${build.dir}"/>
+	</target>
+
+	<!-- TODO Revision the whole Ant buildfile! -->
+
+	<property name="release.dir" value="release"/>
+	<property name="install.dir" value="${release.dir}"/>
+
+	<property name="2p.jar.name" value="2p.jar"/>
+	<property name="applet.jar.name" value="tuprolog-applet.jar"/>
+	<property name="tuprolog.jar.name" value="tuprolog.jar"/>
+	<property name="tuprolog.ide.jar.name" value="tuprolog-ide.jar"/>
+	<property name="tuprolog.extensions.jar.name" value="tuprolog-extensions.jar"/>
+	<property name="jar.dest.dir" value="${release.dir}/lib"/>
+
+	<property name="alice.tuprologx.runtime.package" value="alice/tuprologx/runtime"/>
+
+	<property name="keystore.alias" value="gpiancastelli"/>
+	<property name="keystore.password" value="myKeyStore"/>
+	<property name="keystore.store" value="myKeyStore"/>
+	<property name="keystore.alias.password" value="gpiancastelli"/>
+
+	<property name="doc.src.dir" value="src/doc/java"/>
+	<property name="doc.dest.dir" value="${release.dir}/doc"/>
+	<property name="doc.tuprolog.guide" value="tuprolog-guide.pdf"/>
+	<property name="doc.api.dest.dir" value="${doc.dest.dir}/api"/>
+	
+	<target name="prepare-release" depends="compile">
+		<mkdir dir="${release.dir}"/>
+		<mkdir dir="${doc.dest.dir}"/>
+		<mkdir dir="${doc.api.dest.dir}"/>
+		<mkdir dir="${jar.dest.dir}"/>
+		
+		<mkdir dir="${release.dir}/src"/>
+		<mkdir dir="${release.dir}/test"/>
+	</target>
+
+	<target name="complete-download">
+		<jar jarfile="${jar.dest.dir}/${2p.jar.name}">
+			<fileset dir="${build.dir}"/>
+			<fileset dir="${src.dir}">
+				<include name="**/*.gif"/>
+				<include name="**/*.png"/>
+			</fileset>
+			<manifest>
+				<attribute name="Main-Class" value="alice.tuprologx.ide.GUILauncher"/>
+			</manifest>
+		</jar>
+		<copy file="${doc.src.dir}/${doc.tuprolog.guide}" todir="${doc.dest.dir}"/>
+		<javadoc packagenames="alice.tuprolog.*"
+                 excludepackagenames="alice.tuprolog.lib"
+			     sourcepath="${src.dir}"
+			     destdir="${doc.api.dest.dir}"/>
+		<copy todir="${release.dir}/src">
+			<fileset dir="${src.dir}">
+				<include name="**"/>
+			</fileset>
+		</copy>
+		<copy todir="${release.dir}/test">
+			<fileset dir="src/test/java/">
+				<exclude name="lib/**"/>
+			</fileset>
+		</copy>
+		<copy todir="${release.dir}">
+			<fileset dir=".">
+				<include name="CHANGELOG"/>
+				<include name="COPYRIGHT"/>
+				<include name="LICENSE"/>
+			</fileset>
+		</copy>
+		<zip destfile="${release.dir}/2p-${tuprolog.version}.zip">
+			<fileset dir="${release.dir}"/>
+		</zip>
+	</target>
+
+	<target name="applet-library">
+		<jar jarfile="${install.dir}/${applet.jar.name}">
+			<fileset dir="${classes.dir}"/>
+		</jar>
+		<signjar jar="${install.dir}/${applet.jar.name}"
+             alias="${keystore.alias}"
+             storepass="${keystore.password}"
+             keystore="${keystore.store}"
+             keypass="${keystore.alias.password}"
+    />
+	</target>
+
+	<target name="jws-library">
+		<jar jarfile="${jar.dest.dir}/${tuprolog.jar.name}">
+			<fileset dir="${build.dir}">
+				<include name="${alice.tuprolog.package}/**/*.class"/>
+				<include name="${alice.util.package}/*.class"/>
+			</fileset>
+		</jar>
+		<jar jarfile="${jar.dest.dir}/${tuprolog.ide.jar.name}">
+			<fileset dir="${build.dir}">
+				<include name="${alice.tuprologx.ide.package}/*.class"/>
+				<include name="${alice.util.jedit.package}/*.class"/>
+			</fileset>
+			<fileset dir="${src.dir}">
+				<include name="${alice.tuprologx.ide.package}/**/*.gif"/>
+				<include name="${alice.tuprologx.ide.package}/**/*.png"/>
+			</fileset>
+			<manifest>
+				<attribute name="Main-Class" value="alice.tuprologx.ide.GUILauncher"/>
+			</manifest>
+		</jar>
+		<jar jarfile="${jar.dest.dir}/${tuprolog.extensions.jar.name}">
+			<fileset dir="${build.dir}">
+				<include name="${alice.tuprologx.runtime.package}/**/*.class"/>
+			</fileset>
+		</jar>
+
+		<signjar jar="${jar.dest.dir}/${tuprolog.jar.name}"
+             alias="${keystore.alias}"
+             storepass="${keystore.password}"
+             keystore="${keystore.store}"
+             keypass="${keystore.alias.password}"
+		/>
+		<signjar jar="${jar.dest.dir}/${tuprolog.ide.jar.name}"
+             alias="${keystore.alias}"
+             storepass="${keystore.password}"
+             keystore="${keystore.store}"
+             keypass="${keystore.alias.password}"
+		/>
+		<signjar jar="${jar.dest.dir}/${tuprolog.extensions.jar.name}"
+             alias="${keystore.alias}"
+             storepass="${keystore.password}"
+             keystore="${keystore.store}"
+             keypass="${keystore.alias.password}"
+		/>
+	</target>
+
+	<target name="jws-and-applet" depends="applet-library,jws-library">
+		<zip destfile="${release.dir}/jwsAndApplet.zip">
+			<fileset dir=".">
+				<include name="${install.dir}/${applet.jar.name}"/>
+				<include name="${install.dir}/${tuprolog.ide.jar.name}"/>
+				<include name="${install.dir}/${tuprolog.extensions.jar.name}"/>
+				<include name="${install.dir}/${tuprolog.jar.name}"/>
+				<include name="Download.shtml"/>
+				<include name="images/**"/>
+				<include name="tuprolog.jnlp"/>
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="build-src">
+		<tstamp/>
+		<zip destfile="2p-src-${tuprolog.version}-${DSTAMP}.zip">
+			<fileset dir=".">
+				<include name="${src.dir}/**"/>
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="do-applet" depends="compile,applet-library"/>
+	<target name="do-jws" depends="compile,jws-library"/>
+
+	<target name="do-release" depends="prepare-release,jws-library,complete-download"/>
+	
+	<target name="clean-release">
+		<delete dir="${build.dir}"/>
+		<delete dir="${release.dir}"/>
+	</target>
+
+</project>

@@ -1,0 +1,25 @@
+tuProlog-5 is a rewriting exercise: a port of tuProlog's code from Java 1.4 to
+Java 5/6. In the process, occasional reorganization and bug fixing may happen,
+whenever I feel it as the appropriate thing to do. There is no plan to add new
+features.
+
+This is not an attempt to fork, displace, or take over the development of
+tuProlog. It is just a personal programming exercise, useful to help myself
+learning the "new" features of Java 5 by putting them in practice on a
+familiar code base. Nonetheless the repository is public, because this porting
+effort could be interesting for others, too.
+
+tuProlog-5 starts from the source code of tuProlog 2.1.1. This is the last
+version I helped releasing, so it is the one I know better. A proper change
+log will be filled on the project wiki hosted by Github.
+
+tuProlog-5 is not in any way endorsed by tuProlog's development team or
+related to tuProlog's main development line. Bug reports, feature requests,
+&c. regarding tuProlog must be sent to SourceForge:
+
+<http://sourceforge.net/projects/tuprolog>
+
+either on trackers or on the mailing list. Questions, comments, and any kind
+of feedback strictly regarding tuProlog-5 should be addressed to:
+
+<giulio.piancastelli@gmail.com>
