@@ -10,7 +10,9 @@ be interesting for others, too.
 
 tuProlog-5 starts from the source code of tuProlog 2.1.1. This is the last
 version I helped releasing, so it is the one I know better. A proper change
-log will be filled on the project wiki hosted by Github.
+log will be filled on the project wiki hosted by Github:
+
+<http://wiki.github.com/gpiancastelli/tuprolog-5>
 
 tuProlog-5 is not in any way endorsed by tuProlog's development team or
 related to tuProlog's main development line. Bug reports, feature requests,
