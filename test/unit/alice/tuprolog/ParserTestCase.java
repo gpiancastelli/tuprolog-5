@@ -1,21 +1,27 @@
 package alice.tuprolog;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
-public class ParserTestCase extends TestCase {
+import org.junit.Ignore;
+import org.junit.Test;
+
+public class ParserTestCase {
 	
-	public void testReadingTerms() throws InvalidTermException {
+	@Test public void readingTerms() throws InvalidTermException {
 		Parser p = new Parser("hello.");
 		Struct result = new Struct("hello");
 		assertEquals(result, p.nextTerm(true));
 	}
 	
-	public void testReadingEOF() throws InvalidTermException {
+	@Test public void readingEOF() throws InvalidTermException {
 		Parser p = new Parser("");
 		assertNull(p.nextTerm(false));
 	}
 	
-	public void testUnaryPlusOperator() {
+	@Test public void unaryPlusOperator() {
 		Parser p = new Parser("n(+100).\n");
         // SICStus Prolog interprets "n(+100)" as "n(100)"
 		// GNU Prolog interprets "n(+100)" as "n(+(100))"
@@ -26,7 +32,7 @@ public class ParserTestCase extends TestCase {
 		} catch (InvalidTermException e) {}
 	}
 	
-	public void testUnaryMinusOperator() throws InvalidTermException {
+	@Test public void unaryMinusOperator() throws InvalidTermException {
 		Parser p = new Parser("n(-100).\n");
 		// TODO Check the interpretation by other engines
 		// SICStus Prolog interprets "n(+100)" as "n(100)"
@@ -37,33 +43,33 @@ public class ParserTestCase extends TestCase {
 		assertEquals(result, p.nextTerm(true));
 	}
 	
-	public void testBinaryMinusOperator() throws InvalidTermException {
+	@Test public void binaryMinusOperator() throws InvalidTermException {
 		String s = "abs(3-11)";
 		Parser p = new Parser(s);
 		Struct result = new Struct("abs", new Struct("-", new Int(3), new Int(11)));
 		assertEquals(result, p.nextTerm(false));
 	}
 	
-	public void testListWithTail() throws InvalidTermException {
+	@Test public void listWithTail() throws InvalidTermException {
 		Parser p = new Parser("[p|Y]");
 		Struct result = new Struct(new Struct("p"), new Var("Y"));
 		result.resolveTerm();
 		assertEquals(result, p.nextTerm(false));
 	}
 	
-	public void testBraces() throws InvalidTermException {
+	@Test public void braces() throws InvalidTermException {
 		String s = "{a,b,[3,{4,c},5],{a,b}}";
 		Parser parser = new Parser(s);
 		assertEquals(s, parser.nextTerm(false).toString());
 	}
 	
-	public void testUnivOperator() throws InvalidTermException {
+	@Test public void univOperator() throws InvalidTermException {
 		Parser p = new Parser("p =.. q.");
 		Struct result = new Struct("=..", new Struct("p"), new Struct("q"));
 		assertEquals(result, p.nextTerm(true));
 	}
 	
-	public void testDotOperator() throws InvalidTermException {
+	@Test public void dotOperator() throws InvalidTermException {
 		String s = "class('java.lang.Integer').'MAX_VALUE'";
 		DefaultOperatorManager om = new DefaultOperatorManager();
 		om.opNew(".", "xfx", 600);
@@ -73,7 +79,7 @@ public class ParserTestCase extends TestCase {
 		assertEquals(result, p.nextTerm(false));
 	}
 	
-	public void testBracketedOperatorAsTerm() throws InvalidTermException {
+	@Test public void bracketedOperatorAsTerm() throws InvalidTermException {
 		String s = "u (b1) b2 (b3)";
 		DefaultOperatorManager om = new DefaultOperatorManager();
 		om.opNew("u", "fx", 200);
@@ -85,7 +91,7 @@ public class ParserTestCase extends TestCase {
 		assertEquals(result, p.nextTerm(false));
 	}
 	
-	public void testBracketedOperatorAsTerm2() throws InvalidTermException {
+	@Test public void bracketedOperatorAsTerm2() throws InvalidTermException {
 		String s = "(u) b1 (b2) b3 a";
 		DefaultOperatorManager om = new DefaultOperatorManager();
 		om.opNew("u", "fx", 200);
@@ -97,7 +103,7 @@ public class ParserTestCase extends TestCase {
 		assertEquals(result, p.nextTerm(false));
 	}
 	
-	public void testIntegerBinaryRepresentation() throws InvalidTermException {
+	@Test public void integerBinaryRepresentation() throws InvalidTermException {
 		String n = "0b101101";
 		Parser p = new Parser(n);
 		alice.tuprolog.Number result = new Int(45);
@@ -109,7 +115,7 @@ public class ParserTestCase extends TestCase {
 		} catch (InvalidTermException expected) {}
 	}
 	
-	public void testIntegerOctalRepresentation() throws InvalidTermException {
+	@Test public void integerOctalRepresentation() throws InvalidTermException {
 		String n = "0o77351";
 		Parser p = new Parser(n);
 		alice.tuprolog.Number result = new Int(32489);
@@ -121,7 +127,7 @@ public class ParserTestCase extends TestCase {
 		} catch (InvalidTermException expected) {}
 	}
 	
-	public void testIntegerHexadecimalRepresentation() throws InvalidTermException {
+	@Test public void integerHexadecimalRepresentation() throws InvalidTermException {
 		String n = "0xDECAF";
 		Parser p = new Parser(n);
 		alice.tuprolog.Number result = new Int(912559);
@@ -133,21 +139,21 @@ public class ParserTestCase extends TestCase {
 		} catch (InvalidTermException expected) {}
 	}
 	
-	public void testEmptyDCGAction() throws InvalidTermException {
+	@Test public void emptyDCGAction() throws InvalidTermException {
 		String s = "{}";
 		Parser p = new Parser(s);
 		Struct result = new Struct("{}");
 		assertEquals(result, p.nextTerm(false));
 	}
 	
-	public void testSingleDCGAction() throws InvalidTermException {
+	@Test public void singleDCGAction() throws InvalidTermException {
 		String s = "{hello}";
 		Parser p = new Parser(s);
 		Struct result = new Struct("{}", new Struct("hello"));
 		assertEquals(result, p.nextTerm(false));
 	}
 	
-	public void testMultipleDCGAction() throws InvalidTermException {
+	@Test public void multipleDCGAction() throws InvalidTermException {
 		String s = "{a, b, c}";
 		Parser p = new Parser(s);
 		Struct result = new Struct("{}",
@@ -156,18 +162,18 @@ public class ParserTestCase extends TestCase {
 		assertEquals(result, p.nextTerm(false));
 	}
 	
-	// This is an error both in 2.0.1 and in 2.1... don't know why, though.
-//	public void testDCGActionWithOperators() throws Exception {
-//        String input = "{A =.. B, hotel, 2}";
-//        Struct result = new Struct("{}",
-//                            new Struct(",", new Struct("=..", new Var("A"), new Var("B")),
-//                                new Struct(",", new Struct("hotel"), new Int(2))));
-//        result.resolveTerm();
-//        Parser p = new Parser(input);
-//        assertEquals(result, p.nextTerm(false));
-//	}
+	@Ignore("This is an error both in 2.0.1 and in 2.1... don't know why, though.")
+	@Test public void dcgActionWithOperators() throws Exception {
+        String input = "{A =.. B, hotel, 2}";
+        Struct result = new Struct("{}",
+                            new Struct(",", new Struct("=..", new Var("A"), new Var("B")),
+                                new Struct(",", new Struct("hotel"), new Int(2))));
+        result.resolveTerm();
+        Parser p = new Parser(input);
+        assertEquals(result, p.nextTerm(false));
+	}
 	
-	public void testMissingDCGActionElement() {
+	@Test public void missingDCGActionElement() {
 		String s = "{1, 2, , 4}";
 		Parser p = new Parser(s);
 		try {
@@ -176,7 +182,7 @@ public class ParserTestCase extends TestCase {
 		} catch (InvalidTermException expected) {}
 	}
 	
-	public void testDCGActionCommaAsAnotherSymbol() {
+	@Test public void dcgActionCommaAsAnotherSymbol() {
 		String s = "{1 @ 2 @ 4}";
 		Parser p = new Parser(s);
 		try {
@@ -185,7 +191,7 @@ public class ParserTestCase extends TestCase {
 		} catch (InvalidTermException expected) {}
 	}
 	
-	public void testUncompleteDCGAction() {
+	@Test public void uncompleteDCGAction() {
 		String s = "{1, 2,}";
 		Parser p = new Parser(s);
 		try {
@@ -201,7 +207,7 @@ public class ParserTestCase extends TestCase {
 		} catch (InvalidTermException expected) {}
 	}
 
-	public void testMultilineComments() throws InvalidTermException {
+	@Test public void multilineComments() throws InvalidTermException {
 		String theory = "t1." + "\n" +
 		                "/*" + "\n" +
 		                "t2" + "\n" +
@@ -212,7 +218,7 @@ public class ParserTestCase extends TestCase {
 		assertEquals(new Struct("t3"), p.nextTerm(true));
 	}
 	
-	public void testSingleQuotedTermWithInvalidLineBreaks() {
+	@Test public void singleQuotedTermWithInvalidLineBreaks() {
 		String s = "out('"+
 		           "can_do(X).\n"+
 		           "can_do(Y).\n"+

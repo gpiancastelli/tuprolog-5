@@ -1,6 +1,3 @@
-/**
- * 
- */
 package alice.tuprolog;
 
 import alice.tuprolog.event.WarningEvent;

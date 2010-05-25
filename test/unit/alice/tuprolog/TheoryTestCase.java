@@ -1,17 +1,20 @@
 package alice.tuprolog;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-public class TheoryTestCase extends TestCase {
+import org.junit.Test;
 
-	public void testToStringWithParenthesis() throws InvalidTheoryException {
+public class TheoryTestCase {
+
+	@Test public void toStringWithParenthesis() throws InvalidTheoryException {
 		String before = "a :- b, (d ; e).";
 		Theory theory = new Theory(before);
 		String after = theory.toString();
 		assertEquals(theory.toString(), new Theory(after).toString());
 	}
 	
-	public void testAppendClauseLists() throws InvalidTheoryException, MalformedGoalException {
+	@Test public void appendClauseLists() throws InvalidTheoryException, MalformedGoalException {
 		Term[] clauseList = new Term[] {new Struct("p"), new Struct("q"), new Struct("r")};
 		Term[] otherClauseList = new Term[] {new Struct("a"), new Struct("b"), new Struct("c")};
 		Theory theory = new Theory(new Struct(clauseList));

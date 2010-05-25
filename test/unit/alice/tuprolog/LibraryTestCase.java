@@ -1,10 +1,13 @@
 package alice.tuprolog;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-public class LibraryTestCase extends TestCase {
+import org.junit.Test;
+
+public class LibraryTestCase {
 	
-	public void testLibraryFunctor() throws PrologException {
+	@Test public void libraryFunctor() throws PrologException {
 		Prolog engine = new Prolog();
 		engine.loadLibrary(new TestLibrary());
 		SolveInfo goal = engine.solve("N is sum(1, 3).");
@@ -12,7 +15,7 @@ public class LibraryTestCase extends TestCase {
 		assertEquals(new Int(4), goal.getVarValue("N"));
 	}
 	
-	public void testLibraryPredicate() throws PrologException {
+	@Test public void libraryPredicate() throws PrologException {
 		Prolog engine = new Prolog();
 		engine.loadLibrary(new TestLibrary());
 		TestOutputListener l = new TestOutputListener();

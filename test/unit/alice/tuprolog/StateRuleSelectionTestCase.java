@@ -1,10 +1,12 @@
 package alice.tuprolog;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertTrue;
 
-public class StateRuleSelectionTestCase extends TestCase {
+import org.junit.Test;
+
+public class StateRuleSelectionTestCase {
 	
-	public void testUnknownPredicateInQuery() throws MalformedGoalException {
+	@Test public void unknownPredicateInQuery() throws MalformedGoalException {
 		Prolog engine = new Prolog();
 		TestWarningListener warningListener = new TestWarningListener();
 		engine.addWarningListener(warningListener);
@@ -14,7 +16,7 @@ public class StateRuleSelectionTestCase extends TestCase {
 		assertTrue(warningListener.warning.indexOf("is unknown") > 0);
 	}
 	
-	public void testUnknownPredicateInTheory() throws InvalidTheoryException, MalformedGoalException {
+	@Test public void unknownPredicateInTheory() throws InvalidTheoryException, MalformedGoalException {
 		Prolog engine = new Prolog();
 		TestWarningListener warningListener = new TestWarningListener();
 		engine.addWarningListener(warningListener);

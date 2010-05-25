@@ -1,34 +1,38 @@
 package alice.tuprolog;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-public class DoubleTestCase extends TestCase {
+import org.junit.Ignore;
+import org.junit.Test;
+
+public class DoubleTestCase {
 	
-	public void testIsAtomic() {
+	@Test public void isAtomic() {
 		assertTrue(new alice.tuprolog.Double(0).isAtomic());
 	}
 	
-	public void testIsAtom() {
+	@Test public void isAtom() {
 		assertFalse(new alice.tuprolog.Double(0).isAtom());
 	}
 	
-	public void testIsCompound() {
+	@Test public void isCompound() {
 		assertFalse(new alice.tuprolog.Double(0).isCompound());
 	}
 	
-	public void testEqualsToStruct() {
+	@Test public void equalsToStruct() {
 		alice.tuprolog.Double zero = new alice.tuprolog.Double(0);
 		Struct s = new Struct();
 		assertFalse(zero.equals(s));
 	}
 	
-	public void testEqualsToVar() throws InvalidTermException {
+	@Test public void equalsToVar() throws InvalidTermException {
 		alice.tuprolog.Double one = new alice.tuprolog.Double(1);
 		Var x = new Var("X");
 		assertFalse(one.equals(x));
 	}
 	
-	public void testEqualsToDouble() {
+	@Test public void equalsToDouble() {
 		alice.tuprolog.Double zero = new alice.tuprolog.Double(0);
 		alice.tuprolog.Double one = new alice.tuprolog.Double(1);
 		assertFalse(zero.equals(one));
@@ -36,17 +40,19 @@ public class DoubleTestCase extends TestCase {
 		assertTrue(anotherZero.equals(zero));
 	}
 	
-	public void testEqualsToFloat() {
+	@Ignore("Not implemented")
+	@Test public void equalsToFloat() {
 		// TODO Test Double numbers for equality with Float numbers
 	}
 	
-	public void testEqualsToInt() {
+	@Test public void equalsToInt() {
 		alice.tuprolog.Double doubleOne = new alice.tuprolog.Double(1.0);
 		Int integerOne = new Int(1);
 		assertFalse(doubleOne.equals(integerOne));
 	}
 	
-	public void testEqualsToLong() {
+	@Ignore("Not implemented")
+	@Test public void testEqualsToLong() {
 		// TODO Test Double numbers for equality with Long numbers
 	}
 

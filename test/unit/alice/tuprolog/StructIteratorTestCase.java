@@ -1,17 +1,19 @@
 package alice.tuprolog;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-/**
- * 
- * @author <a href="mailto:giulio.piancastelli@unibo.it">Giulio Piancastelli</a>
- */
-public class StructIteratorTestCase extends TestCase {
+public class StructIteratorTestCase {
 	
-	public void testEmptyIterator() {
+	@Test public void emptyIterator() {
 		Struct list = new Struct();
 		Iterator i = list.listIterator();
 		assertFalse(i.hasNext());
@@ -21,7 +23,7 @@ public class StructIteratorTestCase extends TestCase {
 		} catch (NoSuchElementException expected) {}
 	}
 	
-	public void testIteratorCount() {
+	@Test public void testIteratorCount() {
 		Struct list = new Struct(new Term[] {new Int(1), new Int(2), new Int(3), new Int(5), new Int(7)});
 		Iterator i = list.listIterator();
 		int count = 0;
@@ -31,7 +33,7 @@ public class StructIteratorTestCase extends TestCase {
 		assertFalse(i.hasNext());
 	}
 	
-	public void testMultipleHasNext() {
+	@Test public void multipleHasNext() {
 		Struct list = new Struct(new Term[] {new Struct("p"), new Struct("q"), new Struct("r")});
 		Iterator i = list.listIterator();
 		assertTrue(i.hasNext());
@@ -40,7 +42,7 @@ public class StructIteratorTestCase extends TestCase {
 		assertEquals(new Struct("p"), i.next());
 	}
 	
-	public void testMultipleNext() {
+	@Test public void multipleNext() {
 		Struct list = new Struct(new Term[] {new Int(0), new Int(1), new Int(2), new Int(3), new Int(5), new Int(7)});
 		Iterator i = list.listIterator();
 		assertTrue(i.hasNext());
@@ -58,7 +60,7 @@ public class StructIteratorTestCase extends TestCase {
 		} catch (NoSuchElementException expected) {}
 	}
 	
-	public void testRemoveOperationNotSupported() {
+	@Test public void removeOperationNotSupported() {
 		Struct list = new Struct(new Int(1), new Struct());
 		Iterator i = list.listIterator();
 		assertNotNull(i.next());

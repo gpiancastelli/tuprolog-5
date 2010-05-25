@@ -1,18 +1,20 @@
 package alice.tuprolog;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertFalse;
 
-public class VarTestCase extends TestCase {
+import org.junit.Test;
+
+public class VarTestCase {
 	
-	public void testIsAtomic() {
+	@Test public void isAtomic() {
 		assertFalse(new Var("X").isAtomic());
 	}
 	
-	public void testIsAtom() {
+	@Test public void isAtom() {
 		assertFalse(new Var("X").isAtom());
 	}
 	
-	public void testIsCompound() {
+	@Test public void isCompound() {
 		assertFalse(new Var("X").isCompound());
 	}
 

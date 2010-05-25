@@ -1,16 +1,19 @@
 package alice.tuprolog;
 
-import alice.tuprolog.InvalidLibraryException;
-import alice.tuprolog.Library;
-import alice.tuprolog.Prolog;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
+
+import org.junit.Test;
+
 import alice.tuprolog.event.SpyEvent;
 import alice.tuprolog.event.SpyListener;
 
-import junit.framework.TestCase;
-
-public class PrologTestCase extends TestCase {
+public class PrologTestCase {
 	
-	public void testEngineInitialization() {
+	@Test public void engineInitialization() {
 		Prolog engine = new Prolog();
 		assertEquals(4, engine.getCurrentLibraries().length);
 		assertNotNull(engine.getLibrary("alice.tuprolog.lib.BasicLibrary"));
@@ -19,13 +22,13 @@ public class PrologTestCase extends TestCase {
 		assertNotNull(engine.getLibrary("alice.tuprolog.lib.JavaLibrary"));
 	}
 	
-	public void testLoadLibraryAsString() throws InvalidLibraryException {
+	@Test public void loadLibraryAsString() throws InvalidLibraryException {
 		Prolog engine = new Prolog();
 		engine.loadLibrary("alice.tuprolog.StringLibrary");
 		assertNotNull(engine.getLibrary("alice.tuprolog.StringLibrary"));
 	}
 	
-	public void testLoadLibraryAsObject() throws InvalidLibraryException {
+	@Test public void loadLibraryAsObject() throws InvalidLibraryException {
 		Prolog engine = new Prolog();
 		Library stringLibrary = new StringLibrary();
 		engine.loadLibrary(stringLibrary);
@@ -35,12 +38,12 @@ public class PrologTestCase extends TestCase {
 		assertSame(javaLibrary, engine.getLibrary("alice.tuprolog.lib.JavaLibrary"));
 	}
 	
-	public void testGetLibraryWithName() throws InvalidLibraryException {
+	@Test public void getLibraryWithName() throws InvalidLibraryException {
 		Prolog engine = new Prolog(new String[] {"alice.tuprolog.TestLibrary"});
 		assertNotNull(engine.getLibrary("TestLibraryName"));
 	}
 	
-	public void testUnloadLibraryAfterLoadingTheory() throws Exception {
+	@Test public void unloadLibraryAfterLoadingTheory() throws Exception {
 		Prolog engine = new Prolog();
 		assertNotNull(engine.getLibrary("alice.tuprolog.lib.IOLibrary"));
 		Theory t = new Theory("a(1).\na(2).\n");
@@ -49,7 +52,7 @@ public class PrologTestCase extends TestCase {
 		assertNull(engine.getLibrary("alice.tuprolog.lib.IOLibrary"));
 	}
 	
-	public void testAddTheory() throws InvalidTheoryException {
+	@Test public void addTheory() throws InvalidTheoryException {
 		Prolog engine = new Prolog();
 		Theory t = new Theory("test :- notx existing(s).");
 		try {
@@ -60,7 +63,7 @@ public class PrologTestCase extends TestCase {
 		}
 	}
 	
-	public void testSpyListenerManagement() {
+	@Test public void spyListenerManagement() {
 		Prolog engine = new Prolog();
 		SpyListener listener1 = new SpyListener() {
 			public void onSpy(SpyEvent e) {}
@@ -73,7 +76,7 @@ public class PrologTestCase extends TestCase {
 		assertEquals(2, engine.getSpyListenerList().size());
 	}
 	
-	public void testLibraryListener() throws InvalidLibraryException {
+	@Test public void libraryListener() throws InvalidLibraryException {
 		Prolog engine = new Prolog(new String[]{});
 		engine.loadLibrary("alice.tuprolog.lib.BasicLibrary");
 		engine.loadLibrary("alice.tuprolog.lib.IOLibrary");
@@ -85,7 +88,7 @@ public class PrologTestCase extends TestCase {
 		assertEquals("alice.tuprolog.lib.JavaLibrary", a.firstMessage);
 	}
 	
-	public void testTheoryListener() throws InvalidTheoryException {
+	@Test public void theoryListener() throws InvalidTheoryException {
 		Prolog engine = new Prolog();
 		TestPrologEventAdapter a = new TestPrologEventAdapter();
 		engine.addTheoryListener(a);
@@ -99,7 +102,7 @@ public class PrologTestCase extends TestCase {
 		assertEquals("a(1).\n\na(2).\n\na(3).\n\na(4).\n\n", a.secondMessage);
 	}
 	
-	public void testQueryListener() throws Exception {
+	@Test public void queryListener() throws Exception {
 		Prolog engine = new Prolog();
 		TestPrologEventAdapter a = new TestPrologEventAdapter();
 		engine.addQueryListener(a);

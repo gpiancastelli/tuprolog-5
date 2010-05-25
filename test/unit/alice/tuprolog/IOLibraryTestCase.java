@@ -1,11 +1,15 @@
 package alice.tuprolog;
 
-import alice.tuprolog.lib.IOLibrary;
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-public class IOLibraryTestCase extends TestCase {
+import org.junit.Test;
+
+import alice.tuprolog.lib.IOLibrary;
+
+public class IOLibraryTestCase {
 	
-	public void testGetPrimitives() {
+	@Test public void getPrimitives() {
 		Library library = new IOLibrary();
 		java.util.List[] primitives = library.getPrimitives();
 		assertEquals(3, primitives.length);
@@ -14,7 +18,7 @@ public class IOLibraryTestCase extends TestCase {
 		assertEquals(0, primitives[PrimitiveInfo.FUNCTOR].size());
 	}
 	
-	public void testTab1() throws MalformedGoalException {
+	@Test public void testTab1() throws MalformedGoalException {
 		Prolog engine = new Prolog();
 		TestOutputListener l = new TestOutputListener();
 		engine.addOutputListener(l);

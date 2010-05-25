@@ -1,10 +1,13 @@
 package alice.tuprolog;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
-public class BuiltInTestCase extends TestCase {
+import org.junit.Test;
+
+public class BuiltInTestCase {
 	
-	public void testConvertTermToGoal() throws InvalidTermException {
+	@Test public void convertTermToGoal() throws InvalidTermException {
 		Term t = new Var("T");
 		Struct result = new Struct("call", t);
 		assertEquals(result, BuiltIn.convertTermToGoal(t));

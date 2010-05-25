@@ -1,17 +1,19 @@
 package alice.tuprolog;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-/**
- * 
- * @author <a href="mailto:giulio.piancastelli@unibo.it">Giulio Piancastelli</a>
- */
-public class TermIteratorTestCase extends TestCase {
+public class TermIteratorTestCase {
 	
-	public void testEmptyIterator() {
+	@Test public void emptyIterator() {
 		String theory = "";
 		Iterator i = Term.getIterator(theory);
 		assertFalse(i.hasNext());
@@ -21,7 +23,7 @@ public class TermIteratorTestCase extends TestCase {
 		} catch (NoSuchElementException expected) {}
 	}
 	
-	public void testIterationCount() {
+	@Test public void iterationCount() {
 		String theory = "q(1)." + "\n" +
 		                "q(2)." + "\n" +
 		                "q(3)." + "\n" +
@@ -35,7 +37,7 @@ public class TermIteratorTestCase extends TestCase {
 		assertFalse(i.hasNext());
 	}
 	
-	public void testMultipleHasNext() {
+	@Test public void multipleHasNext() {
 		String theory = "p. q. r.";
 		Iterator i = Term.getIterator(theory);
 		assertTrue(i.hasNext());
@@ -44,7 +46,7 @@ public class TermIteratorTestCase extends TestCase {
 		assertEquals(new Struct("p"), i.next());
 	}
 	
-	public void testMultipleNext() {
+	@Test public void multipleNext() {
 		String theory = "p(X):-q(X),X>1." + "\n" +
 		                "q(1)." + "\n" +
 						"q(2)." + "\n" +
@@ -67,7 +69,7 @@ public class TermIteratorTestCase extends TestCase {
 		} catch (NoSuchElementException expected) {}
 	}
 	
-	public void testIteratorOnInvalidTerm() {
+	@Test public void iteratorOnInvalidTerm() {
 		String t = "q(1)"; // missing the End-Of-Clause!
 		try {
 			Term.getIterator(t);
@@ -75,7 +77,7 @@ public class TermIteratorTestCase extends TestCase {
 		} catch (InvalidTermException expected) {}
 	}
 	
-	public void testIterationOnInvalidTheory() {
+	@Test public void iterationOnInvalidTheory() {
 		String theory = "q(1)." + "\n" +
 		                "q(2)." + "\n" +
 						"q(3) " + "\n" + // missing the End-Of-Clause!
@@ -101,7 +103,7 @@ public class TermIteratorTestCase extends TestCase {
 		} catch (InvalidTermException expected) {}
 	}
 	
-	public void testRemoveOperationNotSupported() {
+	@Test public void removeOperationNotSupported() {
 		String theory = "p(1).";
 		Iterator i = Term.getIterator(theory);
 		assertNotNull(i.next());

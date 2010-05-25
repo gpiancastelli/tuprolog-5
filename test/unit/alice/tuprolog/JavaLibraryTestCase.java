@@ -1,12 +1,17 @@
 package alice.tuprolog;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+
 import alice.tuprolog.lib.InvalidObjectIdException;
 import alice.tuprolog.lib.JavaLibrary;
-import junit.framework.TestCase;
 
-public class JavaLibraryTestCase extends TestCase {
+public class JavaLibraryTestCase {
 	
-	public void testGetPrimitives() {
+	@Test public void getPrimitives() {
 		Library library = new JavaLibrary();
 		java.util.List[] primitives = library.getPrimitives();
 		assertEquals(3, primitives.length);
@@ -15,7 +20,7 @@ public class JavaLibraryTestCase extends TestCase {
 		assertEquals(0, primitives[PrimitiveInfo.FUNCTOR].size());
 	}
 	
-	public void testAnonymousObjectRegistration() throws InvalidTheoryException, InvalidObjectIdException {
+	@Test public void anonymousObjectRegistration() throws InvalidTheoryException, InvalidObjectIdException {
 		Prolog engine = new Prolog();		
 		JavaLibrary lib = (JavaLibrary) engine.getLibrary("alice.tuprolog.lib.JavaLibrary");
 		String theory = "demo(X) :- X <- update. \n";
@@ -31,7 +36,7 @@ public class JavaLibraryTestCase extends TestCase {
 		assertFalse(goal.isSuccess());
 	}
 	
-	public void testDynamicObjectsRetrival() throws PrologException {
+	@Test public void dynamicObjectsRetrival() throws PrologException {
 		Prolog engine = new Prolog();
 		JavaLibrary lib = (JavaLibrary) engine.getLibrary("alice.tuprolog.lib.JavaLibrary");
 		String theory = "demo(C) :- \n" +

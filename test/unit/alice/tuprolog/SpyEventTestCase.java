@@ -1,11 +1,14 @@
 package alice.tuprolog;
 
-import junit.framework.TestCase;
-import alice.tuprolog.event.*;
+import static org.junit.Assert.assertEquals;
 
-public class SpyEventTestCase extends TestCase {
+import org.junit.Test;
+
+import alice.tuprolog.event.SpyEvent;
+
+public class SpyEventTestCase {
 	
-	public void testToString() {
+	@Test public void stringRepresentation() {
 		String msg = "testConstruction";
 		SpyEvent e = new SpyEvent(new Prolog(), msg);
 		assertEquals(msg, e.toString());

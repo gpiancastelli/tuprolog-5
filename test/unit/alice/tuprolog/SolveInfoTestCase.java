@@ -1,10 +1,13 @@
 package alice.tuprolog;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-public class SolveInfoTestCase extends TestCase {
+import org.junit.Test;
 
-	public void testGetSubsequentQuery() {
+public class SolveInfoTestCase {
+
+	@Test public void getSubsequentQuery() {
 		Prolog engine = new Prolog();
 		Term query = new Struct("is", new Var("X"), new Struct("+", new Int(1), new Int(2)));
 		SolveInfo result = engine.solve(query);

@@ -1,12 +1,16 @@
 package alice.tuprolog;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.List;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class TheoryManagerTestCase extends TestCase {
+public class TheoryManagerTestCase {
 	
-	public void testUnknownDirective() throws InvalidTheoryException {
+	@Test public void unknownDirective() throws InvalidTheoryException {
 		String theory = ":- unidentified_directive(unknown_argument).";
 		Prolog engine = new Prolog();
 		TestWarningListener warningListener = new TestWarningListener();
@@ -16,7 +20,7 @@ public class TheoryManagerTestCase extends TestCase {
 		assertTrue(warningListener.warning.indexOf("is unknown") > 0);
 	}
 	
-	public void testFailedDirective() throws InvalidTheoryException {
+	@Test public void failedDirective() throws InvalidTheoryException {
 		String theory = ":- load_library('UnknownLibrary').";
 		Prolog engine = new Prolog();
 		TestWarningListener warningListener = new TestWarningListener();
@@ -26,14 +30,14 @@ public class TheoryManagerTestCase extends TestCase {
 		assertTrue(warningListener.warning.indexOf("InvalidLibraryException") > 0);
 	}
 	
-	public void testAssertNotBacktrackable() throws PrologException {
+	@Test public void assertNotBacktrackable() throws PrologException {
 		Prolog engine = new Prolog();
 		SolveInfo firstSolution = engine.solve("assertz(a(z)).");
 		assertTrue(firstSolution.isSuccess());
 		assertFalse(firstSolution.hasOpenAlternatives());
 	}
 	
-	public void testAbolish() throws PrologException {
+	@Test public void abolish() throws PrologException {
 		Prolog engine = new Prolog();
 		String theory = "test(A, B) :- A is 1+2, B is 2+3.";
 		engine.setTheory(new Theory(theory));
