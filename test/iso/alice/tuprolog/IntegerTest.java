@@ -32,13 +32,11 @@ public class IntegerTest {
 
     @Test public void test3() throws PrologException {
         SolveInfo solution = engine.solve("integer(X).");
-        // FIXME Generates a ClassCastException: alice.tuprolog.Var
         assertFalse(solution.isSuccess());
     }
 
     @Test public void test4() throws PrologException {
         SolveInfo solution = engine.solve("integer(atom).");
-        // FIXME Generates a ClassCastException: alice.tuprolog.Struct
         assertFalse(solution.isSuccess());
     }
 

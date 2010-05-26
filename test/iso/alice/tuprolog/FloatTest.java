@@ -32,13 +32,11 @@ public class FloatTest {
 
     @Test public void test3() throws PrologException {
         SolveInfo solution = engine.solve("float(atom).");
-        // FIXME Generates a ClassCastException: alice.tuprolog.Struct
         assertFalse(solution.isSuccess());
     }
 
     @Test public void test4() throws PrologException {
         SolveInfo solution = engine.solve("float(X).");
-        // FIXME Generates a ClassCastException: alice.tuprolog.Var
         assertFalse(solution.isSuccess());
     }
 
