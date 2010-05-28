@@ -70,7 +70,7 @@ public class JavaLibrary extends Library {
 	private HashMap staticObjects = new HashMap();
 	private IdentityHashMap staticObjects_inverse = new IdentityHashMap();
 	
-	/** progressive conter used to identify registered objects */
+	/** progressive counter used to identify registered objects */
 	private int id = 0;
 	
 	
