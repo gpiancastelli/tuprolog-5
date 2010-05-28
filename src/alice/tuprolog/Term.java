@@ -20,11 +20,9 @@ package alice.tuprolog;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import alice.util.OneWayList;
 
@@ -35,7 +33,7 @@ import alice.util.OneWayList;
  * @see Var
  * @see Number
  */
-public abstract class Term implements java.io.Serializable {
+public abstract class Term {
 
 	// true and false constants
 	public static final Term TRUE  = new Struct("true");

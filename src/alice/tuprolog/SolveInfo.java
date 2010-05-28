@@ -16,9 +16,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package alice.tuprolog;
-import java.io.*;
-import java.util.*;
 
+import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -28,7 +28,7 @@ import java.util.*;
  * 
  * @author Alex Benini
  */
-public class SolveInfo implements Serializable  {
+public class SolveInfo  {
 	
 	/*
 	 * possible values returned by step functions

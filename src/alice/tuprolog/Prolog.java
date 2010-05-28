@@ -17,8 +17,9 @@
  */
 package alice.tuprolog;
 
-import java.util.*;
-import java.io.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import alice.tuprolog.event.LibraryEvent;
 import alice.tuprolog.event.LibraryListener;
@@ -33,14 +34,12 @@ import alice.tuprolog.event.TheoryListener;
 import alice.tuprolog.event.WarningEvent;
 import alice.tuprolog.event.WarningListener;
 
-
-
 /**
  *
  * The Prolog class represents a tuProlog engine.
  *
  */
-public class Prolog implements Serializable {
+public class Prolog {
 	
 	// 2P version
 	private static final String VERSION = "2.1.1";    

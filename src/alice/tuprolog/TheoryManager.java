@@ -20,7 +20,6 @@ package alice.tuprolog;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -45,7 +44,7 @@ import alice.util.Tools;
  *
  * @see Theory
  */
-public class TheoryManager implements Serializable {
+public class TheoryManager {
 
     private ClauseDatabase dynamicDBase;
     private ClauseDatabase staticDBase;

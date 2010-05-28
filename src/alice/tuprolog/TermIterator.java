@@ -30,7 +30,7 @@ import java.util.NoSuchElementException;
  * instead of just returning it or checking for its existence from a pool
  * of already produced terms.
  */
-class TermIterator implements Iterator, java.io.Serializable {
+class TermIterator implements Iterator {
 	
 	private Parser parser;
 	private boolean hasNext;

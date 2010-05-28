@@ -17,12 +17,12 @@
  */
 package alice.tuprolog;
 
-import java.util.*;
+import java.util.HashMap;
 
 /**
  * This class represents a prolog Flag
  */
-class Flag implements java.io.Serializable {
+class Flag {
 	
 	private String name;
 	private Struct valueList;

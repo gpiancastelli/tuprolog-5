@@ -8,14 +8,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-
-
 /**
  * @author Alex Benini
  *
  * Core engine
  */
-public class EngineManager implements java.io.Serializable {
+public class EngineManager {
 	
 	private Prolog			mediator;
 	private TheoryManager    theoryManager;

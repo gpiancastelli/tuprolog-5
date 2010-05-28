@@ -16,7 +16,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package alice.tuprolog;
-import java.io.Serializable;
 
 /**
  * This class represents a token read by the prolog term tokenizer
@@ -24,7 +23,7 @@ import java.io.Serializable;
  *
  *
  */
-class Token implements Serializable {
+class Token {
 	// token textual representation
 	String seq;
 	// token type and attribute

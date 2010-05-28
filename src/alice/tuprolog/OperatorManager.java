@@ -17,18 +17,18 @@
  */
 package alice.tuprolog;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.HashMap;
 
 /**
  * This class manages Prolog operators.
  *
  * @see Operator
  */
-class OperatorManager implements java.io.Serializable {
+class OperatorManager {
 	
 	/** current known operators */
 	private OperatorRegister operatorList = new OperatorRegister();

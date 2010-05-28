@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.util.Iterator;
 
 import alice.tuprolog.InvalidTheoryException;
@@ -21,7 +20,7 @@ import alice.tuprolog.event.SpyListener;
 import alice.tuprolog.event.WarningEvent;
 import alice.tuprolog.event.WarningListener;
 
-public class CUIConsole extends Automaton implements Serializable, OutputListener, SpyListener, WarningListener {
+public class CUIConsole extends Automaton implements OutputListener, SpyListener, WarningListener {
 
     BufferedReader  stdin;
     Prolog          engine;

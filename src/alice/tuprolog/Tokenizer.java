@@ -17,10 +17,12 @@
  */
 package alice.tuprolog;
 
-import java.io.*;
-import java.util.LinkedList;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StreamTokenizer;
+import java.io.StringReader;
 import java.util.Arrays;
-import java.util.regex.Pattern;
+import java.util.LinkedList;
 
 /**
  * BNF for tuProlog
@@ -45,7 +47,7 @@ import java.util.regex.Pattern;
  * the type returned is the same as the unicode int value of the ordinary character
  * - other characters should be handled as ordinary characters.
  */
-class Tokenizer extends StreamTokenizer implements Serializable {
+class Tokenizer extends StreamTokenizer {
 
     static final int TYPEMASK = 0x00FF;
     static final int ATTRMASK = 0xFF00;

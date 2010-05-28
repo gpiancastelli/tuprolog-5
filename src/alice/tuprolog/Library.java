@@ -17,9 +17,8 @@
  */
 package alice.tuprolog;
 
-import java.io.Serializable;
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -39,7 +38,7 @@ import java.util.*;
  * </ul>
  * <p>
  */
-public abstract class Library implements Serializable, IPrimitives {
+public abstract class Library implements IPrimitives {
 	
 	/** prolog core which loaded the library */
 	protected Prolog engine;

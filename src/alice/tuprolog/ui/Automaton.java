@@ -21,7 +21,7 @@ package alice.tuprolog.ui;
  * (to allow correct behaviour of reflection)
  *
  */
-public abstract class Automaton implements Runnable, java.io.Serializable {
+public abstract class Automaton implements Runnable {
 
     /** method name representing state behaviour */
     protected String state="boot";

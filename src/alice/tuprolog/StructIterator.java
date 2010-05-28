@@ -24,7 +24,7 @@ import java.util.NoSuchElementException;
  *
  * @see Struct
  */
-class StructIterator implements java.util.Iterator, java.io.Serializable {
+class StructIterator implements java.util.Iterator {
 	
 	Struct list;
 	

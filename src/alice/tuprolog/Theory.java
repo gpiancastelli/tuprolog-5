@@ -16,7 +16,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package alice.tuprolog;
-import	java.io.*;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Iterator;
 
 /**
@@ -29,7 +31,7 @@ import java.util.Iterator;
  * @see Prolog
  *
  */
-public class Theory implements Serializable {
+public class Theory {
 
 	private String theory;
 	private Struct clauseList;

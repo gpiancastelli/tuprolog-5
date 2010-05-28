@@ -19,13 +19,11 @@ package alice.tuprolog.lib;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.EventListener;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
@@ -1517,7 +1515,7 @@ public class JavaLibrary extends Library {
  * about type and value of a method
  * arguments
  */
-class Signature implements Serializable {
+class Signature {
 	Class[] types;
 	Object[] values;
 	
@@ -1546,23 +1544,3 @@ class Signature implements Serializable {
 /** used to load new classes without touching system class loader */
 class ClassLoader extends java.lang.ClassLoader {
 }
-
-/**
- * Information about an EventListener
- */
-class ListenerInfo implements Serializable {
-	public String listenerInterfaceName;
-	public EventListener listener;
-	//public String eventName;
-	public String eventFullClass;
-	
-	public ListenerInfo(EventListener l, String eventClass, String n) {
-		listener = l;
-		//this.eventName=eventName;
-		this.eventFullClass = eventClass;
-		listenerInterfaceName = n;
-	}
-}
-
-
-
