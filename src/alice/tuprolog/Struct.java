@@ -31,7 +31,7 @@ public class Struct extends Term {
 	/** name of the structure */
 	private String name;
 	/** args array */
-	private Term[] arg;
+	private Term[] args;
 	/** arity **/
 	private int arity;
 	/** to speedup hash map operation */
@@ -42,73 +42,17 @@ public class Struct extends Term {
 	private boolean resolved=false;
 	
 	/**
-	 * Builds a Struct representing an atom
+	 * Builds a compound term, with a series of arguments.
+	 * If no arguments are passed, builds an atom.
 	 */
-	public Struct(String f) {
-		this(f,0);
-	}
-	
-	/**
-	 * Builds a compound, with one argument
-	 */
-	public Struct(String f, Term at0) {
-		this(f, new Term[] {at0});
-	}
-	
-	/**
-	 * Builds a compound, with two arguments
-	 */
-	public Struct(String f, Term at0, Term at1) {
-		this(f, new Term[] {at0, at1});
-	}
-	
-	/**
-	 * Builds a compound, with three arguments
-	 */
-	public Struct(String f, Term at0, Term at1, Term at2) {
-		this(f, new Term[] {at0, at1, at2});
-	}
-	
-	/**
-	 * Builds a compound, with four arguments
-	 */
-	public Struct(String f, Term at0, Term at1, Term at2, Term at3) {
-		this(f, new Term[] {at0, at1, at2, at3});
-	}
-	
-	/**
-	 * Builds a compound, with five arguments
-	 */
-	public Struct(String f, Term at0, Term at1, Term at2, Term at3, Term at4) {
-		this(f, new Term[] {at0, at1, at2, at3, at4});
-	}
-	
-	/**
-	 * Builds a compound, with six arguments
-	 */
-	public Struct(String f, Term at0, Term at1, Term at2, Term at3, Term at4, Term at5) {
-		this(f, new Term[] {at0, at1, at2, at3, at4, at5});
-	}
-	
-	/**
-	 * Builds a compound, with seven arguments
-	 */
-	public Struct(String f, Term at0, Term at1, Term at2, Term at3, Term at4, Term at5, Term at6) {
-		this(f, new Term[] {at0, at1, at2, at3, at4, at5, at6});
-	}
-	
-	/**
-	 * Builds a compound, with an array of arguments
-	 */
-	public Struct(String f, Term[] argList) {
-		this(f, argList.length);
-		for (int i = 0; i < argList.length; i++)
-			if (argList[i] == null)
+	public Struct(String f, Term... args) {
+		this(f, args.length);
+		for (int i = 0; i < args.length; i++)
+			if (args[i] == null)
 				throw new InvalidTermException("Arguments of a Struct cannot be null");
 			else
-				arg[i] = argList[i];
+				this.args[i] = args[i];
 	}
-	
 	
 	/**
 	 * Builds a structure representing an empty list
@@ -118,66 +62,64 @@ public class Struct extends Term {
 		resolved = true;
 	}
 	
-	
 	/**
 	 * Builds a list providing head and tail
 	 */
-	public Struct(Term h,Term t) {
-		this(".",2);
-		arg[0] = h;
-		arg[1] = t;
+	public Struct(Term h, Term t) {
+		this(".", 2);
+		args[0] = h;
+		args[1] = t;
 	}
 	
 	/**
 	 * Builds a list specifying the elements
 	 */
-	public Struct(Term[] argList) {
-		this(argList,0);
+	public Struct(Term[] args) {
+		this(args, 0);
 	}
 	
-	private Struct(Term[] argList, int index) {
-		this(".",2);
-		if (index<argList.length) {
-			arg[0] = argList[index];
-			arg[1] = new Struct(argList,index+1);
+	private Struct(Term[] args, int index) {
+		this(".", 2);
+		if (index < args.length) {
+			this.args[0] = args[index];
+			this.args[1] = new Struct(args, index+1);
 		} else {
 			// build an empty list
 			name = "[]";
 			arity = 0;
-			arg = null;
+			this.args = null;
 		}
 	}
 	
 	/**
 	 * Builds a compound, with a linked list of arguments
 	 */
-	Struct(String f, LinkedList al) {
+	Struct(String f, LinkedList<Term> args) {
 		name = f;
-		arity = al.size();
+		arity = args.size();
 		if (arity > 0) {
-			arg = new Term[arity];
-			for(int c = 0;c < arity;c++)
-				arg[c] = (Term) al.removeFirst();
+			this.args = new Term[arity];
+			for(int c = 0; c < arity; c++)
+				this.args[c] = args.removeFirst();
 		}
 		predicateIndicator = name + "/" + arity;
 		resolved = false;
 	}
 	
-	private Struct(int arity_) {
-		arity = arity_;
-		arg = new Term[arity];
+	private Struct(int arity) {
+		this.arity = arity;
+		args = new Term[arity];
 	}
 	
-	private Struct(String name_,int arity_) {
-		if (name_ == null)
+	private Struct(String name,int arity) {
+		if (name == null)
 			throw new InvalidTermException("The functor of a Struct cannot be null");
-		if (name_.length() == 0 && arity_ > 0)
+		if (name.length() == 0 && arity > 0)
 			throw new InvalidTermException("The functor of a non-atom Struct cannot be an empty string");
-		name = name_;
-		arity = arity_;
-		if (arity > 0) {
-			arg = new Term[arity];
-		}
+		this.name = name;
+		this.arity = arity;
+		if (arity > 0)
+			args = new Term[arity];
 		predicateIndicator = name + "/" + arity;
 		resolved = false;
 	}
@@ -212,7 +154,7 @@ public class Struct extends Term {
 	 * No bound check is done
 	 */
 	public Term getArg(int index) {
-		return arg[index];
+		return args[index];
 	}
 	
 	/**
@@ -221,7 +163,7 @@ public class Struct extends Term {
 	 * (Only for internal service)
 	 */
 	void setArg(int index, Term argument) {
-		arg[index] = argument;
+		args[index] = argument;
 	}
 	
 	/**
@@ -231,7 +173,7 @@ public class Struct extends Term {
 	 * <code>getArg(index).getTerm()</code>
 	 */
 	public Term getTerm(int index) {
-		return arg[index].getTerm();
+		return args[index].getTerm();
 	}
 	
 	
@@ -268,12 +210,12 @@ public class Struct extends Term {
 	}
 	
 	public boolean isList() {
-		return (name.equals(".") && arity == 2 && arg[1].isList()) || isEmptyList();
+		return (name.equals(".") && arity == 2 && args[1].isList()) || isEmptyList();
 	}
 	
 	public boolean isGround() {
 		for (int i=0; i<arity; i++) {
-			if (!arg[i].isGround()) {
+			if (!args[i].isGround()) {
 				return false;
 			}
 		}
@@ -284,7 +226,7 @@ public class Struct extends Term {
 	 * Check is this struct is clause or directive
 	 */
 	public boolean isClause() {
-		return(name.equals(":-") && arity > 1 && arg[0].getTerm() instanceof Struct);
+		return(name.equals(":-") && arity > 1 && args[0].getTerm() instanceof Struct);
 		//return(name.equals(":-") && arity == 2 && arg[0].getTerm() instanceof Struct);
 	}    
 	
@@ -304,17 +246,17 @@ public class Struct extends Term {
 		if (arity == 0) {
 			return null;
 		}
-		for (int i=0; i<arg.length; i++) {
-			if (arg[i] instanceof Struct) {
-				Struct s = (Struct) arg[i];
+		for (int i=0; i<args.length; i++) {
+			if (args[i] instanceof Struct) {
+				Struct s = (Struct) args[i];
 				if (s.getName().equals(name)) {
 					return s;
 				}
 			}
 		}
-		for (int i=0; i<arg.length; i++) {
-			if (arg[i] instanceof Struct) {
-				Struct s = (Struct)arg[i];
+		for (int i=0; i<args.length; i++) {
+			if (args[i] instanceof Struct) {
+				Struct s = (Struct)args[i];
 				Struct sol = s.getArg(name);
 				if (sol!=null) {
 					return sol;
@@ -344,9 +286,9 @@ public class Struct extends Term {
 					return true;
 				} else if (name.compareTo(ts.name) == 0) {
 					for (int c = 0;c < arity;c++) {
-						if (arg[c].isGreater(ts.arg[c])) {
+						if (args[c].isGreater(ts.args[c])) {
 							return true;
-						} else if (!arg[c].isEqual(ts.arg[c])) {
+						} else if (!args[c].isEqual(ts.args[c])) {
 							return false;
 						}
 					}
@@ -366,7 +308,7 @@ public class Struct extends Term {
 			Struct ts = (Struct) t;
 			if (arity == ts.arity && name.equals(ts.name)) {
 				for (int c = 0;c < arity;c++) {
-					if (!arg[c].isEqual(ts.arg[c])) {
+					if (!args[c].isEqual(ts.args[c])) {
 						return false;
 					}
 				}
@@ -393,7 +335,7 @@ public class Struct extends Term {
 		t.predicateIndicator   = predicateIndicator;
 		t.primitive = primitive;
 		for (int c = 0;c < arity;c++) {
-			t.arg[c] = arg[c].copy(vMap, idExecCtx);
+			t.args[c] = args[c].copy(vMap, idExecCtx);
 		}
 		return t;
 	}
@@ -410,7 +352,7 @@ public class Struct extends Term {
 		t.predicateIndicator   = predicateIndicator;
 		t.primitive = null;
 		for (int c = 0;c < arity;c++) {
-			t.arg[c] = arg[c].copy(vMap, substMap);
+			t.args[c] = args[c].copy(vMap, substMap);
 		}
 		return t;
 	}
@@ -438,7 +380,7 @@ public class Struct extends Term {
 	long resolveTerm(LinkedList vl,long count) {
 		long newcount=count;
 		for (int c = 0;c < arity;c++) {
-			Term term=arg[c];
+			Term term=args[c];
 			if (term!=null) {
 				//--------------------------------
 				// we want to resolve only not linked variables:
@@ -461,7 +403,7 @@ public class Struct extends Term {
 							}
 						}
 						if (found != null) {
-							arg[c] = found;
+							args[c] = found;
 						} else {
 							vl.add(t);
 						}
@@ -495,7 +437,7 @@ public class Struct extends Term {
 	public Term listHead() {
 		if (!isList())
 			throw new UnsupportedOperationException("The structure " + this + " is not a list.");
-		return arg[0].getTerm();
+		return args[0].getTerm();
 	}
 	
 	/**
@@ -509,7 +451,7 @@ public class Struct extends Term {
 	public Struct listTail() {
 		if (!isList())
 			throw new UnsupportedOperationException("The structure " + this + " is not a list.");
-		return (Struct) arg[1].getTerm() ;
+		return (Struct) args[1].getTerm() ;
 	}
 	
 	/**
@@ -527,7 +469,7 @@ public class Struct extends Term {
 		int count = 0;
 		while (!t.isEmptyList()) {
 			count++;
-			t = (Struct) t.arg[1].getTerm();
+			t = (Struct) t.args[1].getTerm();
 		}
 		return count;
 	}
@@ -554,7 +496,7 @@ public class Struct extends Term {
 	Struct toList() {
 		Struct t = new Struct();
 		for(int c = arity - 1;c >= 0;c--) {
-			t = new Struct(arg[c].getTerm(),t);
+			t = new Struct(args[c].getTerm(),t);
 		}
 		return new Struct(new Struct(name),t);
 	}
@@ -566,11 +508,11 @@ public class Struct extends Term {
 	 * If this structure is not a list, null object is returned
 	 */
 	Struct fromList() {
-		Term ft = arg[0].getTerm();
+		Term ft = args[0].getTerm();
 		if (!ft.isAtom()) {
 			return null;
 		}
-		Struct at = (Struct) arg[1].getTerm();
+		Struct at = (Struct) args[1].getTerm();
 		LinkedList al = new LinkedList();
 		while (!at.isEmptyList()) {
 			if (!at.isList()) {
@@ -590,12 +532,12 @@ public class Struct extends Term {
 		if (isEmptyList()) {
 			name = ".";
 			arity = 2;
-			arg = new Term[arity];
-			arg[0] = t; arg[1] = new Struct();
-		} else if (arg[1].isList()) {
-			((Struct) arg[1]).append(t);
+			args = new Term[arity];
+			args[0] = t; args[1] = new Struct();
+		} else if (args[1].isList()) {
+			((Struct) args[1]).append(t);
 		} else {
-			arg[1] = t;
+			args[1] = t;
 		}
 	}
 	
@@ -605,10 +547,10 @@ public class Struct extends Term {
 	 */
 	void insert(Term t) {
 		Struct co=new Struct();
-		co.arg[0]=arg[0];
-		co.arg[1]=arg[1];
-		arg[0] = t;
-		arg[1] = co;
+		co.args[0]=args[0];
+		co.args[1]=args[1];
+		args[0] = t;
+		args[1] = co;
 	}
 	
 	//
@@ -627,7 +569,7 @@ public class Struct extends Term {
 			Struct ts = (Struct) t;
 			if ( arity == ts.arity && name.equals(ts.name)) {
 				for (int c = 0;c < arity;c++) {
-					if (!arg[c].unify(vl1,vl2,ts.arg[c])) {
+					if (!args[c].unify(vl1,vl2,ts.args[c])) {
 						return false;
 					}
 				}
@@ -687,16 +629,16 @@ public class Struct extends Term {
 			if (arity > 0) {
 				s = s + "(";
 				for (int c = 1;c < arity;c++) {
-					if (!(arg[c - 1] instanceof Var)) {
-						s = s + arg[c - 1].toString() + ",";
+					if (!(args[c - 1] instanceof Var)) {
+						s = s + args[c - 1].toString() + ",";
 					} else {
-						s = s + ((Var)arg[c - 1]).toStringFlattened() + ",";
+						s = s + ((Var)args[c - 1]).toStringFlattened() + ",";
 					}
 				}
-				if (!(arg[arity - 1] instanceof Var)) {
-					s = s + arg[arity - 1].toString() + ")";
+				if (!(args[arity - 1] instanceof Var)) {
+					s = s + args[arity - 1].toString() + ")";
 				} else {
-					s = s + ((Var)arg[arity - 1]).toStringFlattened() + ")";
+					s = s + ((Var)args[arity - 1]).toStringFlattened() + ")";
 				}
 			}
 			return s;
@@ -704,8 +646,8 @@ public class Struct extends Term {
 	}
 	
 	private String toString0() {
-		Term h = arg[0].getTerm();
-		Term t = arg[1].getTerm();
+		Term h = args[0].getTerm();
+		Term t = args[1].getTerm();
 		if (t.isList()) {
 			Struct tl = (Struct) t;
 			if (tl.isEmptyList()) {
@@ -736,12 +678,12 @@ public class Struct extends Term {
 	private String toString0_bracket() {
 		if (arity == 0) {
 			return "";
-		} else if (arity==1 && !((arg[0] instanceof Struct) && ((Struct)arg[0]).getName().equals(","))){
-			return arg[0].getTerm().toString();
+		} else if (arity==1 && !((args[0] instanceof Struct) && ((Struct)args[0]).getName().equals(","))){
+			return args[0].getTerm().toString();
 		} else {
 			// comma case 
-			Term head = ((Struct)arg[0]).getTerm(0);
-			Term tail = ((Struct)arg[0]).getTerm(1);
+			Term head = ((Struct)args[0]).getTerm(0);
+			Term tail = ((Struct)args[0]).getTerm(1);
 			StringBuffer buf = new StringBuffer(head.toString());
 			while (tail instanceof Struct && ((Struct)tail).getName().equals(",")){
 				head = ((Struct)tail).getTerm(0);
@@ -755,8 +697,8 @@ public class Struct extends Term {
 	}
 	
 	private String toStringAsList(OperatorManager op) {
-		Term h = arg[0];
-		Term t = arg[1].getTerm();
+		Term h = args[0];
+		Term t = args[1].getTerm();
 		if (t.isList()) {
 			Struct tl = (Struct)t;
 			if (tl.isEmptyList()){
@@ -773,7 +715,7 @@ public class Struct extends Term {
 		String   v = "";
 		
 		if (name.equals(".") && arity == 2) {
-			if (arg[0].isEmptyList()) {
+			if (args[0].isEmptyList()) {
 				return("[]");
 			} else {
 				return("[" + toStringAsList(op) + "]");
@@ -786,34 +728,34 @@ public class Struct extends Term {
 			if ((p = op.opPrio(name,"xfx")) >= OperatorManager.OP_LOW) {
 				return(
 						(((x && p >= prio) || (!x && p > prio)) ? "(" : "") +
-						arg[0].toStringAsArgX(op,p) +
+						args[0].toStringAsArgX(op,p) +
 						" " + name + " "      +
-						arg[1].toStringAsArgX(op,p) +
+						args[1].toStringAsArgX(op,p) +
 						(((x && p >= prio) || (!x && p > prio)) ? ")" : ""));
 			}
 			if ((p = op.opPrio(name,"yfx")) >= OperatorManager.OP_LOW) {
 				return(
 						(((x && p >= prio) || (!x && p > prio)) ? "(" : "") +
-						arg[0].toStringAsArgY(op,p) +
+						args[0].toStringAsArgY(op,p) +
 						" " + name + " "      +
-						arg[1].toStringAsArgX(op,p) +
+						args[1].toStringAsArgX(op,p) +
 						(((x && p >= prio) || (!x && p > prio)) ? ")" : ""));
 			}
 			if ((p = op.opPrio(name,"xfy")) >= OperatorManager.OP_LOW) {
 				if (!name.equals(",")) {
 					return(
 							(((x && p >= prio) || (!x && p > prio)) ? "(" : "") +
-							arg[0].toStringAsArgX(op,p) +
+							args[0].toStringAsArgX(op,p) +
 							" " + name + " "      +
-							arg[1].toStringAsArgY(op,p) +
+							args[1].toStringAsArgY(op,p) +
 							(((x && p >= prio) || (!x && p > prio)) ? ")" : ""));
 				} else {
 					return(
 							(((x && p >= prio) || (!x && p > prio)) ? "(" : "") +
-							arg[0].toStringAsArgX(op,p) +
+							args[0].toStringAsArgX(op,p) +
 							//",\n\t"+
 							","+
-							arg[1].toStringAsArgY(op,p) +
+							args[1].toStringAsArgY(op,p) +
 							(((x && p >= prio) || (!x && p > prio)) ? ")" : ""));
 				}
 			}
@@ -823,27 +765,27 @@ public class Struct extends Term {
 				return(
 						(((x && p >= prio) || (!x && p > prio)) ? "(" : "") +
 						name + " "            +
-						arg[0].toStringAsArgX(op,p) +
+						args[0].toStringAsArgX(op,p) +
 						(((x && p >= prio) || (!x && p > prio)) ? ")" : ""));
 			}
 			if ((p = op.opPrio(name,"fy")) >= OperatorManager.OP_LOW) {
 				return(
 						(((x && p >= prio) || (!x && p > prio)) ? "(" : "") +
 						name + " "            +
-						arg[0].toStringAsArgY(op,p) +
+						args[0].toStringAsArgY(op,p) +
 						(((x && p >= prio) || (!x && p > prio)) ? ")" : ""));
 			}
 			if ((p = op.opPrio(name,"xf")) >= OperatorManager.OP_LOW) {
 				return(
 						(((x && p >= prio) || (!x && p > prio)) ? "(" : "") +
-						arg[0].toStringAsArgX(op,p) +
+						args[0].toStringAsArgX(op,p) +
 						" " + name + " "      +
 						(((x && p >= prio) || (!x && p > prio)) ? ")" : ""));
 			}
 			if ((p = op.opPrio(name,"yf")) >= OperatorManager.OP_LOW) {
 				return(
 						(((x && p >= prio) || (!x && p > prio)) ? "(" : "") +
-						arg[0].toStringAsArgY(op,p) +
+						args[0].toStringAsArgY(op,p) +
 						" " + name + " "      +
 						(((x && p >= prio) || (!x && p > prio)) ? ")" : ""));
 			}
@@ -854,9 +796,9 @@ public class Struct extends Term {
 		}
 		v = v + "(";
 		for (p = 1;p < arity;p++) {
-			v = v + arg[p - 1].toStringAsArgY(op,0) + ",";
+			v = v + args[p - 1].toStringAsArgY(op,0) + ",";
 		}
-		v = v + arg[arity - 1].toStringAsArgY(op,0);
+		v = v + args[arity - 1].toStringAsArgY(op,0);
 		v = v + ")";
 		return v;
 	}

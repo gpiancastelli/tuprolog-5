@@ -54,7 +54,20 @@ public class FunctorTest {
         SolveInfo solution = engine.solve("functor(X, foo, 3).");
         assertTrue(solution.isSuccess());
         Term binding = solution.getTerm("X");
-        assertEquals(Term.createTerm("foo(_, _, _)"), binding);
+        // X = foo(_, _, _)
+        assertTrue(binding.isCompound());
+        Struct foo = (Struct) binding;
+        assertEquals(3, foo.getArity());
+        assertEquals("foo", foo.getName());
+        Term arg = foo.getArg(0);
+        assertTrue(arg instanceof Var);
+        assertTrue(((Var) arg).isAnonymous());
+        arg = foo.getArg(1);
+        assertTrue(arg instanceof Var);
+        assertTrue(((Var) arg).isAnonymous());
+        arg = foo.getArg(2);
+        assertTrue(arg instanceof Var);
+        assertTrue(((Var) arg).isAnonymous());
     }
 
     @Test public void test7() throws PrologException {
