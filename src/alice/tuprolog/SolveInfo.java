@@ -181,22 +181,22 @@ public class SolveInfo  {
 	 */    
 	public String toString() {
 		if (isSuccess) {
-			StringBuffer st = new StringBuffer("yes");
+			StringBuilder sb = new StringBuilder("yes");
 			if (bindings.size() > 0) {
-				st.append(".\n");
+				sb.append(".\n");
 			} else {
-				st.append(". ");
+				sb.append(". ");
 			}
 			Iterator it = bindings.iterator();
 			while(it.hasNext()) {
 				Var v = (Var) it.next();
 				if (v != null && !v.isAnonymous() && v.isBound() &&
 						(!(v.getTerm() instanceof Var) || (!((Var) (v.getTerm())).getName().startsWith("_")))) {
-					st.append(v);
-					st.append("  ");
+					sb.append(v);
+					sb.append("  ");
 				}
 			}
-			return st.toString().trim();
+			return sb.toString().trim();
 		} else {
 			return "no.";
 		}

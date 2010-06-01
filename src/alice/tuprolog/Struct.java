@@ -684,14 +684,14 @@ public class Struct extends Term {
 			// comma case 
 			Term head = ((Struct)args[0]).getTerm(0);
 			Term tail = ((Struct)args[0]).getTerm(1);
-			StringBuffer buf = new StringBuffer(head.toString());
+			StringBuilder buffer = new StringBuilder(head.toString());
 			while (tail instanceof Struct && ((Struct)tail).getName().equals(",")){
 				head = ((Struct)tail).getTerm(0);
-				buf.append(","+head.toString());
+				buffer.append(","+head.toString());
 				tail = ((Struct)tail).getTerm(1);
 			}
-			buf.append(","+tail.toString());
-			return buf.toString();
+			buffer.append(","+tail.toString());
+			return buffer.toString();
 			//	return arg[0]+","+((Struct)arg[1]).toString0_bracket();
 		}
 	}

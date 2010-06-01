@@ -277,7 +277,7 @@ public class TheoryManager {
      * @param onlyDynamic if true, fetches only dynamic clauses
      */
     public String getTheory(boolean onlyDynamic) {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         for (Iterator dynamicClauses = dynamicDBase.iterator(); dynamicClauses.hasNext();) {
             ClauseInfo d = (ClauseInfo) dynamicClauses.next();
             buffer.append(d.toString(engine.getOperatorManager())).append("\n");
