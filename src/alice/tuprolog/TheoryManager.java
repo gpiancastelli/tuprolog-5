@@ -129,12 +129,12 @@ public class TheoryManager {
      * Returns a family of clauses with functor and arity equals
      * to the functor and arity of the term passed as a parameter
      */
-    List find(Term headt) {
+    List<ClauseInfo> find(Term headt) {
         if (headt instanceof Struct) {
         	String key = ((Struct) headt).getPredicateIndicator();
-        	List list = (List) dynamicDBase.getPredicates(key);
+        	List<ClauseInfo> list = dynamicDBase.getPredicates(key);
         	if (list.isEmpty())
-        		list = (List) staticDBase.getPredicates(key);
+        		list = staticDBase.getPredicates(key);
         	return list;
         }
         	
@@ -148,7 +148,7 @@ public class TheoryManager {
 //            return l;
             throw new RuntimeException();
         }
-        return new LinkedList();
+        return new LinkedList<ClauseInfo>();
     }
 
     /**

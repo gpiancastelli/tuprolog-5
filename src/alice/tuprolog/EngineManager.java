@@ -1,6 +1,19 @@
 /*
+ * tuProlog - Copyright (C) 2001-2002  aliCE team at deis.unibo.it
  *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
  *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package alice.tuprolog;
 
@@ -15,7 +28,7 @@ import java.util.NoSuchElementException;
  */
 public class EngineManager {
 	
-	private Prolog			mediator;
+	private Prolog           mediator;
 	private TheoryManager    theoryManager;
 	private PrimitiveManager primitiveManager;
 	private LibraryManager   libraryManager;
@@ -25,8 +38,8 @@ public class EngineManager {
 	Engine env;
 	/* Last environment used */
 	private Engine last_env;
-	/* Stack environments of nidicate solving */
-	private LinkedList stackEnv = new LinkedList();
+	/* Stack environments of nested solving */
+	private LinkedList<Engine> stackEnv = new LinkedList<Engine>();
 	
 	private SolveInfo sinfo;
 	
@@ -49,7 +62,7 @@ public class EngineManager {
 	
 	
 	public EngineManager() {
-		/* Istanzio gli stati */
+		/* Instantiate states */
 		INIT            = new StateInit(this);
 		GOAL_EVALUATION = new StateGoalEvaluation(this);
 		RULE_SELECTION  = new StateRuleSelection(this);
@@ -63,10 +76,10 @@ public class EngineManager {
 	
 	
 	/**
-	 * Config this Manager
+	 * Configure this Manager
 	 */
 	void initialize(Prolog vm) {
-		mediator			= vm;
+		mediator		 = vm;
 		theoryManager    = vm.getTheoryManager();
 		primitiveManager = vm.getPrimitiveManager();
 		libraryManager   = vm.getLibraryManager();
@@ -86,7 +99,7 @@ public class EngineManager {
 	 * @param g the term representing the goal to be demonstrated
 	 * @return the result of the demonstration
 	 * @see SolveInfo
-	 **/
+	 */
 	public SolveInfo solve(Term query) {
 		try {
 			query.resolveTerm();
@@ -157,9 +170,9 @@ public class EngineManager {
 	
 	
 	private void freeze() {
-		if(env==null) return;
+		if(env == null) return;
 		try {
-			if (stackEnv.getLast()==env) return;
+			if (stackEnv.getLast() == env) return;
 		} catch(NoSuchElementException e) {}
 		stackEnv.addLast(env);
 	}
@@ -172,15 +185,14 @@ public class EngineManager {
 	private void defreeze() {
 		last_env = env;
 		if (stackEnv.isEmpty()) return;
-		env = (Engine)(stackEnv.removeLast());
+		env = stackEnv.removeLast();
 	}
-	
 	
 	/*
 	 * Utility functions for Finite State Machine
 	 */
 	
-	List find(Term t) {
+	List<ClauseInfo> find(Term t) {
 		return theoryManager.find(t);
 	}
 	
@@ -196,28 +208,24 @@ public class EngineManager {
 		env.currentContext.goalsToEval.pushSubGoal(goals);
 	}
 	
-	
 	void cut() {
 		env.choicePointSelector.cut(env.currentContext.choicePointAfterCut);
 	}
 	
-	
 	ExecutionContext getCurrentContext() {
-		return (env==null)? null : env.currentContext;
+		return (env == null)? null : env.currentContext;
 	}
-	
 	
 	/**
 	 * Asks for the presence of open alternatives to be explored
-	 * in current demostration process.
+	 * in current demonstration process.
 	 *
 	 * @return true if open alternatives are present
 	 */
 	boolean hasOpenAlternatives() {
-		if (sinfo==null) return false;
+		if (sinfo == null) return false;
 		return sinfo.hasOpenAlternatives();
 	}
-	
 	
 	/**
 	 * Checks if the demonstration process was stopped by an halt command.
@@ -225,9 +233,8 @@ public class EngineManager {
 	 * @return true if the demonstration was stopped
 	 */
 	boolean isHalted() {
-		if (sinfo==null) return false;
+		if (sinfo == null) return false;
 		return sinfo.isHalted();
 	}
-	
 	
 }

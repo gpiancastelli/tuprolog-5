@@ -28,12 +28,21 @@ public class FindallTest {
         assertEquals(Term.createTerm("[1, 2]"), binding);
     }
 
-    @Test // (expected=AssertionError.class)
-    public void test2() throws PrologException {
+    @Test public void test2() throws PrologException {
         SolveInfo solution = engine.solve("findall(X+Y, (X=1), S).");
         assertTrue(solution.isSuccess());
         Term binding = solution.getTerm("S");
-        assertEquals(Term.createTerm("[1 + _]"), binding);
+        // S = [1 + _]
+        assertTrue(binding.isList());
+        Struct list = (Struct) binding;
+        assertEquals(1, list.listSize());
+        assertTrue(list.getArg(0).isCompound());
+        Struct concatenation = (Struct) list.getArg(0);
+        assertEquals("+", concatenation.getName());
+        assertEquals(new Int(1), concatenation.getArg(0));
+        assertTrue(concatenation.getArg(1) instanceof Var);
+        Var anonymous = (Var) concatenation.getArg(1);
+        assertTrue(anonymous.isAnonymous());
     }
 
     @Test public void test3() throws PrologException {

@@ -24,7 +24,7 @@ import java.util.*;
  *
  * @author ivar.orstavik@hist.no
  */
-class ClauseDatabase extends HashMap {
+class ClauseDatabase extends HashMap<String, LinkedList<ClauseInfo>> {
 
     void addFirst(String key, ClauseInfo d) {
         LinkedList family = (LinkedList) get(key);
@@ -44,11 +44,11 @@ class ClauseDatabase extends HashMap {
         return (LinkedList) remove(key);
     }
 
-    List getPredicates(String key) {
-        LinkedList family = (LinkedList) get(key);
+    List<ClauseInfo> getPredicates(String key) {
+        LinkedList<ClauseInfo> family = get(key);
         if (family == null)
-            return new LinkedList();
-        return (List) family.clone();
+            return new LinkedList<ClauseInfo>();
+        return (LinkedList<ClauseInfo>) family.clone();
     }
 
     public Iterator iterator() {
