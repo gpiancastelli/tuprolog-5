@@ -24,34 +24,36 @@ import alice.tuprolog.Theory;
  * This class represents events occurring in theory management. 
  *
  * @since 1.3 
- *
  */
 public class TheoryEvent extends PrologEvent {
 
-    private Theory oldTh;
+	private static final long serialVersionUID = -4303577074375211756L;
+	
+	private Theory oldTh;
     private Theory newTh;
     
-    public TheoryEvent(Prolog source, Theory oldth,Theory newth){
-        super(source);
-    	    oldTh=oldth;
-    	    newTh=newth;
-    	}
-    	
-    	/**
-    	 * Gets the old theory
-    	 * 
-    	 * @return the old theory
-    	 */
-    	public Theory getOldTheory(){
-    	    return oldTh;
-    	}
+	public TheoryEvent(Prolog source, Theory oldTh, Theory newTh) {
+		super(source);
+		this.oldTh = oldTh;
+		this.newTh = newTh;
+	}
 
-    	/**
-    	 * Gets the new theory
-    	 * 
-    	 * @return the new theory
-    	 */
-    	public Theory getNewTheory(){
-    	    return newTh;
-    	}
+	/**
+	 * Gets the old theory
+	 * 
+	 * @return the old theory
+	 */
+	public Theory getOldTheory() {
+		return oldTh;
+	}
+
+	/**
+	 * Gets the new theory
+	 * 
+	 * @return the new theory
+	 */
+	public Theory getNewTheory() {
+		return newTh;
+	}
+
 }

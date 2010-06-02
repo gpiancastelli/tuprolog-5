@@ -16,25 +16,27 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package alice.tuprolog.event;
-import java.util.*;
+
+import java.util.EventObject;
 
 /**
  *  This class defines an event defining a warning emitted by
  *  a prolog engine
- *
  */
 public class WarningEvent extends EventObject {
 
-    /** event description */
+	private static final long serialVersionUID = -1650703082666303904L;
+	
+	/** event description */
     private String msg;
 
-    public WarningEvent(Object source,String msg_){
+    public WarningEvent(Object source, String msg){
         super(source);
-        msg=msg_;
+        this.msg = msg;
     }
 
     public String getMsg(){
-        return "WARNING: "+msg;
+        return "WARNING: " + msg;
     }
     
 }

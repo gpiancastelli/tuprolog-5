@@ -24,15 +24,16 @@ import alice.tuprolog.SolveInfo;
  * This class represents events concerning query management.
  * 
  * @since 1.3
- *
  */
 public class QueryEvent extends PrologEvent {
 
-    private SolveInfo info;
+	private static final long serialVersionUID = 7088657346801885879L;
+	
+	private SolveInfo info;
     
     public QueryEvent(Prolog source, SolveInfo info){
         super(source);
-        this.info=info;
+        this.info = info;
     }
     
     /**
@@ -43,4 +44,5 @@ public class QueryEvent extends PrologEvent {
     public SolveInfo getSolveInfo(){
         return info;
     }
+
 }
