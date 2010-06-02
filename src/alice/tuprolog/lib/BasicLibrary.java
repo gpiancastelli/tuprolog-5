@@ -197,18 +197,16 @@ public class BasicLibrary extends Library {
 	
 	public boolean integer_1(Term t) {
 		t = t.getTerm();
-		if (t instanceof Var || t instanceof Struct)
+		if (!(t instanceof Number))
 			return false;
-		alice.tuprolog.Number n = (alice.tuprolog.Number) t.getTerm();
-		return n.isInteger();
+		return ((Number) t).isInteger();
 	}
 	
 	public boolean float_1(Term t) {
 		t = t.getTerm();
-		if (t instanceof Var || t instanceof Struct)
+		if (!(t instanceof Number))
 			return false;
-		alice.tuprolog.Number n = (alice.tuprolog.Number) t.getTerm();
-		return n.isReal();
+		return ((Number) t).isReal();
 	}
 	
 	public boolean atom_1(Term t) {
