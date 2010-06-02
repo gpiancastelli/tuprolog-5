@@ -17,8 +17,8 @@
  */
 package alice.tuprolog;
 
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Administrator of flags declared
@@ -26,23 +26,22 @@ import java.util.*;
  */
 class FlagManager {
 	
-	/* flag list */
-	private ArrayList flags;
+	/** flag list */
+	private List<Flag> flags;
 	
-	/**  mediator owner of the manager*/
-	protected Prolog  mediator;
+	/** mediator owner of the manager*/
+	protected Prolog mediator;
 	
 	FlagManager() {
-		flags = new ArrayList();
+		flags = new ArrayList<Flag>();
 	}
 	
 	/**
-	 * Config this Manager
+	 * Configure this Manager
 	 */
 	public void initialize(Prolog vm) {
 		mediator = vm;
 	}
-	
 	
 	/**
 	 * Defines a new flag
@@ -53,39 +52,28 @@ class FlagManager {
 	}
 	
 	public boolean setFlag(String name, Term value) {
-		java.util.Iterator it = flags.iterator();
-		while (it.hasNext()) {
-			Flag flag = (Flag) it.next();
-			if (flag.getName().equals(name)) {
+		for (Flag flag : flags) {
+			if (flag.getName().equals(name))
 				if (flag.isModifiable() && flag.isValidValue(value)) {
 					flag.setValue(value);
 					return true;
-				} else {
+				} else
 					return false;
-				}
-			}
 		}
 		return false;
 	}    
 	
 	public Struct getPrologFlagList() {
-		Struct flist = new Struct();
-		java.util.Iterator it = flags.iterator();
-		while (it.hasNext()) {
-			Flag fl = (Flag) it.next();
-			flist = new Struct(new Struct("flag", new Struct(fl.getName()), fl.getValue()), flist);
-		}
-		return flist;
+		Struct flagList = new Struct();
+		for (Flag flag : flags)
+			flagList = new Struct(new Struct("flag", new Struct(flag.getName()), flag.getValue()), flagList);
+		return flagList;
 	}
 	
 	public Term getFlag(String name) {
-		java.util.Iterator it = flags.iterator();
-		while (it.hasNext()) {
-			Flag fl = (Flag) it.next();
-			if (fl.getName() == name) {
-				return fl.getValue();
-			}
-		}
+		for (Flag flag : flags)
+			if (flag.getName().equals(name))
+				return flag.getValue();
 		return null;
 	}
 	
