@@ -24,6 +24,8 @@ package alice.tuprolog;
  */
 public class InvalidLibraryException extends PrologException {
 	
+	private static final long serialVersionUID = -4014985734802883564L;
+	
 	private String libraryName;
 	private int line;
 	private int pos;

@@ -23,10 +23,9 @@ import alice.tuprolog.PrologException;
  * to register an object in the JavaLibrary
  *
  * @see JavaLibrary
- *
- *
- *
- *
  */
 public class InvalidObjectIdException extends PrologException {
+
+	private static final long serialVersionUID = 7495034598262848218L;
+
 }

@@ -23,6 +23,8 @@ package alice.tuprolog;
  */
 public class PrologException extends Exception {
 	
+	private static final long serialVersionUID = -7516617013746235989L;
+
 	public PrologException() {}
 	
 	public PrologException(String st) {

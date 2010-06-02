@@ -19,8 +19,9 @@ package alice.tuprolog;
 
 /**
  * This exception means that a not well formed goal has been specified.
- *
- *
- *
  */
-public class UnknownVarException extends PrologException {}
+public class UnknownVarException extends PrologException {
+
+	private static final long serialVersionUID = 3831907564905563679L;
+	
+}

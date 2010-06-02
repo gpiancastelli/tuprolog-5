@@ -21,9 +21,10 @@ package alice.tuprolog;
  * This exceptions means that a not valid tuProlog theory has been specified
  *
  * @see Theory
- *
  */
 public class InvalidTheoryException extends PrologException {
+	
+	private static final long serialVersionUID = 8697898609842609809L;
 	
 	public int line = -1;
 	public int pos = -1;

@@ -22,9 +22,10 @@ package alice.tuprolog;
  * and no halt predicate has been issued
  *
  * @see SolveInfo
- *
  */
 public class HaltException extends PrologException {
+
+	private static final long serialVersionUID = 5183065034196398454L;
 	
 	private int value;
 	
