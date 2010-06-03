@@ -17,10 +17,10 @@
  */
 package alice.tuprolog;
 
-import java.util.AbstractMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Struct class represents both compound prolog term
@@ -326,34 +326,32 @@ public class Struct extends Term {
 	
 	/**
 	 * Gets a copy of this structure
-	 * @param vMap is needed for register occurence of same variables
+	 * @param vMap is needed for register occurrence of same variables
 	 */
-	Term copy(AbstractMap vMap, int idExecCtx) {
+	Term copy(Map<Var, Var> vMap, int idExecCtx) {
 		Struct t = new Struct(arity);
-		t.resolved  = resolved;
-		t.name      = name;
-		t.predicateIndicator   = predicateIndicator;
+		t.resolved = resolved;
+		t.name = name;
+		t.predicateIndicator = predicateIndicator;
 		t.primitive = primitive;
-		for (int c = 0;c < arity;c++) {
+		for (int c = 0; c < arity; c++)
 			t.args[c] = args[c].copy(vMap, idExecCtx);
-		}
 		return t;
 	}
 	
 	
 	/**
 	 * Gets a copy of this structure
-	 * @param vMap is needed for register occurence of same variables
+	 * @param vMap is needed for register occurrence of same variables
 	 */
-	Term copy(AbstractMap vMap, AbstractMap substMap) {
+	Term copy(Map<Var, Var> vMap, Map<Var, Var> substMap) {
 		Struct t = new Struct(arity);
-		t.resolved  = false;
-		t.name      = name;
-		t.predicateIndicator   = predicateIndicator;
+		t.resolved = false;
+		t.name = name;
+		t.predicateIndicator = predicateIndicator;
 		t.primitive = null;
-		for (int c = 0;c < arity;c++) {
+		for (int c = 0; c < arity; c++)
 			t.args[c] = args[c].copy(vMap, substMap);
-		}
 		return t;
 	}
 	

@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import alice.util.OneWayList;
 
@@ -143,7 +144,7 @@ public abstract class Term {
 	 * @param idExecCtx Execution Context identified
 	 */
 	public Term copyGoal(AbstractMap vars, int idExecCtx) {
-		return copy(vars,idExecCtx);
+		return copy(vars, idExecCtx);
 	}
 	
 	
@@ -171,12 +172,12 @@ public abstract class Term {
 	 * (if empty list then no renaming)
 	 * @param idExecCtx Execution Context identifier
 	 */
-	abstract Term copy(AbstractMap vMap, int idExecCtx);
+	abstract Term copy(Map<Var, Var> vMap, int idExecCtx);
 	
 	/**
 	 * gets a copy for result.
 	 */
-	abstract Term copy(AbstractMap vMap, AbstractMap substMap);
+	abstract Term copy(Map<Var, Var> vMap, Map<Var, Var> substMap);
 	
 	/**
 	 * Try to unify two terms

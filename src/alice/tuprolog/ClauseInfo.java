@@ -144,29 +144,29 @@ public class ClauseInfo {
 	 * Perform copy for assertion operation
 	 */
 	void performCopy() {
-		AbstractMap v = new LinkedHashMap();
+		Map<Var, Var> v = new LinkedHashMap<Var, Var>();
 		clause = (Struct) clause.copy(v, Var.ORIGINAL);
-		v = new IdentityHashMap();
-		head = (Struct)head.copy(v,Var.ORIGINAL);
+		v = new IdentityHashMap<Var, Var>();
+		head = (Struct) head.copy(v, Var.ORIGINAL);
 		body = new SubGoalTree();
-		bodyCopy(body,bodyCopy,v,Var.ORIGINAL);
+		bodyCopy(body, bodyCopy, v, Var.ORIGINAL);
 	}
 	
 	/**
-	 * Perform copy for use in current engine's demostration
+	 * Perform copy for use in current engine's demonstration
 	 * @param idExecCtx Current ExecutionContext id
 	 */
 	void performCopy(int idExecCtx) {
-		IdentityHashMap v = new IdentityHashMap();
-		headCopy = (Struct)head.copy(v,idExecCtx);
+		Map<Var, Var> v = new IdentityHashMap<Var, Var>();
+		headCopy = (Struct) head.copy(v, idExecCtx);
 		bodyCopy = new SubGoalTree();
-		bodyCopy(body,bodyCopy,v,idExecCtx);
+		bodyCopy(body, bodyCopy, v, idExecCtx);
 	}
 	
-	private void bodyCopy(SubGoalTree source, SubGoalTree destination, AbstractMap map, int id) {
+	private void bodyCopy(SubGoalTree source, SubGoalTree destination, Map<Var, Var> map, int id) {
 		Iterator it = source.iterator();
 		while (it.hasNext()) {
-			AbstractSubGoalTree s = (AbstractSubGoalTree)it.next();
+			AbstractSubGoalTree s = (AbstractSubGoalTree) it.next();
 			if (s.isLeaf()) {
 				SubGoalElement l = (SubGoalElement)s;
 				Term t = l.getValue().copy(map,id);

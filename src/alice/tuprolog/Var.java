@@ -17,7 +17,9 @@
  */
 package alice.tuprolog;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class represents a variable term.
@@ -121,48 +123,45 @@ public class Var extends Term {
 	 * a variable with the same time identifier is found in the list,
 	 * then the variable in the list is returned.
 	 */
-	Term copy(AbstractMap vMap, int idExecCtx) {
+	Term copy(Map<Var, Var> vMap, int idExecCtx) {
 		Term tt = getTerm();
 		if (tt == this) {
-			Var v = (Var)(vMap.get(this));
+			Var v = (Var) vMap.get(this);
 			if (v == null) {
-				//No occurence of v before
-				v = new Var(name,idExecCtx,0,timestamp);
-				vMap.put(this,v);
+				// No occurrence of v before
+				v = new Var(name, idExecCtx, 0, timestamp);
+				vMap.put(this, v);
 			}
 			return v;
-		} else {
+		} else
 			return tt.copy(vMap, idExecCtx);
-		}
 	}
 	
 	
 	/**
 	 * Gets a copy of this variable.
 	 */
-	Term copy(AbstractMap vMap, AbstractMap substMap) {
+	Term copy(Map<Var, Var> vMap, Map<Var, Var> substMap) {
 		Var v;
 		Object temp = vMap.get(this);
 		if (temp == null) {
-			v = new Var(null,Var.PROGRESSIVE,vMap.size(),timestamp);//name,Var.PROGRESSIVE,vMap.size(),timestamp);
+			v = new Var(null, Var.PROGRESSIVE, vMap.size(), timestamp);//name,Var.PROGRESSIVE,vMap.size(),timestamp);
 			vMap.put(this,v);
-		} else {
+		} else
 			v = (Var) temp;
-		}
 		Term t = getTerm();
 		if (t instanceof Var) {
 			Object tt = substMap.get(t);
 			if (tt == null) {
-				substMap.put(t,v);
+				substMap.put((Var) t, v);
 				v.link = null;
-			} else {
+			} else
 				v.link = (tt != v) ? (Var)tt : null;
-			}
 		}
-		if (t instanceof Struct) {
-			v.link = t.copy(vMap,substMap);
-		}
-		if (t instanceof Number) v.link = t;
+		if (t instanceof Struct)
+			v.link = t.copy(vMap, substMap);
+		if (t instanceof Number)
+			v.link = t;
 		return v;
 	}
 	

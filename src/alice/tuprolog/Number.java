@@ -17,17 +17,15 @@
  */
 package alice.tuprolog;
 
-import java.util.*;
+import java.util.Map;
 
 /**
- *
  * Number abstract class represents numbers prolog data type
  *
  * @see Int
  * @see Long
  * @see Float
  * @see Double
- *
  */
 public abstract class Number extends Term {
 	
@@ -154,7 +152,6 @@ public abstract class Number extends Term {
 		return true;
 	}
 	
-	
 	//
 	
 	/**
@@ -170,17 +167,16 @@ public abstract class Number extends Term {
 	 * the list argument passed contains the list of variables to be renamed
 	 * (if empty list then no renaming)
 	 */
-	Term copy(AbstractMap vMap, int idExecCtx) {
+	Term copy(Map<Var, Var> vMap, int idExecCtx) {
 		return this;
 	}
 	
 	/**
 	 * gets a copy of the term.
 	 */
-	Term copy(AbstractMap vMap, AbstractMap substMap) {
+	Term copy(Map<Var, Var> vMap, Map<Var, Var> substMap) {
 		return this;
 	}
-	
 	
 	long resolveTerm(long count) {
 		return count;
@@ -192,6 +188,5 @@ public abstract class Number extends Term {
 	public void free() {}
 	
 	void restoreVariables() {}
-	
 	
 }

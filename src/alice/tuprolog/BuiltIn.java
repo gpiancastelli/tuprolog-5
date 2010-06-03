@@ -217,7 +217,7 @@ public class BuiltIn extends Library {
 	 * <ul>
 	 * <li>If T is a variable then G is the control construct call,
 	 * whose argument is T.</li>
-	 * <li>If the principal functor of T is t ’,’/2 or ;/2 or ->/2,
+	 * <li>If the principal functor of T is t ï¿½,ï¿½/2 or ;/2 or ->/2,
 	 * then each argument of T shall also be converted to a goal.</li>
 	 * <li>If T is an atom or compound term with principal functor FT,
 	 * then G is a predication whose predicate indicator is FT, and
@@ -310,7 +310,7 @@ public class BuiltIn extends Library {
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
 		int id = engineManager.env.nDemoSteps;
-		return unify(arg1,arg0.copy(new IdentityHashMap(),id));
+		return unify(arg1, arg0.copy(new IdentityHashMap<Var, Var>(), id));
 	}	
 	
 	
