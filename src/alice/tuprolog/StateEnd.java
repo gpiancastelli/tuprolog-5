@@ -17,20 +17,19 @@
  */
 package alice.tuprolog;
 
-import java.util.*;
-
-import alice.tuprolog.Struct;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Alex Benini
  *
- * End state of demostration.
+ * End state of demonstration.
  */
 public class StateEnd extends State {
 	
 	private int endState;	
 	private Struct goal;
-	private List vars;
+	private List<Var> vars;
 	
 	/**
 	 * Constructor
@@ -48,23 +47,25 @@ public class StateEnd extends State {
 		return goal;
 	}
 	
-	public List getResultVars() {
+	public List<Var> getResultVars() {
 		return vars;
 	}
 	
-	
 	void doJob(Engine e) {
-		vars = new ArrayList();
-		goal = (Struct)e.startGoal.copyResult(e.goalVars,vars);
+		vars = new ArrayList<Var>();
+		goal = (Struct) e.startGoal.copyResult(e.goalVars, vars);
 	}
 	
-	
 	public String toString() {
-		switch(endState){
-		case EngineManager.FALSE  : return "FALSE";
-		case EngineManager.TRUE   : return "TRUE";
-		case EngineManager.TRUE_CP: return "TRUE_CP";
-		default                   : return "HALT";
+		switch (endState) {
+		case EngineManager.FALSE:
+			return "FALSE";
+		case EngineManager.TRUE:
+			return "TRUE";
+		case EngineManager.TRUE_CP:
+			return "TRUE_CP";
+		default:
+			return "HALT";
 		}
 	}
 	

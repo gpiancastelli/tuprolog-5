@@ -32,7 +32,7 @@ public class Engine {
 	State  nextState;
 	Term   query;
 	Struct startGoal;
-	Collection goalVars;
+	Collection<Var> goalVars;
 	
 	int    nDemoSteps;
 	
@@ -115,8 +115,8 @@ public class Engine {
 	}
 	
 	void prepareGoal() {
-		LinkedHashMap goalVars = new LinkedHashMap();
-		startGoal = (Struct)(query).copyGoal(goalVars,0);
+		Map<Var, Var> goalVars = new LinkedHashMap<Var, Var>();
+		startGoal = (Struct) query.copy(goalVars, 0);
 		this.goalVars = goalVars.values();
 	}
 	

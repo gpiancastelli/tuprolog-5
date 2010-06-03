@@ -17,7 +17,6 @@
  */
 package alice.tuprolog;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.IdentityHashMap;
@@ -128,7 +127,6 @@ public abstract class Term {
 	 */
 	abstract long resolveTerm(long count);
 	
-	
 	/**
 	 * Resolves variables inside the term
 	 * 
@@ -138,32 +136,20 @@ public abstract class Term {
 		resolveTerm(System.currentTimeMillis());
 	}
 	
-	
-	/**
-	 * gets a engine's copy of this term.
-	 * @param idExecCtx Execution Context identified
-	 */
-	public Term copyGoal(AbstractMap vars, int idExecCtx) {
-		return copy(vars, idExecCtx);
-	}
-	
-	
 	/**
 	 * gets a copy of this term for the output
 	 */
-	public Term copyResult(Collection goalVars, List resultVars) {
-		IdentityHashMap originals = new IdentityHashMap();
-		for (Iterator i = goalVars.iterator(); i.hasNext();) {
-			Var key = (Var) i.next();
+	public Term copyResult(Collection<Var> goalVars, List<Var> resultVars) {
+		Map<Var, Var> originals = new IdentityHashMap<Var, Var>();
+		for (Var key : goalVars) {
 			Var clone = new Var();
 			if (!key.isAnonymous())
 				clone = new Var(key.getOriginalName());
-			originals.put(key,clone);
+			originals.put(key, clone);
 			resultVars.add(clone);
 		}
-		return copy(originals,new IdentityHashMap());
+		return copy(originals, new IdentityHashMap<Var, Var>());
 	}
-	
 	
 	/**
 	 * gets a copy (with renamed variables) of the term.
