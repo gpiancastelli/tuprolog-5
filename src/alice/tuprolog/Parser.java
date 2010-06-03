@@ -67,7 +67,7 @@ public class Parser {
     private OperatorManager opManager = defaultOperatorManager;
 
     /**
-     * creating a Parser specifing how to handle operators
+     * creating a Parser specifying how to handle operators
      * and what text to parse
      */
     public Parser(OperatorManager op, InputStream theoryText) {
@@ -77,7 +77,7 @@ public class Parser {
     }
 
     /**
-     * creating a Parser specifing how to handle operators
+     * creating a Parser specifying how to handle operators
      * and what text to parse
      */
     public Parser(OperatorManager op, String theoryText) {
@@ -266,12 +266,12 @@ public class Parser {
     }
 
     /**
-     * Parses and returns a valid 'leftside' of an expression.
+     * Parses and returns a valid 'left side' of an expression.
      * If the left side starts with a prefix, it consumes other expressions with a lower priority than itself.
      * If the left side does not have a prefix it must be an expr0.
      *
-     * @param commaIsEndMarker used when the leftside is part of and argument list of expressions
-     * @param maxPriority operators with a higher priority than this will effectivly end the expression
+     * @param commaIsEndMarker used when the left side is part of and argument list of expressions
+     * @param maxPriority operators with a higher priority than this will effectively end the expression
      * @return a wrapper of: 1. term correctly structured and 2. the priority of its root operator
      * @throws InvalidTermException
      */
@@ -336,13 +336,13 @@ public class Parser {
         Token t1 = tokenizer.readToken();
 
         if (t1.isType(Tokenizer.INTEGER))
-            return Parser.parseInteger(t1.seq); //todo moved method to Number
+            return Parser.parseInteger(t1.seq); // TODO moved method to Number
 
         if (t1.isType(Tokenizer.FLOAT))
-            return Parser.parseFloat(t1.seq);   //todo moved method to Number
+            return Parser.parseFloat(t1.seq);   // TODO moved method to Number
 
         if (t1.isType(Tokenizer.VARIABLE))
-            return new Var(t1.seq);             //todo switched to use the internal check for "_" in Var(String)
+            return new Var(t1.seq);             // TODO switched to use the internal check for "_" in Var(String)
 
         if (t1.isType(Tokenizer.ATOM) || t1.isType(Tokenizer.SQ_SEQUENCE) || t1.isType(Tokenizer.DQ_SEQUENCE)) {
             if (!t1.isFunctor())
@@ -352,7 +352,7 @@ public class Parser {
             Token t2 = tokenizer.readToken();   //reading left par
             if (!t2.isType(Tokenizer.LPAR))
                 throw new InvalidTermException("bug in parsing process. Something identified as functor misses its first left parenthesis");//todo check can be skipped
-            LinkedList a = expr0_arglist();     //reading arguments
+            LinkedList<Term> a = expr0_arglist();     //reading arguments
             Token t3 = tokenizer.readToken();
             if (t3.isType(Tokenizer.RPAR))      //reading right par
                 return new Struct(functor, a);
@@ -394,7 +394,7 @@ public class Parser {
         throw new InvalidTermException("The following token could not be identified: "+t1.seq);
     }
 
-    //todo make non-recursive?
+    // TODO make non-recursive?
     private Term expr0_list() throws InvalidTermException, IOException {
         Term head = expr(true);
         Token t = tokenizer.readToken();
@@ -409,18 +409,18 @@ public class Parser {
         throw new InvalidTermException("The expression: " + head + "\nis not followed by either a ',' or '|'  or ']'.");
     }
 
-    //todo make non-recursive
-    private LinkedList expr0_arglist() throws InvalidTermException, IOException {
+    // TODO make non-recursive
+    private LinkedList<Term> expr0_arglist() throws InvalidTermException, IOException {
         Term head = expr(true);
         Token t = tokenizer.readToken();
         if (",".equals(t.seq)) {
-            LinkedList l = expr0_arglist();
+            LinkedList<Term> l = expr0_arglist();
             l.addFirst(head);
             return l;
         }
         if (")".equals(t.seq)) {
             tokenizer.unreadToken(t);
-            LinkedList l = new LinkedList();
+            LinkedList<Term> l = new LinkedList<Term>();
             l.add(head);
             return l;
         }

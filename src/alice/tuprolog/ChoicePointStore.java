@@ -3,7 +3,6 @@ package alice.tuprolog;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ChoicePointStore {
 	
 	private ChoicePointContext pointer;
@@ -82,8 +81,8 @@ public class ChoicePointStore {
 	 * Methods for spyListeners
 	 */
 	
-	public List getChoicePoints() {
-		ArrayList l = new ArrayList();
+	public List<ChoicePointContext> getChoicePoints() {
+		List<ChoicePointContext> l = new ArrayList<ChoicePointContext>();
 		ChoicePointContext t = pointer;
 		while (t != null) {
 			l.add(t);

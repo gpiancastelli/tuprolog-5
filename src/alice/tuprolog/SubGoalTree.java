@@ -4,10 +4,10 @@ import java.util.*;
 
 public class SubGoalTree extends AbstractSubGoalTree {
 	
-	private ArrayList terms;
+	private List<AbstractSubGoalTree> terms;
 	
 	public SubGoalTree() {
-		terms = new ArrayList();
+		terms = new ArrayList<AbstractSubGoalTree>();
 	}
 	
 	public void addChild(Term term) {
@@ -22,10 +22,10 @@ public class SubGoalTree extends AbstractSubGoalTree {
 	}
 	
 	public AbstractSubGoalTree getChild(int i) {
-		return (AbstractSubGoalTree)terms.get(i);
+		return terms.get(i);
 	}
 	
-	public Iterator iterator() {
+	public Iterator<AbstractSubGoalTree> iterator() {
 		return terms.iterator();
 	}
 	
@@ -38,11 +38,11 @@ public class SubGoalTree extends AbstractSubGoalTree {
 	
 	public String toString() {
 		String result = " [ ";
-		Iterator i = terms.iterator();
+		Iterator<AbstractSubGoalTree> i = terms.iterator();
 		if (i.hasNext())
-			result = result + ((AbstractSubGoalTree)i.next()).toString();
+			result = result + i.next().toString();
 		while (i.hasNext()) {
-			result = result + " , " + ((AbstractSubGoalTree)i.next()).toString();
+			result = result + " , " + i.next().toString();
 		}
 		return result + " ] ";
 	}

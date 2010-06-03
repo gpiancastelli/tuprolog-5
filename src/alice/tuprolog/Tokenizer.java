@@ -75,7 +75,7 @@ class Tokenizer extends StreamTokenizer {
     }
 
     //used to enable pushback from the parser. Not in any way connected with pushBack2 and super.pushBack().
-    private LinkedList tokenList = new LinkedList();
+    private LinkedList<Token> tokenList = new LinkedList<Token>();
 
     //used in the double lookahead check that . following ints is a fraction marker or end marker (pushback() only works on one level)
     private PushBack pushBack2 = null;
@@ -188,7 +188,7 @@ class Tokenizer extends StreamTokenizer {
             }
         }
 
-        // syntactic charachters
+        // syntactic characters
         if (typea == TT_EOF) return new Token("", Tokenizer.EOF);
         if (typea == '(') return new Token("(", Tokenizer.LPAR);
         if (typea == ')') return new Token(")", Tokenizer.RPAR);

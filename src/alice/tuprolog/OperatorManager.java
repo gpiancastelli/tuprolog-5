@@ -18,10 +18,10 @@
 package alice.tuprolog;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class manages Prolog operators.
@@ -62,11 +62,9 @@ class OperatorManager {
 	 */
 	public int opNext(int prio) {
 		int n = 0;
-		for (Iterator it = operatorList.iterator(); it.hasNext();) {
-			Operator opFromList = (Operator) it.next();
+		for (Operator opFromList : operatorList)
 			if (opFromList.prio > n && opFromList.prio < prio)
 				n = opFromList.prio;
-		}
 		return n;
 	}
 	
@@ -75,37 +73,41 @@ class OperatorManager {
 	 *
 	 *  @return the list of the operators
 	 */
-	public List getOperators() {
-		return new LinkedList(operatorList);
+	public List<Operator> getOperators() {
+		return new LinkedList<Operator>(operatorList);
 	}
 	
 	/**
-	 * Register for operators
-	 * Cashes operator by name+type description.
+	 * Register for operators.
+	 * Caches operator by name+type description.
 	 * Retains insertion order as LinkedHashSet.
-	 * <p/>
-	 * todo Not 100% sure if 'insertion-order-priority' should be completely replaced
+	 * <p>
+	 * TODO Not 100% sure if 'insertion-order-priority' should be completely replaced
 	 * by the explicit priority given to operators.
 	 *
 	 * @author ivar.orstavik@hist.no
 	 */
-	private static class OperatorRegister extends LinkedHashSet {
-		//map of operators by name and type
-		//key is the nameType of an operator (for example ":-xfx") - value is an Operator
-		private HashMap nameTypeToKey = new HashMap();
+	private static class OperatorRegister extends LinkedHashSet<Operator> {
+		
+		private static final long serialVersionUID = -5985442076134169576L;
+		
+		// map of operators by name and type
+		// key is the nameType of an operator (for example ":-xfx") - value is an Operator
+		private Map<String, Operator> nameTypeToKey = new HashMap<String, Operator>();
 		
 		public boolean addOperator(Operator op) {
 			final String nameTypeKey = op.name + op.type;
 			Operator matchingOp = (Operator) nameTypeToKey.get(nameTypeKey);
 			if (matchingOp != null)
-				super.remove(matchingOp);       //removes found match from the main list
-			nameTypeToKey.put(nameTypeKey, op); //writes over found match in nameTypeToKey map
-			return super.add(op);               //adds new operator to the main list
+				super.remove(matchingOp);       // removes found match from the main list
+			nameTypeToKey.put(nameTypeKey, op); // writes over found match in nameTypeToKey map
+			return super.add(op);               // adds new operator to the main list
 		}
 		
 		public Operator getOperator(String name, String type) {
 			return (Operator) nameTypeToKey.get(name + type);
 		}
+	
 	}
 	
 }
