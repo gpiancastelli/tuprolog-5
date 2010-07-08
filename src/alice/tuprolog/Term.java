@@ -175,25 +175,21 @@ public abstract class Term {
 		EngineManager engine = mediator.getEngineManager();
 		resolveTerm();
 		t1.resolveTerm();
-		List v1 = new ArrayList();
-		List v2 = new ArrayList();
-		boolean ok = unify(v1,v2,t1);
+		List<Var> v1 = new ArrayList<Var>();
+		List<Var> v2 = new ArrayList<Var>();
+		boolean ok = unify(v1, v2, t1);
 		if (ok) {
 			ExecutionContext ec = engine.getCurrentContext();
 			if (ec != null) {
-				int id = (engine.env==null)? Var.PROGRESSIVE : engine.env.nDemoSteps;
+				int id = (engine.env == null) ? Var.PROGRESSIVE : engine.env.nDemoSteps;
 				// Update trailingVars
-				ec.trailingVars = new OneWayList(v1,ec.trailingVars);
+				ec.trailingVars = new OneWayList(v1, ec.trailingVars);
 				// Renaming after unify because its utility regards not the engine but the user
 				int count = 0;
-				Iterator it = v1.iterator();
-				while (it.hasNext()) {
-					((Var)it.next()).rename(id,count);
-				}
-				it = v2.iterator();
-				while (it.hasNext()) {
-					((Var)it.next()).rename(id,count);
-				}
+				for (Var v : v1)
+					v.rename(id, count);
+				for (Var v : v2)
+					v.rename(id, count);
 			}
 			return true;
 		}
