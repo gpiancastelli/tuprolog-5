@@ -2,6 +2,7 @@ package alice.tuprolog;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -15,6 +16,8 @@ import alice.tuprolog.event.OutputListener;
  * in any other more fine-grained way (e.g. through a unit test) and that
  * the ISO standard tests alone were not able to catch. It is a messy
  * melting-pot, probably in need of a proper reorganization.
+ * 
+ * Waiting for that reorganization, new tests are inserted at the beginning.
  */
 public class BugsTest {
 	
@@ -25,6 +28,16 @@ public class BugsTest {
 	public void setUp() {
 		engine = new Prolog();
 		output = "";
+	}
+	
+	@Test public void renamingInUnification() throws PrologException {
+		String goal = "functor(TERM, foo, 2), TERM =.. [H|T].";
+		SolveInfo solution = engine.solve(goal);
+		assertTrue(solution.isSuccess());
+		Struct t = (Struct) solution.getTerm("T");
+		Term first = t.getArg(0);
+		Term second = ((Struct) t.getArg(1)).getArg(0);
+		assertNotSame(first, second);
 	}
 	
 	@Test public void numberUnification() throws PrologException {

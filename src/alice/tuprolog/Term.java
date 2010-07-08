@@ -181,15 +181,15 @@ public abstract class Term {
 		if (ok) {
 			ExecutionContext ec = engine.getCurrentContext();
 			if (ec != null) {
-				int id = (engine.env == null) ? Var.PROGRESSIVE : engine.env.nDemoSteps;
 				// Update trailingVars
 				ec.trailingVars = new OneWayList(v1, ec.trailingVars);
 				// Renaming after unify because its utility regards not the engine but the user
-				int count = 0;
-				for (Var v : v1)
-					v.rename(id, count);
-				for (Var v : v2)
-					v.rename(id, count);
+//				int id = (engine.env == null) ? Var.PROGRESSIVE : engine.env.nDemoSteps;
+//				int count = 0;
+//				for (Var v : v1)
+//					v.rename(id, count);
+//				for (Var v : v2)
+//					v.rename(id, count);
 			}
 			return true;
 		}
