@@ -17,7 +17,6 @@
  */
 package alice.tuprolog;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -44,33 +43,21 @@ public class SolveInfo  {
 	
 	private Term query;
 	private Struct goal;
-	private List   bindings;
+	private List<Var> bindings;
 	
 	
-	/**
-	 * 
-	 */
 	SolveInfo(Term initGoal){
 		query = initGoal;
 		isSuccess = false;
 	}
 	
-	/**
-	 * 
-	 * @param initGoal
-	 * @param resultGoal
-	 * @param resultDemo
-	 * @param resultVars
-	 */
-	SolveInfo(Term initGoal, Struct resultGoal, int resultDemo, List resultVars) {
+	SolveInfo(Term initGoal, Struct resultGoal, int resultDemo, List<Var> resultVars) {
 		query = initGoal;
 		goal = resultGoal;
 		bindings = resultVars;
 		endState = resultDemo;
 		isSuccess = (endState > FALSE);
 	}
-	
-	
 	
 	/**
 	 * Checks if the solve request was successful
@@ -81,7 +68,6 @@ public class SolveInfo  {
 		return isSuccess;
 	}
 	
-	
 	/**
 	 * Checks if the solve request was halted
 	 *
@@ -91,7 +77,6 @@ public class SolveInfo  {
 		return (endState == HALT);
 	}
 	
-	
 	/**
 	 * Checks if the solve request was halted
 	 *
@@ -100,7 +85,6 @@ public class SolveInfo  {
 	public boolean hasOpenAlternatives() {
 		return (endState == TRUE_CP);
 	}
-	
 	
 	/**
 	 * Gets the query
@@ -119,14 +103,12 @@ public class SolveInfo  {
 	 *             solution
 	 */
 	public Term  getSolution() throws NoSolutionException {
-		if (isSuccess){
+		if (isSuccess)
 			return goal;
-		} else {
+		else
 			throw new NoSolutionException();
-		}
 	}
-	
-	
+		
 	/**
 	 * Gets the list of the variables in the solution.
 	 * @return the array of variables.
@@ -134,12 +116,11 @@ public class SolveInfo  {
 	 * @throws NoSolutionException if current solve information
 	 * does not concern a successful 
 	 */
-	public List getBindingVars() throws NoSolutionException {
-		if (isSuccess){
+	public List<Var> getBindingVars() throws NoSolutionException {
+		if (isSuccess)
 			return bindings;
-		}else {
+		else
 			throw new NoSolutionException();
-		}
 	}
 	
 	/**
@@ -160,13 +141,9 @@ public class SolveInfo  {
 	 */
 	public Term getVarValue(String varName) throws NoSolutionException {
 		if (isSuccess) {
-			Iterator it = bindings.iterator();
-			while (it.hasNext()) {
-				Var v = (Var)it.next();
-				if (v!=null && v.getName().equals(varName)) {
+			for (Var v : bindings)
+				if (v != null && v.getName().equals(varName))
 					return v.getTerm();
-				}
-			}
 			return null;
 		} else
 			throw new NoSolutionException();
@@ -175,32 +152,25 @@ public class SolveInfo  {
 	/**
 	 * Returns the string representation of the result of the demonstration.
 	 * 
-	 * For successful demonstration, the representation concerns 
-	 * variables with bindings.  For failed demo, the method returns false string.
-	 * 
+	 * For successful demonstrations, the representation concerns variables
+	 * with bindings. For failed demo, the method returns false string.
 	 */    
 	public String toString() {
 		if (isSuccess) {
 			StringBuilder sb = new StringBuilder("yes");
-			if (bindings.size() > 0) {
+			if (bindings.size() > 0)
 				sb.append(".\n");
-			} else {
+			else
 				sb.append(". ");
-			}
-			Iterator it = bindings.iterator();
-			while(it.hasNext()) {
-				Var v = (Var) it.next();
+			for (Var v : bindings)
 				if (v != null && !v.isAnonymous() && v.isBound() &&
 						(!(v.getTerm() instanceof Var) || (!((Var) (v.getTerm())).getName().startsWith("_")))) {
 					sb.append(v);
 					sb.append("  ");
 				}
-			}
 			return sb.toString().trim();
-		} else {
+		} else
 			return "no.";
-		}
 	}
-	
 	
 }
