@@ -17,12 +17,12 @@
  */
 package alice.tuprolog;
 
-import java.lang.reflect.*;
-
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * Primitive class
- * referring to a builtin predicate or functor
+ * referring to a built-in predicate or functor
  *
  * @see Struct
  */
@@ -35,7 +35,7 @@ public class PrimitiveInfo {
 	private int type;
 	/** method to be call when evaluating the built-in*/
 	private Method method;
-	/** lib object where the builtin is defined */
+	/** library object where the built-in is defined */
 	private IPrimitives source;
 	/** for optimization purposes */
 	private Term[] primitive_args;
@@ -43,14 +43,13 @@ public class PrimitiveInfo {
 	
 	
 	public PrimitiveInfo(int type, String key, Library lib, Method m, int arity) throws NoSuchMethodException {
-		if (m==null) {
+		if (m == null)
 			throw new NoSuchMethodException();
-		}
 		this.type = type;
 		primitive_key = key;
 		source = lib;
 		method = m;
-		primitive_args=new Term[arity];
+		primitive_args = new Term[arity];
 	}
 	
 	
@@ -97,10 +96,9 @@ public class PrimitiveInfo {
 	 * @throws Exception if invocation directive failure
 	 */
 	public void evalAsDirective(Struct g) throws IllegalAccessException, InvocationTargetException {
-		for (int i=0; i<primitive_args.length; i++) {
+		for (int i = 0; i < primitive_args.length; i++)
 			primitive_args[i] = g.getTerm(i);
-		}
-		method.invoke(source,primitive_args);
+		method.invoke(source, (Object[]) primitive_args);
 	}
 	
 	
@@ -109,11 +107,10 @@ public class PrimitiveInfo {
 	 * @throws Exception if invocation primitive failure
 	 */
 	public boolean evalAsPredicate(Struct g) throws Throwable {
-		for (int i=0; i<primitive_args.length; i++) {
+		for (int i = 0; i < primitive_args.length; i++)
 			primitive_args[i] = g.getArg(i);
-		}
 		try {
-			return ((Boolean)method.invoke(source,primitive_args)).booleanValue();
+			return ((Boolean) method.invoke(source, (Object[]) primitive_args)).booleanValue();
 		} catch (InvocationTargetException e) {
 			// throw new Exception(e.getCause());
 			throw e.getCause();
@@ -126,10 +123,9 @@ public class PrimitiveInfo {
 	 */
 	public Term evalAsFunctor(Struct g) {
 		try {
-			for (int i=0; i<primitive_args.length; i++) {
+			for (int i = 0; i < primitive_args.length; i++)
 				primitive_args[i] = g.getTerm(i);
-			}
-			return ((Term)method.invoke(source,primitive_args));
+			return ((Term) method.invoke(source, (Object[]) primitive_args));
 		} catch (Exception ex) {
 			return null;
 		}
@@ -138,7 +134,9 @@ public class PrimitiveInfo {
 	
 	
 	public String toString() {
-		return "[ primitive: method "+method.getName()+" - "+primitive_args+" - N args: "+primitive_args.length+" - "+source.getClass().getName()+" ]\n";
+		return "[ primitive: method " + method.getName() + " - " +
+		       primitive_args + " - N args: " + primitive_args.length +
+		       " - " + source.getClass().getName() + " ]\n";
 	}
 	
 }

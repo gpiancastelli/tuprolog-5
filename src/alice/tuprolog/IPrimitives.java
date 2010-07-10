@@ -28,6 +28,6 @@ public interface IPrimitives {
 	/**
 	 * gets the list of primitives defined in the library
 	 */
-	List[] getPrimitives();
+	List<PrimitiveInfo>[] getPrimitives();
 	
 }
