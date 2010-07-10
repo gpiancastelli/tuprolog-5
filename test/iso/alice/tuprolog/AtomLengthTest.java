@@ -43,14 +43,12 @@ public class AtomLengthTest {
 		SolveInfo solution = engine.solve("atom_length(Atom, 4).");
 		assertFalse(solution.isSuccess());
 		// TODO Should throw instantiation_error
-		// FIXME Actually throws a ClassCastException: alice.tuprolog.Var
 	}
 	
 	@Test public void atomAsNumber() throws PrologException {
 		SolveInfo solution = engine.solve("atom_length(1.23, 4).");
 		assertFalse(solution.isSuccess());
 		// TODO Should throw type_error(atom, 1.23)
-		// FIXME Actually throws a ClassCastException: alice.tuprolog.Double
 	}
 	
 	@Test public void lengthAsAtom() throws PrologException {

@@ -34,7 +34,10 @@ public class ISOLibrary extends Library {
 	}
 	
 	public boolean atom_length_2(Term arg, Term len) {
-		Struct arg0 = (Struct) arg.getTerm();
+		arg = arg.getTerm();
+		if (!(arg instanceof Struct))
+			return false;
+		Struct arg0 = (Struct) arg;
 		if (!arg0.isAtom())
 			return false;
 		return unify(len,new Int(arg0.getName().length()));
