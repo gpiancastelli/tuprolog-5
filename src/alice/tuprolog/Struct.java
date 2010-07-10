@@ -360,11 +360,11 @@ public class Struct extends Term {
 	 * resolve term
 	 */
 	long resolveTerm(long count) {
-		if (resolved) {
+		if (resolved)
 			return count;
-		} else {
-			LinkedList vars = new LinkedList();
-			return resolveTerm(vars,count);
+		else {
+			LinkedList<Var> vars = new LinkedList<Var>();
+			return resolveTerm(vars, count);
 		}
 	}
 	
@@ -375,40 +375,36 @@ public class Struct extends Term {
 	 * @param count start timestamp for variables of this term
 	 * @return next timestamp for other terms
 	 */
-	long resolveTerm(LinkedList vl,long count) {
-		long newcount=count;
-		for (int c = 0;c < arity;c++) {
-			Term term=args[c];
-			if (term!=null) {
+	long resolveTerm(LinkedList<Var> vl, long count) {
+		long newcount = count;
+		for (int c = 0; c < arity; c++) {
+			Term term = args[c];
+			if (term != null) {
 				//--------------------------------
 				// we want to resolve only not linked variables:
 				// so linked variables must get the linked term
-				term=term.getTerm();
+				term = term.getTerm();
 				//--------------------------------
 				if (term instanceof Var) {
 					Var t = (Var) term;
 					t.setTimestamp(newcount++);
 					if (!t.isAnonymous()) {
 						// searching a variable with the same name in the list
-						String name= t.getName();
-						Iterator it = vl.iterator();
+						String name = t.getName();
 						Var found = null;
-						while (it.hasNext()) {
-							Var vn = (Var) it.next();
+						for (Var vn : vl)
 							if (name.equals(vn.getName())) {
-								found=vn;
+								found = vn;
 								break;
 							}
-						}
-						if (found != null) {
+						if (found != null)
 							args[c] = found;
-						} else {
+						else
 							vl.add(t);
-						}
 					}
-				} else if (term instanceof Struct) {
-					newcount = ( (Struct) term ).resolveTerm(vl,newcount);
-				}
+				} else
+					if (term instanceof Struct)
+						newcount = ((Struct) term).resolveTerm(vl, newcount);
 			}
 		}
 		resolved = true;
@@ -480,7 +476,7 @@ public class Struct extends Term {
 	 * If the callee structure is not a list, throws an <code>UnsupportedOperationException</code>
 	 * </p>
 	 */
-	public java.util.Iterator listIterator() {
+	public Iterator listIterator() {
 		if (!isList())
 			throw new UnsupportedOperationException("The structure " + this + " is not a list.");
 		return new StructIterator(this);
@@ -560,22 +556,22 @@ public class Struct extends Term {
 	 * @param vl2 list of variables unified
 	 * @return true if the term is unifiable with this one
 	 */
-	boolean unify(List vl1,List vl2,Term t) {
-		// In fase di unificazione bisogna annotare tutte le variabili della struct completa.
+	boolean unify(List<Var> vl1, List<Var> vl2, Term t) {
+		// During unification we need to take note of
+		// all the variables in the complete struct
 		t = t.getTerm();
 		if (t instanceof Struct) {
 			Struct ts = (Struct) t;
-			if ( arity == ts.arity && name.equals(ts.name)) {
-				for (int c = 0;c < arity;c++) {
-					if (!args[c].unify(vl1,vl2,ts.args[c])) {
+			if (arity == ts.arity && name.equals(ts.name)) {
+				for (int c = 0; c < arity; c++) {
+					if (!args[c].unify(vl1, vl2, ts.args[c]))
 						return false;
-					}
 				}
 				return true;
 			}
-		} else if (t instanceof Var) {
-			return t.unify(vl2, vl1, this);
-		}
+		} else
+			if (t instanceof Var)
+				return t.unify(vl2, vl1, this);
 		return false;
 	}
 	

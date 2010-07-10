@@ -211,9 +211,9 @@ public abstract class Term {
 	public boolean match(Term t) {
 		resolveTerm();
 		t.resolveTerm();
-		List v1 = new ArrayList();
-		List v2 = new ArrayList();
-		boolean ok = unify(v1,v2,t);
+		List<Var> v1 = new ArrayList<Var>();
+		List<Var> v2 = new ArrayList<Var>();
+		boolean ok = unify(v1, v2, t);
 		Var.free(v1);
 		Var.free(v2);
 		return ok;
@@ -228,7 +228,7 @@ public abstract class Term {
 	 * @param varsUnifiedArg1 Vars unified in myself
 	 * @param varsUnifiedArg2 Vars unified in term t
 	 */
-	abstract boolean unify(List varsUnifiedArg1, List varsUnifiedArg2, Term t);
+	abstract boolean unify(List<Var> varsUnifiedArg1, List<Var> varsUnifiedArg2, Term t);
 	
 	
 	/**
@@ -271,7 +271,7 @@ public abstract class Term {
 	 * Gets an iterator providing
 	 * a term stream from a source text
 	 */
-	public static java.util.Iterator getIterator(String text) {
+	public static Iterator getIterator(String text) {
 		return new Parser(text).iterator();
 	}
 	

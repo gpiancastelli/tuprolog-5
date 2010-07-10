@@ -160,15 +160,16 @@ public class Int extends Number {
 	 * Tries to unify a term with the provided term argument.
 	 * This service is to be used in demonstration context.
 	 */
-	boolean unify(List vl1, List vl2, Term t) {
+	boolean unify(List<Var> vl1, List<Var> vl2, Term t) {
 		t = t.getTerm();
 		if (t instanceof Var) {
 			return t.unify(vl2, vl1, this);
-		} else if (t instanceof Number && ((Number) t).isInteger()) {
-			return value == ((Number) t).intValue();
-		} else {
-			return false;
-		}
+		} else
+			if (t instanceof Number && ((Number) t).isInteger()) {
+				return value == ((Number) t).intValue();
+			} else {
+				return false;
+			}
 	}
 	
 	public String toString() {

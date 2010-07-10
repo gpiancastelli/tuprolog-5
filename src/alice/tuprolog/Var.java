@@ -17,7 +17,6 @@
  */
 package alice.tuprolog;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -177,11 +176,9 @@ public class Var extends Term {
 	/**
 	 * De-unify the variables of list
 	 */
-	public static void free(List varsUnified) {
-		Iterator it = varsUnified.iterator();
-		while(it.hasNext()){
-			((Var)it.next()).free();    			
-		}
+	public static void free(List<Var> varsUnified) {
+		for (Var v : varsUnified)
+			v.free();
 	}
 	
 	
@@ -338,27 +335,25 @@ public class Var extends Term {
 	
 	
 	/**
-	 * finds var occurence in a Struct, doing occur-check.
-	 * (era una findIn)
+	 * finds variable occurrence in a Struct, doing occur-check.
+	 * (was called findIn)
 	 * @param vl TODO
 	 */
-	private boolean occurCheck(List vl, Struct t) {
-		int arity=t.getArity();
-		for (int c = 0;c < arity;c++) {
+	private boolean occurCheck(List<Var> vl, Struct t) {
+		int arity = t.getArity();
+		for (int c = 0; c < arity; c++) {
 			Term at = t.getTerm(c);
 			if (at instanceof Struct) {
-				if (occurCheck(vl, (Struct)at)) {
+				if (occurCheck(vl, (Struct) at))
 					return true;
+			} else
+				if (at instanceof Var) {
+					Var v = (Var) at;
+					if (v.link == null)
+						vl.add(v);
+					if (this == v)
+						return true;
 				}
-			} else if (at instanceof Var) {
-				Var v = (Var)at;
-				if (v.link == null) {
-					vl.add(v);
-				}
-				if (this == v) {
-					return true;
-				}
-			}
 		}
 		return false;
 	}
@@ -366,7 +361,7 @@ public class Var extends Term {
 	//
 	
 	/**
-	 * Resolve the occurence of variables in a Term
+	 * Resolve the occurrence of variables in a Term
 	 */
 	long resolveTerm(long count) {
 		Term tt=getTerm();
@@ -407,29 +402,35 @@ public class Var extends Term {
 	 * or p(X,X)=p(Y,f(Y)) ); if occur check is ok
 	 * then it's success and a new link is created (retractable by a code)
 	 */
-	boolean unify(List vl1, List vl2, Term t) {
+	boolean unify(List<Var> vl1, List<Var> vl2, Term t) {
 		Term tt = getTerm();
 		if(tt == this) {
 			t = t.getTerm();
 			if (t instanceof Var) {
 				if (this == t) {
-					try{
+					try {
 						vl1.add(this);            	
-					} catch(NullPointerException e) {/* vl1==null mean nothing intresting for the caller */}
+					} catch (NullPointerException e) {
+						/* vl1==null means nothing interesting for the caller */
+					}
 					return true;
 				}
-			} else if (t instanceof Struct) {
-				// occur-check
-				if (occurCheck(vl2, (Struct)t)) {
-					return false;
-				}
-			} else if (!(t instanceof Number)) {
-				return false;
-			}
+			} else
+				if (t instanceof Struct) {
+					// occur-check
+					if (occurCheck(vl2, (Struct)t)) {
+						return false;
+					}
+				} else
+					if (!(t instanceof Number)) {
+						return false;
+					}
 			link = t;
 			try {
 				vl1.add(this);            	
-			} catch(NullPointerException e) {/* vl1==null mean nothing intresting for the caller */}
+			} catch (NullPointerException e) {
+				/* vl1==null mean nothing interesting for the caller */
+			}
 			//System.out.println("VAR "+name+" BOUND to "+link+" - time: "+time+" - mark: "+mark);
 			return true;
 		} else {
@@ -519,6 +520,5 @@ public class Var extends Term {
 			}
 		}
 	}
-	
-	
+		
 }
