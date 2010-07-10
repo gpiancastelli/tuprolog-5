@@ -503,15 +503,13 @@ public class Struct extends Term {
 	 */
 	Struct fromList() {
 		Term ft = args[0].getTerm();
-		if (!ft.isAtom()) {
+		if (!ft.isAtom())
 			return null;
-		}
 		Struct at = (Struct) args[1].getTerm();
-		LinkedList al = new LinkedList();
+		LinkedList<Term> al = new LinkedList<Term>();
 		while (!at.isEmptyList()) {
-			if (!at.isList()) {
+			if (!at.isList())
 				return null;
-			}
 			al.addLast(at.getTerm(0));
 			at = (Struct) at.getTerm(1);
 		}
