@@ -4,11 +4,12 @@
  */
 package alice.tuprolog;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import alice.tuprolog.event.LibraryEvent;
 import alice.tuprolog.event.WarningEvent;
-
 
 /**
  * @author Alex Benini
@@ -17,7 +18,7 @@ import alice.tuprolog.event.WarningEvent;
 class LibraryManager {
 	
 	/* dynamically loaded built-in libraries */
-	private ArrayList currentLibraries;
+	private List<Library> currentLibraries;
 	
 	/*  */
 	private Prolog prolog;
@@ -26,11 +27,11 @@ class LibraryManager {
 	
 	
 	LibraryManager(){
-		currentLibraries = new ArrayList();
+		currentLibraries = new ArrayList<Library>();
 	}
 	
 	/**
-	 * Config this Manager
+	 * Configure this Manager
 	 */
 	void initialize(Prolog vm){
 		prolog = vm;
@@ -102,9 +103,8 @@ class LibraryManager {
 	 */
 	public synchronized String[] getCurrentLibraries() {
 		String[] libs = new String[currentLibraries.size()];
-		for (int i=0; i<libs.length; i++) {
-			libs[i] = ( (Library) currentLibraries.get(i) ).getName();
-		}
+		for (int i = 0; i < libs.length; i++)
+			libs[i] = ((Library) currentLibraries.get(i)).getName();
 		return libs;
 	}
 	
@@ -116,14 +116,13 @@ class LibraryManager {
 	 */
 	public synchronized void unloadLibrary(String name) throws InvalidLibraryException {
 		boolean found = false;
-		Iterator it = currentLibraries.listIterator();
-		while (it.hasNext()){
-			Library lib = (Library) it.next();
-			if (lib.getName().equals(name)) {
+		for (Iterator<Library> i = currentLibraries.iterator(); i.hasNext();) {
+			Library library = i.next();
+			if (library.getName().equals(name)) {
 				found = true;
-				it.remove();
-				lib.dismiss();
-				primitiveManager.deletePrimitiveInfo(lib);
+				i.remove();
+				library.dismiss();
+				primitiveManager.deletePrimitiveInfo(library);
 				break;
 			}
 		}
@@ -132,7 +131,7 @@ class LibraryManager {
 		}
 		theoryManager.removeLibraryTheory(name);
 		theoryManager.rebindPrimitives();
-		LibraryEvent ev = new LibraryEvent(prolog,name);
+		LibraryEvent ev = new LibraryEvent(prolog, name);
 		prolog.notifyUnloadedLibrary(ev);
 	}
 	
@@ -149,16 +148,16 @@ class LibraryManager {
 			String name = lib.getName();
 			lib.setEngine(prolog);
 			currentLibraries.add(lib);
-			//set primitives
+			// set primitives
 			primitiveManager.createPrimitiveInfo(lib);
-			//set theory
+			// set theory
 			String th = lib.getTheory();
 			if (th != null) {
 				theoryManager.consult(new Theory(th), false, name);
 				theoryManager.solveTheoryGoal();
 			}
 			// in current theory there could be predicates and functors
-			// which become builtins after lib loading
+			// which become built-in after library loading
 			theoryManager.rebindPrimitives();
 			//
 			return lib;
@@ -171,7 +170,6 @@ class LibraryManager {
 		}
 	}
 	
-	
 	/**
 	 * Gets the reference to a loaded library
 	 *
@@ -180,30 +178,22 @@ class LibraryManager {
 	 *         not found
 	 */
 	public synchronized Library getLibrary(String name) {
-		Iterator it = currentLibraries.listIterator();
-		while (it.hasNext()){
-			Library alib = (Library) it.next();
-			if (alib.getName().equals(name)) {
-				return alib;
-			}
-		}
+		for (Library library : currentLibraries)
+			if (library.getName().equals(name))
+				return library;
 		return null;
 	}
 	
 	
-	public synchronized void onSolveBegin(Term g){
-		Iterator it = currentLibraries.listIterator();
-		while (it.hasNext()){
-			((Library) it.next()).onSolveBegin(g);
-		}
+	public synchronized void onSolveBegin(Term g) {
+		for (Library library : currentLibraries)
+			library.onSolveBegin(g);
 	}
 	
 	
-	public synchronized void onSolveEnd(){
-		Iterator it = currentLibraries.listIterator();
-		while (it.hasNext()){
-			((Library) it.next()).onSolveEnd();
-		}
+	public synchronized void onSolveEnd() {
+		for (Library library : currentLibraries)
+			library.onSolveEnd();
 	}
 	
 }
