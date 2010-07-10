@@ -17,24 +17,23 @@
  */
 package alice.tuprolog;
 
-import java.util.*;
-
-import alice.tuprolog.Struct;
-import alice.tuprolog.Term;
-
-
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Alex Benini
  */
 public class Engine {
 	
-	State  nextState;
-	Term   query;
+	State nextState;
+	Term query;
 	Struct startGoal;
 	Collection<Var> goalVars;
 	
-	int    nDemoSteps;
+	int nDemoSteps;
 	
 	ExecutionContext currentContext; 
 	//ClauseStore clauseSelector;
@@ -53,13 +52,11 @@ public class Engine {
 		this.mustStop = false;
 	}
 	
-	
-	public String toString() {
-		try {
-			return
-			"ExecutionStack: \n"+currentContext+"\n"+
-			"ChoicePointStore: \n"+choicePointSelector+"\n\n";
-		} catch(Exception ex) { return ""; }
+	void initialize(ExecutionContext eCtx) {
+		currentContext = eCtx;
+		choicePointSelector = new ChoicePointStore();
+		nDemoSteps = 1;
+		currentAlternative = null;
 	}
 	
 	void mustStop() {
@@ -84,9 +81,27 @@ public class Engine {
 			
 		} while (!(nextState instanceof StateEnd));
 		nextState.doJob(this);
-		return (StateEnd)(nextState);
+		return (StateEnd) nextState;
 	}
 	
+	void prepareGoal() {
+		Map<Var, Var> goalVars = new LinkedHashMap<Var, Var>();
+		startGoal = (Struct) query.copy(goalVars, 0);
+		this.goalVars = goalVars.values();
+	}
+	
+//	void cut() {
+//		choicePointSelector.cut(currentContext.depth -1);
+//	}
+	
+	public String toString() {
+		try {
+			return "ExecutionStack: \n" + currentContext + "\n" +
+			       "ChoicePointStore: \n" + choicePointSelector + "\n\n";
+		} catch(Exception ex) {
+			return "";
+		}
+	}
 	
 	/*
 	 * Methods for spyListeners
@@ -100,8 +115,8 @@ public class Engine {
 		return nDemoSteps;
 	}
 	
-	public List getExecutionStack() {
-		ArrayList l = new ArrayList();
+	public List<ExecutionContext> getExecutionStack() {
+		List<ExecutionContext> l = new ArrayList<ExecutionContext>();
 		ExecutionContext t = currentContext;
 		while (t != null) {
 			l.add(t);
@@ -112,23 +127,6 @@ public class Engine {
 	
 	public ChoicePointStore getChoicePointStore() {
 		return choicePointSelector;
-	}
-	
-	void prepareGoal() {
-		Map<Var, Var> goalVars = new LinkedHashMap<Var, Var>();
-		startGoal = (Struct) query.copy(goalVars, 0);
-		this.goalVars = goalVars.values();
-	}
-	
-//	void cut() {
-//		choicePointSelector.cut(currentContext.depth -1);
-//	}
-	
-	void initialize(ExecutionContext eCtx) {
-		currentContext = eCtx;
-		choicePointSelector = new ChoicePointStore();
-		nDemoSteps = 1;
-		currentAlternative = null;
 	}
 	
 }
