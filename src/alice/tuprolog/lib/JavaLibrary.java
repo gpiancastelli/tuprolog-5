@@ -242,7 +242,7 @@ public class JavaLibrary extends Library {
 		Struct classPathes = (Struct) clPathes.getTerm();
 		id = id.getTerm();
 		try {
-			String fullClassName = alice.util.Tools.removeApices(className.toString());
+			String fullClassName = className.toStringWithoutApices();
 			
 			String fullClassPath = fullClassName.replace('.', '/');
 			Iterator it = classPathes.listIterator();
@@ -251,13 +251,13 @@ public class JavaLibrary extends Library {
 				if (cp.length() > 0) {
 					cp += ";";
 				}
-				cp += alice.util.Tools.removeApices(((Struct) it.next()).toString());
+				cp += ((Struct) it.next()).toStringWithoutApices();
 			}
 			if (cp.length() > 0) {
 				cp = " -classpath " + cp;
 			}
 			
-			String text = alice.util.Tools.removeApices(classSource.toString());
+			String text = classSource.toStringWithoutApices();
 			
 			//System.out.println("class source: "+text+
 			//                   "\nid: "+id+
@@ -338,7 +338,7 @@ public class JavaLibrary extends Library {
 				return false;
 			
 			//System.out.println(args);
-			String objName = alice.util.Tools.removeApices(objId.toString());
+			String objName = objId.toStringWithoutApices();
 			obj = currentObjects.get(objName);
 			Object res = null;
 			
@@ -370,7 +370,7 @@ public class JavaLibrary extends Library {
 					Struct id = (Struct) objId;
 					if (id.getArity() == 1 && id.getName().equals("class")) {
 						try {
-							Class cl = Class.forName(alice.util.Tools.removeApices(id.getArg(0).toString()));
+							Class cl = Class.forName(id.getArg(0).toStringWithoutApices());
 							Method m = cl.getMethod(methodName, args.getTypes());
 							m.setAccessible(true);
 							res = m.invoke(null, args.getValues());
@@ -430,18 +430,18 @@ public class JavaLibrary extends Library {
 			Class cl = null;
 			if (objId.isCompound() &&
 					((Struct) objId).getArity() == 1 && ((Struct) objId).getName().equals("class")) {
-				String clName = alice.util.Tools.removeApices(((Struct) objId).getArg(0).toString());
+				String clName = ((Struct) objId).getArg(0).toStringWithoutApices();
 				try {
 					cl = Class.forName(clName);
 				} catch (ClassNotFoundException ex) {
 					getEngine().warn("Java class not found: " + clName);
 					return false;
 				} catch (Exception ex) {
-					getEngine().warn("Static field " + fieldName + " not found in class " + alice.util.Tools.removeApices(((Struct) objId).getArg(0).toString()));
+					getEngine().warn("Static field " + fieldName + " not found in class " + ((Struct) objId).getArg(0).toStringWithoutApices());
 					return false;
 				}
 			} else {
-				String objName = alice.util.Tools.removeApices(objId.toString());
+				String objName = objId.toStringWithoutApices();
 				obj = currentObjects.get(objName);
 				if (obj != null) {
 					cl = obj.getClass();
@@ -466,7 +466,7 @@ public class JavaLibrary extends Library {
 					return false;
 				}
 			} else {
-				String what_name = alice.util.Tools.removeApices(what.toString());
+				String what_name = what.toStringWithoutApices();
 				Object obj2 = currentObjects.get(what_name);
 				if (obj2 != null) {
 					field.set(obj, obj2);
@@ -499,18 +499,18 @@ public class JavaLibrary extends Library {
 			Class cl = null;
 			if (objId.isCompound() &&
 					((Struct) objId).getArity() == 1 && ((Struct) objId).getName().equals("class")) {
-				String clName = alice.util.Tools.removeApices(((Struct) objId).getArg(0).toString());
+				String clName = ((Struct) objId).getArg(0).toStringWithoutApices();
 				try {
 					cl = Class.forName(clName);
 				} catch (ClassNotFoundException ex) {
 					getEngine().warn("Java class not found: " + clName);
 					return false;
 				} catch (Exception ex) {
-					getEngine().warn("Static field " + fieldName + " not found in class " + alice.util.Tools.removeApices(((Struct) objId).getArg(0).toString()));
+					getEngine().warn("Static field " + fieldName + " not found in class " + ((Struct) objId).getArg(0).toStringWithoutApices());
 					return false;
 				}
 			} else {
-				String objName = alice.util.Tools.removeApices(objId.toString());
+				String objName = objId.toStringWithoutApices();
 				obj = currentObjects.get(objName);
 				if (obj == null) {
 					return false;
@@ -566,7 +566,7 @@ public class JavaLibrary extends Library {
 		}
 		try {
 			Class cl = null;
-			String objName = alice.util.Tools.removeApices(objId.toString());
+			String objName = objId.toStringWithoutApices();
 			obj = currentObjects.get(objName);
 			if (obj != null) {
 				cl = obj.getClass();
@@ -647,7 +647,7 @@ public class JavaLibrary extends Library {
 		}
 		try {
 			Class cl = null;
-			String objName = alice.util.Tools.removeApices(objId.toString());
+			String objName = objId.toStringWithoutApices();
 			obj = currentObjects.get(objName);
 			if (obj != null) {
 				cl = obj.getClass();
@@ -758,7 +758,7 @@ public class JavaLibrary extends Library {
 				values[i] = null;
 				types[i] = null;
 			} else if (term.isAtom()) {
-				String name = alice.util.Tools.removeApices(term.toString());
+				String name = term.toStringWithoutApices();
 				if (name.equals("true")){
 					values[i]=Boolean.TRUE;
 					types[i] = Boolean.TYPE;
@@ -795,9 +795,9 @@ public class JavaLibrary extends Library {
 				if (tc.getName().equals("as")) {
 					return parse_as(values, types, i, tc.getTerm(0), tc.getTerm(1));
 				} else {
-					Object obj = currentObjects.get(alice.util.Tools.removeApices(tc.toString()));
+					Object obj = currentObjects.get(tc.toStringWithoutApices());
 					if (obj == null) {
-						values[i] = alice.util.Tools.removeApices(tc.toString());
+						values[i] = tc.toStringWithoutApices();
 					} else {
 						values[i] = obj;
 					}
@@ -824,8 +824,8 @@ public class JavaLibrary extends Library {
 	private boolean parse_as(Object[] values, Class[] types, int i, Term castWhat, Term castTo) {
 		try {
 			if (!(castWhat instanceof Number)) {
-				String castTo_name = alice.util.Tools.removeApices(((Struct) castTo).getName());
-				String castWhat_name = alice.util.Tools.removeApices(castWhat.getTerm().toString());
+				String castTo_name = ((Struct) castTo).toStringWithoutApices();
+				String castWhat_name = castWhat.getTerm().toStringWithoutApices();
 				//System.out.println(castWhat_name+" "+castTo_name);
 				if (castTo_name.equals("java.lang.String") && 
 						castWhat_name.equals("true")){
@@ -1022,7 +1022,7 @@ public class JavaLibrary extends Library {
 				// object already referenced
 				return false;
 			} else {
-				String raw_name = alice.util.Tools.removeApices(id.getTerm().toString());
+				String raw_name = id.getTerm().toStringWithoutApices();
 				staticObjects.put(raw_name, obj);
 				staticObjects_inverse.put(obj, id);
 				return true;
@@ -1071,7 +1071,7 @@ public class JavaLibrary extends Library {
 			throw new InvalidObjectIdException();
 		}
 		synchronized (staticObjects){
-			return staticObjects.get(alice.util.Tools.removeApices(id.toString()));
+			return staticObjects.get(id.toStringWithoutApices());
 		}
 	}
 	
@@ -1088,7 +1088,7 @@ public class JavaLibrary extends Library {
 			throw new InvalidObjectIdException();
 		}
 		synchronized (staticObjects){
-			String raw_name = alice.util.Tools.removeApices(id.toString());
+			String raw_name = id.toStringWithoutApices();
 			Object obj = staticObjects.remove(raw_name);
 			if (obj != null) {
 				staticObjects_inverse.remove(obj);
@@ -1109,7 +1109,7 @@ public class JavaLibrary extends Library {
 	 */
 	public void registerDynamic(Struct id, Object obj) {
 		synchronized (currentObjects){
-			String raw_name = alice.util.Tools.removeApices(id.toString());
+			String raw_name = id.toStringWithoutApices();
 			currentObjects.put(raw_name, obj);
 			currentObjects_inverse.put(obj, id);
 		}
@@ -1154,7 +1154,7 @@ public class JavaLibrary extends Library {
 			throw new InvalidObjectIdException();
 		}
 		synchronized (currentObjects){
-			return currentObjects.get(alice.util.Tools.removeApices(id.toString()));
+			return currentObjects.get(id.toStringWithoutApices());
 		}
 	}
 	
@@ -1166,7 +1166,7 @@ public class JavaLibrary extends Library {
 	 */
 	public boolean unregisterDynamic(Struct id) {
 		synchronized (currentObjects){
-			String raw_name = alice.util.Tools.removeApices(id.toString());
+			String raw_name = id.toStringWithoutApices();
 			Object obj = currentObjects.remove(raw_name);
 			if (obj != null) {
 				currentObjects_inverse.remove(obj);
@@ -1206,7 +1206,7 @@ public class JavaLibrary extends Library {
 					return true;
 				} else {
 					// verify of the id is already used
-					String raw_name = alice.util.Tools.removeApices(id.getTerm().toString());
+					String raw_name = id.getTerm().toStringWithoutApices();
 					Object linkedobj = currentObjects.get(raw_name);
 					if (linkedobj == null) {
 						registerDynamic((Struct)(id.getTerm()), obj);

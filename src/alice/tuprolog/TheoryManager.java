@@ -25,8 +25,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
-import alice.util.Tools;
-
 /**
  * This class defines the Theory Manager who manages the clauses/theory often referred to as the Prolog database.
  * The theory (as a set of clauses) are stored in the ClauseDatabase which in essence is a HashMap grouped by functor/arity.
@@ -118,7 +116,7 @@ public class TheoryManager {
      * predicate indicator passed as a parameter
      */
     boolean abolish(Struct pi) {
-    	String key = Tools.removeApices(pi.toString());
+    	String key = pi.toStringWithoutApices();
         LinkedList abolished = dynamicDBase.abolish(key);
         if (abolished != null)
         	engine.spy("ABOLISHED: " + key + " number of clauses=" + abolished.size() + "\n");

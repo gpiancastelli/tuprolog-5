@@ -86,7 +86,7 @@ public class BasicLibrary extends Library {
 		Struct clName = (Struct) className.getTerm();
 		libName = libName.getTerm();
 		try {
-			Library lib = getEngine().loadLibrary(alice.util.Tools.removeApices(clName.getName()));
+			Library lib = getEngine().loadLibrary(clName.toStringWithoutApices());
 			return unify(libName,new Struct(lib.getName()));
 		} catch (Exception ex){
 			return false;
@@ -98,7 +98,7 @@ public class BasicLibrary extends Library {
 	 * 
 	 * @param theory theory text
 	 * @param libName name of the library
-	 * @return true if the library has been succesfully loaded.
+	 * @return true if the library has been successfully loaded.
 	 */
 	public boolean load_library_from_theory_2(Term th, Term libName){
 		Struct theory = (Struct) th.getTerm();
@@ -137,7 +137,7 @@ public class BasicLibrary extends Library {
 	public boolean agent_1(Term th) {
 		Struct theory = (Struct) th.getTerm();
 		try {
-			new Agent(alice.util.Tools.removeApices(theory.toString())).spawn();
+			new Agent(theory.toStringWithoutApices()).spawn();
 			return true;
 		} catch (Exception ex){
 			ex.printStackTrace();
@@ -153,8 +153,8 @@ public class BasicLibrary extends Library {
 		Struct theory = (Struct) th.getTerm();
 		Struct goal = (Struct) g.getTerm();
 		try {
-			new Agent(alice.util.Tools.removeApices(theory.toString()),
-					goal.toString()+".").spawn();
+			new Agent(theory.toStringWithoutApices(),
+                      goal.toString() + ".").spawn();
 			return true;
 		} catch (Exception ex){
 			ex.printStackTrace();
@@ -519,7 +519,7 @@ public class BasicLibrary extends Library {
 			return unify(arg0,new Struct(arg1.toString()));
 		} else {
 			try {
-				String text = alice.util.Tools.removeApices(arg0.toString());
+				String text = arg0.toStringWithoutApices();
 				return unify(arg1,getEngine().toTerm(text));
 			} catch (Exception ex) {
 				return false;

@@ -17,19 +17,20 @@
  */
 package alice.tuprolog;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 import alice.tuprolog.event.OutputEvent;
 import alice.tuprolog.event.OutputListener;
-import alice.util.Tools;
 
 /**
- * Provides a prolog virtual machine embedded in a separate thread.
+ * Provides a Prolog virtual machine embedded in a separate thread.
  * It needs a theory and optionally a goal.
  * It parses the theory, solves the goal and stops.
  *
  * @see alice.tuprolog.Prolog
- *
  */
 public class Agent {
 	
@@ -44,25 +45,24 @@ public class Agent {
 		}
 	};
 	
-	
 	/**
 	 * Builds a prolog agent providing it a theory
 	 *
 	 * @param theory the text representing the theory
 	 */
-	public Agent(String theory){
-		theoryText=theory;
-		core=new Prolog();
+	public Agent(String theory) {
+		theoryText = theory;
+		core = new Prolog();
 		core.addOutputListener(defaultOutputListener);
 	}
 	
 	/**
 	 * Builds a prolog agent providing it a theory and a goal
 	 */
-	public Agent(String theory,String goal){
-		theoryText=theory;
-		goalText=goal;
-		core=new Prolog();
+	public Agent(String theory,String goal) {
+		theoryText = theory;
+		goalText = goal;
+		core = new Prolog();
 		core.addOutputListener(defaultOutputListener);
 	}
 	
@@ -70,9 +70,9 @@ public class Agent {
 	 * Constructs the Agent with a theory provided
 	 * by an input stream
 	 */
-	public Agent(InputStream is){
-		theoryInputStream=is;
-		core=new Prolog();
+	public Agent(InputStream is) {
+		theoryInputStream = is;
+		core = new Prolog();
 		core.addOutputListener(defaultOutputListener);
 	}
 	
@@ -80,22 +80,22 @@ public class Agent {
 	 * Constructs the Agent with a theory provided
 	 * by an input stream and a goal
 	 */
-	public Agent(InputStream is,String goal){
-		theoryInputStream=is;
-		goalText=goal;
-		core=new Prolog();
+	public Agent(InputStream is, String goal) {
+		theoryInputStream = is;
+		goalText = goal;
+		core = new Prolog();
 		core.addOutputListener(defaultOutputListener);
 	}
 	
 	/**
 	 * Starts agent execution
 	 */
-	final  public void spawn(){
+	final  public void spawn() {
 		new Agent.AgentThread(this).start();
 	}
 	
 	/**
-	 * Adds a listener to ouput events
+	 * Adds a listener to output events
 	 *
 	 * @param l the listener
 	 */
@@ -104,7 +104,7 @@ public class Agent {
 	}
 	
 	/**
-	 * Removes a listener to ouput events
+	 * Removes a listener to output events
 	 *
 	 * @param l the listener
 	 */
@@ -115,58 +115,73 @@ public class Agent {
 	/**
 	 * Removes all output event listeners
 	 */
-	public void removeAllOutputListener(){
+	public void removeAllOutputListener() {
 		core.removeAllOutputListeners();
 	}
 	
-	
-	private void body(){
+	private void body() {
 		try {
-			if (theoryText==null){
+			if (theoryText == null)
 				core.setTheory(new Theory(theoryInputStream));
-			} else {
+			else
 				core.setTheory(new Theory(theoryText));
-			}
-			if (goalText!=null){
+			if (goalText != null)
 				core.solve(goalText);
-			}
-		} catch (Exception ex){
-			System.err.println("invalid theory or goal.");
+		} catch (Exception ex) {
+			System.err.println("Invalid theory or goal.");
 			ex.printStackTrace();
 		}
 	}
 	
-	
+	/** loads a text file and returns its content as a string */
+	public static String loadText(String fileName) throws FileNotFoundException {
+	    try {
+	        BufferedInputStream is = new BufferedInputStream(ClassLoader.getSystemResourceAsStream(fileName));
+	        byte[] info = new byte[is.available()];
+	        is.read(info);
+	        return new String(info);
+	    } catch (Exception ex) {
+	    }
+	    // resource not found among system resources: try as a file
+	    try {
+	        FileInputStream is = new FileInputStream(fileName);
+	        byte[] info = new byte[is.available()];
+	        is.read(info);
+	        return new String(info);
+	    } catch (Exception ex) {
+	    }
+	    throw new FileNotFoundException();
+	}
+
+
 	final class AgentThread extends Thread {
 		Agent agent;
-		AgentThread(Agent agent){
-			this.agent=agent;
+		
+		AgentThread(Agent agent) {
+			this.agent = agent;
 		}
-		final public void run(){
+		
+		final public void run() {
 			agent.body();
 		}
 	}
 	
 	
-	public static void main(String args[]){
-		if (args.length==1 || args.length==2){
-			
-			//FileReader fr;
+	public static void main(String args[]) {
+		if (args.length == 1 || args.length == 2) {
 			try {
-				String text = Tools.loadText(args[0]);
-				if (args.length==1){
+				String text = Agent.loadText(args[0]);
+				if (args.length == 1)
 					new Agent(text).spawn();
-				} else {
-					new Agent(text,args[1]).spawn();
-				}
-			} catch (Exception ex){
-				System.err.println("invalid theory.");
+				else
+					new Agent(text, args[1]).spawn();
+			} catch (Exception ex) {
+				System.err.println("Invalid theory.");
 			}
 		} else {
 			System.err.println("args: <theory file> { goal }");
 			System.exit(-1);
 		}
 	}
-	
 	
 }

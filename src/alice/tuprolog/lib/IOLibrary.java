@@ -17,10 +17,19 @@
  */
 package alice.tuprolog.lib;
 
-import alice.tuprolog.*;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Random;
 
-import java.util.*;
-import java.io.*;
+import alice.tuprolog.Int;
+import alice.tuprolog.Library;
+import alice.tuprolog.Struct;
+import alice.tuprolog.Term;
+
+import static alice.tuprolog.Agent.loadText;
 
 /**
  * This class provides basic I/O predicates.
@@ -224,9 +233,9 @@ public class IOLibrary extends Library {
 		arg0 = arg0.getTerm();
 		try {
 			if (outputStreamName.equals("stdout")) {
-				getEngine().stdOutput(alice.util.Tools.removeApices(arg0.toString()));
+				getEngine().stdOutput(arg0.toStringWithoutApices());
 			} else {
-				outputStream.write(alice.util.Tools.removeApices(arg0.toString()).getBytes());
+				outputStream.write(arg0.toStringWithoutApices().getBytes());
 			}
 			return true;
 		} catch (Exception ex){
@@ -252,8 +261,8 @@ public class IOLibrary extends Library {
 	public boolean text_from_file_2(Term file_name, Term text) {
 		Struct fileName = (Struct) file_name.getTerm();
 		try {
-			Struct goal = new Struct(alice.util.Tools.loadText(
-					alice.util.Tools.removeApices(((Struct) fileName).toString())));
+			Struct goal = new Struct(loadText(
+					((Struct) fileName).toStringWithoutApices()));
 			return unify(text, goal);
 		} catch (Exception ex) {
 			//ex.printStackTrace();
@@ -261,7 +270,7 @@ public class IOLibrary extends Library {
 		}
 	}
 	
-	// miscellanea
+	// miscellaneous
 	
 	public boolean rand_float_1(Term t) {
 		return unify(t, new alice.tuprolog.Double(gen.nextFloat()));

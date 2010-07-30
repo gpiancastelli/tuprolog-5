@@ -410,9 +410,7 @@ public class BuiltIn extends Library {
 		flagDefault    = flagDefault.getTerm();
 		flagModifiable = flagModifiable.getTerm();
 		if (flagSet.isList() && (flagModifiable.equals(Term.TRUE)||flagModifiable.equals(Term.FALSE))) {
-			// TODO libName che futuro deve avere?? --------------------
-			String libName = "";
-			//------------
+			String libName = ""; // TODO What's the future of libName?
 			flagManager.defineFlag(flagName.toString(), (Struct)flagSet, flagDefault, flagModifiable.equals(Term.TRUE), libName);
 		}
 	}
@@ -433,11 +431,10 @@ public class BuiltIn extends Library {
 	}
 	
 	
-	public void include_1(Term theory) throws FileNotFoundException, InvalidTheoryException, IOException {
+	public void include_1(Term theory) throws InvalidTheoryException, IOException {
 		theory = theory.getTerm();
 		engine.addTheory(new Theory(
-				new FileInputStream(alice.util.Tools.removeApices(theory.toString()))));
+				new FileInputStream(theory.toStringWithoutApices())));
 	}
-	
 	
 }
