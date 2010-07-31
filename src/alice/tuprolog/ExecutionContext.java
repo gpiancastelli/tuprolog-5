@@ -20,7 +20,6 @@ package alice.tuprolog;
 import java.util.*;
 
 import alice.tuprolog.Struct;
-import alice.util.OneWayList;
 
 
 /**

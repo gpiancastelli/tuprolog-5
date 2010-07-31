@@ -22,7 +22,6 @@ import java.util.ArrayList;
 
 import alice.tuprolog.ClauseInfo;
 import alice.tuprolog.Struct;
-import alice.util.OneWayList;
 
 /**
  * @author Alex Benini

@@ -24,7 +24,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import alice.util.OneWayList;
 
 /**
  * Term class is the root abstract class for prolog data type

@@ -2,7 +2,6 @@ package alice.tuprolog;
 
 import java.util.*;
 
-import alice.util.OneWayList;
 
 /**
  * A list of clauses belonging to the same family as a goal. A family is
