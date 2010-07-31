@@ -30,7 +30,7 @@ import java.util.NoSuchElementException;
  * instead of just returning it or checking for its existence from a pool
  * of already produced terms.
  */
-class TermIterator implements Iterator {
+class TermIterator implements Iterator<Term> {
 	
 	private Parser parser;
 	private boolean hasNext;
@@ -42,7 +42,7 @@ class TermIterator implements Iterator {
 		hasNext = (next != null);	
 	}
 	
-	public Object next() {
+	public Term next() {
 		if (hasNext) {
 			if (next == null) {
 				next = parser.nextTerm(true);

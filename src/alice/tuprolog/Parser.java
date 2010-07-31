@@ -50,7 +50,7 @@ import java.util.regex.Pattern;
  *              '{' { exprA(1200) }* '}'
  * op(type,n) ::= atom | { symbol }+
  */
-public class Parser {
+public class Parser implements Iterable<Term> {
 
     private static class IdentifiedTerm {
         private int priority;
@@ -102,7 +102,7 @@ public class Parser {
     
 //  user interface
     
-    public Iterator iterator() {
+    public Iterator<Term> iterator() {
     	return new TermIterator(this);
     }
 

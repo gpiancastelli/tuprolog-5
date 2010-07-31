@@ -270,7 +270,7 @@ public abstract class Term {
 	 * Gets an iterator providing
 	 * a term stream from a source text
 	 */
-	public static Iterator getIterator(String text) {
+	public static Iterator<Term> getIterator(String text) {
 		return new Parser(text).iterator();
 	}
 	
