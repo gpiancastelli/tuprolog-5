@@ -26,7 +26,7 @@ import java.util.Map;
  * Struct class represents both compound prolog term
  * and atom term (considered as 0-arity compound).
  */
-public class Struct extends Term {
+public class Struct extends Term implements Iterable<Term> {
 	
 	/** name of the structure */
 	private String name;
@@ -469,18 +469,21 @@ public class Struct extends Term {
 	}
 	
 	/**
-	 * Gets an iterator on the elements of this structure, which is supposed to be a list.
+	 * Gets an iterator on the elements of this structure,
+	 * which is supposed to be a list.
 	 * 
 	 * <p>
-	 * Gets an iterator on the elements of this structure, which is supposed to be a list.
-	 * If the callee structure is not a list, throws an <code>UnsupportedOperationException</code>
-	 * </p>
+	 * If the callee structure is not a list, throws an
+	 * <code>UnsupportedOperationException</code>
 	 */
-	public Iterator listIterator() {
-		if (!isList())
-			throw new UnsupportedOperationException("The structure " + this + " is not a list.");
+	public Iterator<Term> iterator() {
+		if (!isList()) {
+			String message = "The structure " + this + " is not a list.";
+			throw new UnsupportedOperationException(message);
+		}
 		return new StructIterator(this);
 	}
+	
 	
 	// hidden services
 	

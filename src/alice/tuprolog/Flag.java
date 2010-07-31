@@ -75,12 +75,9 @@ class Flag {
 	 * @return flag validity
 	 */
 	public boolean isValidValue(Term value) {
-		java.util.Iterator it=valueList.listIterator();
-		while (it.hasNext()) {
-			Term t=(Term)it.next();
-			if (value.match(t)) {
+		for (Term t : valueList) {
+			if (value.match(t))
 				return true;
-			}
 		}
 		return false;
 	}

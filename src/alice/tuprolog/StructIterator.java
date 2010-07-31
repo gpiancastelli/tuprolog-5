@@ -24,7 +24,7 @@ import java.util.NoSuchElementException;
  *
  * @see Struct
  */
-class StructIterator implements java.util.Iterator {
+class StructIterator implements java.util.Iterator<Term> {
 	
 	Struct list;
 	
@@ -36,7 +36,7 @@ class StructIterator implements java.util.Iterator {
 		return !list.isEmptyList();
 	}
 	
-	public Object next() {
+	public Term next() {
 		if (list.isEmptyList())
 			throw new NoSuchElementException();
 		// Using Struct#getTerm(int) instead of Struct#listHead and Struct#listTail

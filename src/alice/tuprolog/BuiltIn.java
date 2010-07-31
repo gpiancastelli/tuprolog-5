@@ -380,8 +380,8 @@ public class BuiltIn extends Library {
 			return false;
 		String specifier = ((Struct) arg1).getName();
 		if (arg2.isList()) {
-			for (Iterator operators = ((Struct) arg2).listIterator(); operators.hasNext();) {
-				Struct operator = (Struct) operators.next();
+			for (Term t : (Struct) arg2) {
+				Struct operator = (Struct) t;
 				createOperator(operator.getName(), specifier, ((Number) arg0).intValue());
 			}
 		} else

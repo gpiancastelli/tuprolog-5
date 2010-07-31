@@ -812,8 +812,8 @@ public class BasicLibrary extends Library {
 	public boolean $wt_unify_3(Term witness, Term wtList, Term tList) {
 		Struct list = (Struct) wtList.getTerm();
 		Struct result = new Struct();
-		for (java.util.Iterator it = list.listIterator(); it.hasNext();) {
-			Struct element = (Struct) it.next();
+		for (Term wt : list) {
+			Struct element = (Struct) wt;
 			Term w = element.getArg(0); 
 			Term t = element.getArg(1);
 			if (unify(witness, w))
@@ -825,8 +825,8 @@ public class BasicLibrary extends Library {
 	public boolean $s_next0_3(Term witness, Term wtList, Term sNext) {
 		Struct list = (Struct) wtList.getTerm();
 		Struct result = new Struct();
-		for (java.util.Iterator it = list.listIterator(); it.hasNext();) {
-			Struct element = (Struct) it.next();
+		for (Term wt : list) {
+			Struct element = (Struct) wt;
 			Term w = element.getArg(0);
 			if (!unify(witness, w))
 				result.append(element);

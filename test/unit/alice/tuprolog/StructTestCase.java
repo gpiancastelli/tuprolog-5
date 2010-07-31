@@ -152,7 +152,7 @@ public class StructTestCase {
 	@Test public void nonListIterator() {
 		Struct s = new Struct("f", new Int(2));
 		try {
-			assertNotNull(s.listIterator()); // just to make an assertion...
+			assertNotNull(s.iterator()); // just to make an assertion...
 			fail();
 		} catch (UnsupportedOperationException e) {
 			assertEquals("The structure " + s + " is not a list.", e.getMessage());

@@ -245,13 +245,11 @@ public class JavaLibrary extends Library {
 			String fullClassName = className.toStringWithoutApices();
 			
 			String fullClassPath = fullClassName.replace('.', '/');
-			Iterator it = classPathes.listIterator();
 			String cp = "";
-			while (it.hasNext()) {
-				if (cp.length() > 0) {
+			for (Term t : classPathes) {
+				if (cp.length() > 0)
 					cp += ";";
-				}
-				cp += ((Struct) it.next()).toStringWithoutApices();
+				cp += ((Struct) t).toStringWithoutApices();
 			}
 			if (cp.length() > 0) {
 				cp = " -classpath " + cp;
@@ -986,11 +984,9 @@ public class JavaLibrary extends Library {
 	
 	private Object[] getArrayFromList(Struct list) {
 		Object args[] = new Object[list.listSize()];
-		Iterator it = list.listIterator();
 		int count = 0;
-		while (it.hasNext()) {
-			args[count++] = it.next();
-		}
+		for (Term t : list)
+			args[count++] = t;
 		return args;
 	}
 	

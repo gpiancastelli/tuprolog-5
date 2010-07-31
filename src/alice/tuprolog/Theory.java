@@ -77,11 +77,11 @@ public class Theory {
 		this.clauseList = clauseList;
 	}
 	
-	public Iterator iterator(Prolog engine) {
+	public Iterator<Term> iterator(Prolog engine) {
 		if (isTextual())
 			return new Parser(engine.getOperatorManager(), theory).iterator();
 		else
-			return clauseList.listIterator();
+			return clauseList.iterator();
 	}
 
 	/**
