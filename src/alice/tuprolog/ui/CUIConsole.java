@@ -104,9 +104,12 @@ public class CUIConsole extends Automaton implements OutputListener, SpyListener
     private String solveInfoToString(SolveInfo result) {
     	String s = "";
     	try {
-			for (Iterator i = result.getBindingVars().iterator(); i.hasNext();) {
+			for (Iterator<Var> i = result.getBindingVars().iterator(); i.hasNext();) {
 				Var v = (Var) i.next();
-				if (v != null && !v.isAnonymous() && v.isBound() && (!(v.getTerm() instanceof Var) || (!((Var) (v.getTerm())).getName().startsWith("_")))) {
+				if (v != null &&
+					!v.isAnonymous() &&
+					v.isBound() &&
+					(!(v.getTerm() instanceof Var) || (!((Var) (v.getTerm())).getName().startsWith("_")))) {
 					s += v.getName() + " / " + v.getTerm();
 					if (i.hasNext())
 						s += "\n";
@@ -117,7 +120,7 @@ public class CUIConsole extends Automaton implements OutputListener, SpyListener
     }
 
     public void getChoice(){
-        String choice="";
+        String choice = "";
         try {
             while (true){
                 choice = stdin.readLine();
