@@ -348,7 +348,7 @@ public class Prolog {
 	 *
 	 *  @return the list of the operators
 	 */
-	public synchronized java.util.List getCurrentOperatorList() {
+	public synchronized List<Operator> getCurrentOperatorList() {
 		return opManager.getOperators();
 	}
 	

@@ -122,11 +122,12 @@ public class BasicLibrary extends Library {
 	public boolean get_operators_list_1(Term argument) {
 		Term arg = argument.getTerm();
 		Struct list = new Struct();
-		java.util.Iterator it = getEngine().getCurrentOperatorList().iterator();
-		while (it.hasNext()) {
-			Operator o = (Operator) it.next();
-			list = new Struct(new Struct("op", new alice.tuprolog.Int(o.prio), new Struct(o.type), new Struct(o.name)), list);
-		}
+		for (Operator o : getEngine().getCurrentOperatorList())
+			list = new Struct(
+					 new Struct("op", new alice.tuprolog.Int(o.prio),
+					                  new Struct(o.type),
+					                  new Struct(o.name)),
+					          list);
 		return unify(arg, list);
 	}
 	
