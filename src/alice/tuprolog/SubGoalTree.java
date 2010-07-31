@@ -2,7 +2,7 @@ package alice.tuprolog;
 import java.util.*;
 
 
-public class SubGoalTree extends AbstractSubGoalTree {
+public class SubGoalTree extends AbstractSubGoalTree implements Iterable<AbstractSubGoalTree> {
 	
 	private List<AbstractSubGoalTree> terms;
 	

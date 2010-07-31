@@ -16,14 +16,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package alice.tuprolog;
-import java.util.*;
+
+import java.util.IdentityHashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
- * This class mantains information about a clause creation
+ * This class maintains information about a clause creation
  * (clause copy, final time T after renaming, validity stillValid Flag).
- * These information are necessary to the Theory Manager
- * to use the clause in a consistent way
- *
+ * These information are necessary to the Theory Manager to use the clause
+ * in a consistent way.
  */
 public class ClauseInfo {
 	
@@ -39,11 +41,11 @@ public class ClauseInfo {
 	private Struct headCopy;
 	private SubGoalTree bodyCopy;
 	
-	/** if the clause is part of a theory in a lib (null if not)*/
+	/** if the clause is part of a theory in a library (null if not) */
 	String libName;
 	
 	
-	//usata da Find
+	// used by Find
 	/**
 	 * building a valid clause with a time stamp = original time stamp + NumVar in clause
 	 */
@@ -164,9 +166,7 @@ public class ClauseInfo {
 	}
 	
 	private void bodyCopy(SubGoalTree source, SubGoalTree destination, Map<Var, Var> map, int id) {
-		Iterator it = source.iterator();
-		while (it.hasNext()) {
-			AbstractSubGoalTree s = (AbstractSubGoalTree) it.next();
+		for (AbstractSubGoalTree s : source) {
 			if (s.isLeaf()) {
 				SubGoalElement l = (SubGoalElement)s;
 				Term t = l.getValue().copy(map,id);

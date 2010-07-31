@@ -26,15 +26,18 @@ import java.util.List;
 import java.util.Stack;
 
 /**
- * This class defines the Theory Manager who manages the clauses/theory often referred to as the Prolog database.
- * The theory (as a set of clauses) are stored in the ClauseDatabase which in essence is a HashMap grouped by functor/arity.
+ * This class defines the Theory Manager who manages the clauses/theory often
+ * referred to as the Prolog database. The theory (as a set of clauses) are
+ * stored in the ClauseDatabase which in essence is a HashMap grouped by
+ * functor/arity.
  * <p/>
  * The TheoryManager functions logically, as prescribed by ISO Standard 7.5.4
- * section. The effects of assertions and retractions shall not be undone if the
- * program subsequently backtracks over the assert or retract call, as prescribed
- * by ISO Standard 7.7.9 section.
+ * section. The effects of assertions and retractions shall not be undone if
+ * the program subsequently backtracks over the assert or retract call, as
+ * prescribed by ISO Standard 7.7.9 section.
  * <p/>
- * To use the TheoryManager one should primarily use the methods assertA, assertZ, consult, retract, abolish and find.
+ * To use the TheoryManager one should primarily use the methods assertA,
+ * assertZ, consult, retract, abolish and find.
  * <p/>
  *
  * rewritten by:
@@ -48,7 +51,7 @@ public class TheoryManager {
     private ClauseDatabase staticDBase;
     private Prolog engine;
     private PrimitiveManager primitiveManager;
-    private Stack startGoalStack;
+    private Stack<Struct> startGoalStack;
     Theory lastConsultedTheory;
 
     void initialize(Prolog vm) {
@@ -60,7 +63,7 @@ public class TheoryManager {
     }
 
     /**
-     * inserting of a clause at the head of the dbase
+     * Inserting of a clause at the head of the database.
      */
     void assertA(Struct clause, boolean dyn, String libName, boolean backtrackable) {
         ClauseInfo d = new ClauseInfo(toClause(clause), libName);
@@ -76,7 +79,7 @@ public class TheoryManager {
     }
 
     /**
-     * inserting of a clause at the end of the dbase
+     * Inserting of a clause at the end of the database.
      */
     void assertZ(Struct clause, boolean dyn, String libName, boolean backtrackable) {
         ClauseInfo d = new ClauseInfo(toClause(clause), libName);
@@ -92,16 +95,16 @@ public class TheoryManager {
     }
 
     /**
-     * removing from dbase the first clause with head unifying with clause
+     * Removing from database the first clause with head unifying with clause.
      */
     ClauseInfo retract(Struct cl) {
     	Struct clause = toClause(cl);
     	Struct struct = ((Struct) clause.getArg(0));
-        LinkedList family = (LinkedList) dynamicDBase.get(struct.getPredicateIndicator());
+        LinkedList<ClauseInfo> family = dynamicDBase.get(struct.getPredicateIndicator());
         if (family == null)
             return null;
-        for (Iterator it = family.iterator(); it.hasNext();) {
-            ClauseInfo d = (ClauseInfo) it.next();
+        for (Iterator<ClauseInfo> it = family.iterator(); it.hasNext();) {
+            ClauseInfo d = it.next();
             if (clause.match(d.getClause())) {
                 it.remove();
                 engine.spy("DELETE: " + d.getClause() + "\n");
@@ -112,20 +115,20 @@ public class TheoryManager {
     }
 
     /**
-     * removing from dbase all the clauses corresponding to the
-     * predicate indicator passed as a parameter
+     * Removing from database all the clauses corresponding to the
+     * predicate indicator passed as a parameter.
      */
     boolean abolish(Struct pi) {
     	String key = pi.toStringWithoutApices();
-        LinkedList abolished = dynamicDBase.abolish(key);
+        LinkedList<ClauseInfo> abolished = dynamicDBase.abolish(key);
         if (abolished != null)
-        	engine.spy("ABOLISHED: " + key + " number of clauses=" + abolished.size() + "\n");
+        	engine.spy("ABOLISHED: " + key + " number of clauses = " + abolished.size() + "\n");
         return true;
     }
 
     /**
      * Returns a family of clauses with functor and arity equals
-     * to the functor and arity of the term passed as a parameter
+     * to the functor and arity of the term passed as a parameter.
      */
     List<ClauseInfo> find(Term headt) {
         if (headt instanceof Struct) {
@@ -157,11 +160,11 @@ public class TheoryManager {
      * @param libName       if it not null, then the clauses are marked to belong to the specified library
      */
     void consult(Theory theory, boolean dynamicTheory, String libName) throws InvalidTheoryException {
-    	startGoalStack = new Stack();
+    	startGoalStack = new Stack<Struct>();
 
 		// iterate all clauses in theory and assert them
     	try {
-			for (Iterator it = theory.iterator(engine); it.hasNext();) {
+			for (Iterator<Term> it = theory.iterator(engine); it.hasNext();) {
 				Struct d = (Struct) it.next();
 				if (!runDirective(d))
 					assertZ(d, dynamicTheory, libName, true);
@@ -177,31 +180,29 @@ public class TheoryManager {
 
     /**
      * Binds clauses in the database with the corresponding
-     * primitive predicate, if any
+     * primitive predicate, if any.
      */
     void rebindPrimitives() {
-        for (Iterator allClauses = dynamicDBase.iterator(); allClauses.hasNext();) {
-            ClauseInfo d = (ClauseInfo) allClauses.next();
-            for (Iterator itBody = d.getBody().iterator(); itBody.hasNext();) {
-            	Term t = ((SubGoalElement) itBody.next()).getValue();
+    	for (ClauseInfo d : dynamicDBase)
+    		for (AbstractSubGoalTree e : d.getBody()) {
+            	Term t = ((SubGoalElement) e).getValue();
             	primitiveManager.identifyPredicate(t);
             }
-        }
     }
 
     /**
-     * Clears the clause dbase.
+     * Clears the clause database.
      */
     void clear() {
     	dynamicDBase = new ClauseDatabase();
     }
 
     /**
-     * remove all the clauses of lib theory
+     * Remove all the clauses of library theory.
      */
     void removeLibraryTheory(String libName) {
-        for (Iterator allClauses = staticDBase.iterator(); allClauses.hasNext();) {
-            ClauseInfo d = (ClauseInfo) allClauses.next();
+        for (Iterator<ClauseInfo> allClauses = staticDBase.iterator(); allClauses.hasNext();) {
+            ClauseInfo d = allClauses.next();
             if (d.libName != null && libName.equals(d.libName))
                 allClauses.remove();
         }
@@ -223,10 +224,10 @@ public class TheoryManager {
     }
 
     /**
-     * Gets a clause from a generic Term
+     * Gets a clause from a generic Term.
      */
     private Struct toClause(Struct t) {
-    	// TODO bad, slow way of cloning. requires approx twice the time necessary
+    	// TODO bad, slow way of cloning. requires approximately twice the time necessary
         t = (Struct) Term.createTerm(t.toString(), this.engine.getOperatorManager());
         if (!t.isClause())
             t = new Struct(":-", t, new Struct("true"));
@@ -251,14 +252,14 @@ public class TheoryManager {
     }
 
     /**
-     * add a goal eventually defined by last parsed theory.
+     * Add a goal eventually defined by last parsed theory.
      */
     void addStartGoal(Struct g) {
         startGoalStack.push(g);
     }
 
     /**
-     * saves the dbase on a output stream.
+     * Saves the database on a output stream.
      */
     boolean save(OutputStream os, boolean onlyDynamic) {
         try {
@@ -270,26 +271,22 @@ public class TheoryManager {
     }
 
     /**
-     * Gets current theory
+     * Gets current theory.
      *
      * @param onlyDynamic if true, fetches only dynamic clauses
      */
     public String getTheory(boolean onlyDynamic) {
         StringBuilder buffer = new StringBuilder();
-        for (Iterator dynamicClauses = dynamicDBase.iterator(); dynamicClauses.hasNext();) {
-            ClauseInfo d = (ClauseInfo) dynamicClauses.next();
+        for (ClauseInfo d : dynamicDBase)
             buffer.append(d.toString(engine.getOperatorManager())).append("\n");
-        }
         if (!onlyDynamic)
-        	for (Iterator staticClauses = staticDBase.iterator(); staticClauses.hasNext();) {
-                ClauseInfo d = (ClauseInfo) staticClauses.next();
+        	for (ClauseInfo d : staticDBase)
                 buffer.append(d.toString(engine.getOperatorManager())).append("\n");
-            }
         return buffer.toString();
     }
 
     /**
-     * Gets last consulted theory
+     * Gets last consulted theory.
      *
      * @return last theory
      */

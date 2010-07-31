@@ -1,7 +1,8 @@
 package alice.tuprolog;
 
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * A list of clauses belonging to the same family as a goal. A family is
@@ -11,11 +12,11 @@ public class ClauseStore {
 	
 	private OneWayList clauses;
 	private Term goal;
-	private List vars;
+	private List<Var> vars;
 	private boolean haveAlternatives;
 	
 	
-	private ClauseStore(Term goal, List vars) {
+	private ClauseStore(Term goal, List<Var> vars) {
 		this.goal = goal;
 		this.vars = vars;
 		clauses = null;
@@ -23,10 +24,10 @@ public class ClauseStore {
 	
 	
 	/**
-	 * Carica una famiglia di clausole
+	 * Load a clause family.
 	 * @param familyClauses
 	 */
-	public static ClauseStore build(Term goal, List vars, List familyClauses) {
+	public static ClauseStore build(Term goal, List<Var> vars, List<ClauseInfo> familyClauses) {
 		ClauseStore clauseStore = new ClauseStore(goal, vars);
 		clauseStore.clauses = OneWayList.transform(familyClauses);
 		if (clauseStore.clauses == null || !clauseStore.existCompatibleClause())
@@ -36,7 +37,7 @@ public class ClauseStore {
 	
 	
 	/**
-	 * Restituisce la clausola da caricare
+	 * Return the clause to load.
 	 */
 	public ClauseInfo fetch() {
 		if (clauses == null) return null;
@@ -62,7 +63,7 @@ public class ClauseStore {
 	 * @return true if compatible or false otherwise.
 	 */
 	protected boolean existCompatibleClause() {
-		List saveUnifications = deunify(vars);
+		List<Term> saveUnifications = deunify(vars);
 		boolean found = checkCompatibility(goal);
 		reunify(vars, saveUnifications);
 		return found;
@@ -70,16 +71,14 @@ public class ClauseStore {
 	
 	
 	/**
-	 * Salva le unificazioni delle variabili da deunificare
+	 * Save bindings of variables to deunify
 	 * @param varsToDeunify
-	 * @return unificazioni delle variabili
+	 * @return binding of variables
 	 */
-	private List deunify(List varsToDeunify) {
-		List saveUnifications = new ArrayList();
-		//deunifico le variabili termporaneamente
-		Iterator it = varsToDeunify.iterator();
-		while (it.hasNext()) {
-			Var v = ((Var) it.next());
+	private List<Term> deunify(List<Var> varsToDeunify) {
+		List<Term> saveUnifications = new ArrayList<Term>();
+		// temporarily deunifying variables
+		for (Var v : varsToDeunify) {
 			saveUnifications.add(v.getLink());
 			v.free();
 		}
@@ -92,17 +91,16 @@ public class ClauseStore {
 	 * @param varsToReunify
 	 * @param saveUnifications
 	 */
-	private void reunify(List varsToReunify, List saveUnifications) {
+	private void reunify(List<Var> varsToReunify, List<Term> saveUnifications) {
 		int size = varsToReunify.size();
-		ListIterator it1 = varsToReunify.listIterator(size);
-		ListIterator it2 = saveUnifications.listIterator(size);
+		ListIterator<Var> it1 = varsToReunify.listIterator(size);
+		ListIterator<Term> it2 = saveUnifications.listIterator(size);
 		// Only the first occurrence of a variable gets its binding saved;
 		// following occurrences get a null instead. So, to avoid clashes
 		// between those values, and avoid random variable deunification,
 		// the reunification is made starting from the end of the list.
-		while (it1.hasPrevious()) {
-			((Var) it1.previous()).setLink((Term) it2.previous());
-		}
+		while (it1.hasPrevious())
+			it1.previous().setLink(it2.previous());
 	}
 	
 	
@@ -135,11 +133,11 @@ public class ClauseStore {
 	 * Methods for spyListeners
 	 */
 	
-	public List getClauses() {
-		ArrayList l = new ArrayList();
+	public List<ClauseInfo> getClauses() {
+		List<ClauseInfo> l = new ArrayList<ClauseInfo>();
 		OneWayList t = clauses;
 		while (t != null) {
-			l.add(t.getHead());
+			l.add((ClauseInfo) t.getHead());
 			t = t.getTail();
 		}
 		return l;
@@ -149,7 +147,7 @@ public class ClauseStore {
 		return goal;
 	}
 	
-	public List getVarsForMatch() {
+	public List<Var> getVarsForMatch() {
 		return vars;
 	}
 	

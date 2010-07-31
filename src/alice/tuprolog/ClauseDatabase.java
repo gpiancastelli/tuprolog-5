@@ -17,47 +17,56 @@
  */
 package alice.tuprolog;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Customized HashMap for storing clauses in the TheoryManager
  *
  * @author ivar.orstavik@hist.no
  */
-class ClauseDatabase extends HashMap<String, LinkedList<ClauseInfo>> {
+class ClauseDatabase extends HashMap<String, LinkedList<ClauseInfo>> implements Iterable<ClauseInfo> {
 
-    void addFirst(String key, ClauseInfo d) {
-        LinkedList family = (LinkedList) get(key);
+	private static final long serialVersionUID = 5446149929214947819L;
+
+	void addFirst(String key, ClauseInfo d) {
+        LinkedList<ClauseInfo> family = get(key);
         if (family == null)
-            put(key, family = new LinkedList());
+            put(key, family = new LinkedList<ClauseInfo>());
         family.addFirst(d);
     }
 
     void addLast(String key, ClauseInfo d) {
-        LinkedList family = (LinkedList) get(key);
+        LinkedList<ClauseInfo> family = get(key);
         if (family == null)
-            put(key, family = new LinkedList());
+            put(key, family = new LinkedList<ClauseInfo>());
         family.addLast(d);
     }
 
-    LinkedList abolish(String key) {
-        return (LinkedList) remove(key);
+    LinkedList<ClauseInfo> abolish(String key) {
+        return remove(key);
     }
 
-    List<ClauseInfo> getPredicates(String key) {
+    @SuppressWarnings("unchecked")
+	List<ClauseInfo> getPredicates(String key) {
         LinkedList<ClauseInfo> family = get(key);
         if (family == null)
             return new LinkedList<ClauseInfo>();
-        return (LinkedList<ClauseInfo>) family.clone();
+        // Unchecked warning: clone returns an object, the cast to
+        // List<ClauseInfo> is needed. The cast is safe, because we
+        // know to only have LinkedList<ClauseInfo> in the map.
+        return (List<ClauseInfo>) family.clone();
     }
 
-    public Iterator iterator() {
+    public Iterator<ClauseInfo> iterator() {
         return new CompleteIterator(this);
     }
 
-    private static class CompleteIterator implements Iterator {
-        Iterator values;
-        Iterator workingList;
+    private static class CompleteIterator implements Iterator<ClauseInfo> {
+        Iterator<LinkedList<ClauseInfo>> values;
+        Iterator<ClauseInfo> workingList;
 
         public CompleteIterator(ClauseDatabase clauseDatabase) {
             values = clauseDatabase.values().iterator();
@@ -67,13 +76,13 @@ class ClauseDatabase extends HashMap<String, LinkedList<ClauseInfo>> {
             if (workingList != null && workingList.hasNext())
                 return true;
             if (values.hasNext()) {
-                workingList = ((List) values.next()).iterator();
-                return hasNext(); //start again on next workingList
+                workingList = ((List<ClauseInfo>) values.next()).iterator();
+                return hasNext(); // start again on next workingList
             }
             return false;
         }
 
-        public Object next() {
+        public ClauseInfo next() {
             return workingList.next();
         }
 
