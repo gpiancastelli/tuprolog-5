@@ -18,10 +18,8 @@
 package alice.tuprolog;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.*;
-
+import java.util.IdentityHashMap;
 
 /**
  * Library of built-in predicates
@@ -335,15 +333,11 @@ public class BuiltIn extends Library {
 		if (/*!arg0 instanceof Struct ||*/ !arg1.isList()) {
 			return false;
 		}
-		List l = theoryManager.find(arg0);
-		java.util.Iterator it = l.iterator();
-		while (it.hasNext()) {
-			ClauseInfo b = (ClauseInfo)it.next();
+		for (ClauseInfo b : theoryManager.find(arg0))
 			if (match(arg0,b.getHead())) {
 				b.getClause().resolveTerm();
 				((Struct) arg1).append(b.getClause());
 			}
-		}
 		return true;
 	}	
 	

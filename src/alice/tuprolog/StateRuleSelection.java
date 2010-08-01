@@ -17,11 +17,8 @@
  */
 package alice.tuprolog;
 
-import java.util.List;
 import java.util.ArrayList;
-
-import alice.tuprolog.ClauseInfo;
-import alice.tuprolog.Struct;
+import java.util.List;
 
 /**
  * @author Alex Benini
@@ -29,20 +26,15 @@ import alice.tuprolog.Struct;
  */
 public class StateRuleSelection extends State {
 	
-	
-	
 	public StateRuleSelection(EngineManager c) {
 		this.c = c;
 		stateName = "Init";
 	}
 	
-	/* (non-Javadoc)
-	 * @see alice.tuprolog.AbstractRunState#doJob()
-	 */
 	void doJob(Engine e) {
 		/*----------------------------------------------------
-		 * Individuo compatibleGoals e
-		 * stabilisco se derivo da Backtracking.
+		 * Identify compatibleGoals and
+		 * ascertain whether we come from backtracking.
 		 */
 		Struct goal = e.currentContext.currentGoal;
 		boolean fromBacktracking = true;
@@ -52,10 +44,10 @@ public class StateRuleSelection extends State {
 		if (alternative == null) {
 			/* from normal evaluation */
 			fromBacktracking = false;
-			List varsList = new ArrayList();
-			e.currentContext.trailingVars = new OneWayList(varsList,e.currentContext.trailingVars);
+			List<Var> varsList = new ArrayList<Var>();
+			e.currentContext.trailingVars = new OneWayList(varsList, e.currentContext.trailingVars);
 			clauseStore = ClauseStore.build(goal, varsList, c.find(goal));
-			if (clauseStore == null){
+			if (clauseStore == null) {
 				e.nextState = c.BACKTRACK;
 				return;
 			}
@@ -63,7 +55,7 @@ public class StateRuleSelection extends State {
 			clauseStore = alternative.compatibleGoals;
 		
 		/*-----------------------------------------------------
-		 * Scelgo una regola fra quelle potenzialmente compatibili.
+		 * Choose a rule from those potentially compatible
 		 */
 		ClauseInfo clause = clauseStore.fetch();
 		
@@ -73,7 +65,7 @@ public class StateRuleSelection extends State {
 		ExecutionContext ec = new ExecutionContext(e.nDemoSteps++);
 		ExecutionContext curCtx = e.currentContext;
 		ec.clause = clause.getClause();
-		//head and body with refresh variables (clause copied)
+		// head and body with refresh variables (clause copied)
 		clause.performCopy(ec.getId());
 		ec.headClause = clause.getHeadCopy();
 		ec.goalsToEval = new SubGoalStore();
@@ -106,12 +98,16 @@ public class StateRuleSelection extends State {
 		}
 			
 		Struct curGoal = curCtx.currentGoal;
-		List unifiedVars = (List)e.currentContext.trailingVars.getHead();
+		
+		// Unchecked cast from Object, but safe (thanks, OneWayList!)
+		@SuppressWarnings("unchecked")
+		List<Var> unifiedVars = (List<Var>) e.currentContext.trailingVars.getHead();
+		
 		curGoal.unify(unifiedVars,unifiedVars,ec.headClause);
 		
 		ec.haveAlternatives = clauseStore.haveAlternatives();
 		
-		//creazione cpc
+		// cpc creation
 		if (ec.haveAlternatives && !fromBacktracking) {
 			ChoicePointContext cpc = new ChoicePointContext();
 			cpc.compatibleGoals = clauseStore;
@@ -121,7 +117,7 @@ public class StateRuleSelection extends State {
 			cpc.varsToDeunify = e.currentContext.trailingVars;
 			e.choicePointSelector.add(cpc);
 		}
-		//distruzione cpc
+		// cpc destruction
 		if (!ec.haveAlternatives && fromBacktracking) {
 			e.choicePointSelector.removeUnusedChoicePoints();
 		}

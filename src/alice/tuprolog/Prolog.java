@@ -18,7 +18,6 @@
 package alice.tuprolog;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import alice.tuprolog.event.LibraryEvent;
@@ -35,9 +34,7 @@ import alice.tuprolog.event.WarningEvent;
 import alice.tuprolog.event.WarningListener;
 
 /**
- *
  * The Prolog class represents a tuProlog engine.
- *
  */
 public class Prolog {
 	
@@ -61,27 +58,26 @@ public class Prolog {
 	private boolean spy;  
 	/*  warning activated ?  */
 	private boolean warning;
-	/* listeners registrated for virtual machine output events */
-	private ArrayList outputListeners;
-	/* listeners registrated for virtual machine internal events */
-	private ArrayList spyListeners;
-	/* listeners registrated for virtual machine state change events */
-	private ArrayList warningListeners;
+	/* listeners registered for virtual machine output events */
+	private ArrayList<OutputListener> outputListeners;
+	/* listeners registered for virtual machine internal events */
+	private ArrayList<SpyListener> spyListeners;
+	/* listeners registered for virtual machine state change events */
+	private ArrayList<WarningListener> warningListeners;
 	
 	/* listeners to theory events */
-	private ArrayList theoryListeners;
+	private ArrayList<TheoryListener> theoryListeners;
 	/* listeners to library events */
-	private ArrayList libraryListeners;
+	private ArrayList<LibraryListener> libraryListeners;
 	/* listeners to query events */
-	private ArrayList queryListeners;
-	
+	private ArrayList<QueryListener> queryListeners;
 	
 	
 	/**
 	 * Builds a prolog engine with default libraries loaded.
 	 *
 	 * The default libraries are BasicLibrary, ISOLibrary,
-	 * IOLibrary, and  JavaLibrary
+	 * IOLibrary, and JavaLibrary.
 	 */
 	public Prolog() {
 		this(false,true);
@@ -131,14 +127,14 @@ public class Prolog {
 	 * @param warning warning activated
 	 */
 	private Prolog(boolean spy, boolean warning) {
-		outputListeners = new ArrayList();
-		spyListeners = new ArrayList();
-		warningListeners = new ArrayList();
+		outputListeners = new ArrayList<OutputListener>();
+		spyListeners = new ArrayList<SpyListener>();
+		warningListeners = new ArrayList<WarningListener>();
 		this.spy = spy;
 		this.warning = warning;
-		theoryListeners = new ArrayList();
-		queryListeners = new ArrayList();
-		libraryListeners = new ArrayList();
+		theoryListeners = new ArrayList<TheoryListener>();
+		queryListeners = new ArrayList<QueryListener>();
+		libraryListeners = new ArrayList<LibraryListener>();
 		initializeManagers();
 	}
 	
@@ -150,7 +146,7 @@ public class Prolog {
 		theoryManager    = new TheoryManager();
 		primitiveManager = new PrimitiveManager();
 		engineManager    = new EngineManager();
-		//config managers
+		// config managers
 		theoryManager.initialize(this);
 		libraryManager.initialize(this);
 		flagManager.initialize(this);
@@ -196,7 +192,6 @@ public class Prolog {
 	public static String getVersion() {
 		return VERSION;
 	}
-	
 	
 	
 	// theory management interface
@@ -539,7 +534,6 @@ public class Prolog {
 	
 	/**
 	 * Notifies a spy information event
-	 * @param s TODO
 	 */
 	protected void spy(String s, Engine e) {
 		//System.out.println("spy: "+i+"  "+s+"  "+g);
@@ -600,7 +594,7 @@ public class Prolog {
 	// event listeners management
 	
 	/**
-	 * Adds a listener to ouput events
+	 * Adds a listener to output events.
 	 *
 	 * @param l the listener
 	 */
@@ -610,7 +604,7 @@ public class Prolog {
 	
 	
 	/**
-	 * Adds a listener to theory events
+	 * Adds a listener to theory events.
 	 *
 	 * @param l the listener
 	 */
@@ -619,7 +613,7 @@ public class Prolog {
 	}
 	
 	/**
-	 * Adds a listener to library events
+	 * Adds a listener to library events.
 	 *
 	 * @param l the listener
 	 */
@@ -628,7 +622,7 @@ public class Prolog {
 	}
 	
 	/**
-	 * Adds a listener to theory events
+	 * Adds a listener to theory events.
 	 *
 	 * @param l the listener
 	 */
@@ -637,7 +631,7 @@ public class Prolog {
 	}
 	
 	/**
-	 * Adds a listener to spy events
+	 * Adds a listener to spy events.
 	 *
 	 * @param l the listener
 	 */
@@ -646,7 +640,7 @@ public class Prolog {
 	}
 	
 	/**
-	 * Adds a listener to warning events
+	 * Adds a listener to warning events.
 	 *
 	 * @param l the listener
 	 */
@@ -655,7 +649,7 @@ public class Prolog {
 	}
 	
 	/**
-	 * Removes a listener to ouput events
+	 * Removes a listener to output events.
 	 *
 	 * @param l the listener
 	 */
@@ -663,15 +657,13 @@ public class Prolog {
 		outputListeners.remove(l);
 	}
 	
-	/**
-	 * Removes all output event listeners
-	 */
+	/** Removes all output event listeners. */
 	public synchronized void removeAllOutputListeners() {
 		outputListeners.clear();
 	}
 	
 	/**
-	 * Removes a listener to theory events
+	 * Removes a listener to theory events.
 	 *
 	 * @param l the listener
 	 */
@@ -680,7 +672,7 @@ public class Prolog {
 	}
 	
 	/**
-	 * Removes a listener to library events
+	 * Removes a listener to library events.
 	 *
 	 * @param l the listener
 	 */
@@ -689,7 +681,7 @@ public class Prolog {
 	}
 	
 	/**
-	 * Removes a listener to query events
+	 * Removes a listener to query events.
 	 *
 	 * @param l the listener
 	 */
@@ -697,9 +689,8 @@ public class Prolog {
 		queryListeners.remove(l);
 	}
 	
-	
 	/**
-	 * Removes a listener to spy events
+	 * Removes a listener to spy events.
 	 *
 	 * @param l the listener
 	 */
@@ -707,15 +698,13 @@ public class Prolog {
 		spyListeners.remove(l);
 	}
 	
-	/**
-	 * Removes all spy event listeners
-	 */
+	/** Removes all spy event listeners. */
 	public synchronized void removeAllSpyListeners() {
 		spyListeners.clear();
 	}
 	
 	/**
-	 * Removes a listener to warning events
+	 * Removes a listener to warning events.
 	 *
 	 * @param l the listener
 	 */
@@ -723,148 +712,123 @@ public class Prolog {
 		warningListeners.remove(l);
 	}
 	
-	/**
-	 * Removes all warning event listeners
-	 */
+	/** Removes all warning event listeners. */
 	public synchronized void removeAllWarningListeners() {
 		warningListeners.clear();
 	}
 	
-	/**
-	 * Gets a copy of current listener list to output events
-	 */
-	public synchronized List getOutputListenerList() {
-		return (List) outputListeners.clone();
+	/** Gets a copy of current listener list to output events. */
+	@SuppressWarnings("unchecked")
+	public synchronized List<OutputListener> getOutputListenerList() {
+		// Unchecked cast from Object, but safe
+		return (List<OutputListener>) outputListeners.clone();
 	}
 	
-	/**
-	 * Gets a copy of current listener list to warning events
-	 *
-	 */
-	public synchronized List getWarningListenerList() {
-		return (List) warningListeners.clone();
+	/** Gets a copy of current listener list to warning events. */
+	@SuppressWarnings("unchecked")
+	public synchronized List<WarningListener> getWarningListenerList() {
+		// Unchecked cast from Object, but safe
+		return (List<WarningListener>) warningListeners.clone();
 	}
 	
-	/**
-	 * Gets a copy of current listener list to spy events
-	 *
-	 */
-	public synchronized List getSpyListenerList() {
-		return (List) spyListeners.clone();
+	/** Gets a copy of current listener list to spy events. */
+	@SuppressWarnings("unchecked")
+	public synchronized List<SpyListener> getSpyListenerList() {
+		// Unchecked cast from Object, but safe
+		return (List<SpyListener>) spyListeners.clone();
 	}
 	
-	/**
-	 * Gets a copy of current listener list to theory events
-	 * 
-	 */
-	public synchronized List getTheoryListenerList() {
-		return (List) theoryListeners.clone();
+	/** Gets a copy of current listener list to theory events. */
+	@SuppressWarnings("unchecked")
+	public synchronized List<TheoryListener> getTheoryListenerList() {
+		// Unchecked cast from Object, but safe
+		return (List<TheoryListener>) theoryListeners.clone();
 	}
 	
-	/**
-	 * Gets a copy of current listener list to library events
-	 *
-	 */
-	public synchronized List getLibraryListenerList() {
-		return (List) libraryListeners.clone();
+	/** Gets a copy of current listener list to library events. */
+	@SuppressWarnings("unchecked")
+	public synchronized List<LibraryListener> getLibraryListenerList() {
+		// Unchecked cast from Object, but safe
+		return (List<LibraryListener>) libraryListeners.clone();
 	}
 	
-	/**
-	 * Gets a copy of current listener list to query events
-	 *
-	 */
-	public synchronized List getQueryListenerList() {
-		return (List) queryListeners.clone();
+	/** Gets a copy of current listener list to query events. */
+	@SuppressWarnings("unchecked")
+	public synchronized List<QueryListener> getQueryListenerList() {
+		// Unchecked cast from Object, but safe
+		return (List<QueryListener>) queryListeners.clone();
 	}
 	
 	// notification
 	
 	/**
-	 * Notifies an ouput information event
+	 * Notifies an output information event.
 	 *
 	 * @param e the event
 	 */
 	protected void notifyOutput(OutputEvent e) {
-		Iterator it = outputListeners.listIterator();
-		while (it.hasNext()) {
-			((OutputListener) it.next()).onOutput(e);
-		}
+		for (OutputListener ol : outputListeners)
+			ol.onOutput(e);
 	}
 	
 	/**
-	 * Notifies a spy information event
+	 * Notifies a spy information event.
 	 *
 	 * @param e the event
 	 */
 	protected void notifySpy(SpyEvent e) {
-		Iterator it = spyListeners.listIterator();
-		while (it.hasNext()) {
-			((SpyListener) it.next()).onSpy(e);
-		}
+		for (SpyListener sl : spyListeners)
+			sl.onSpy(e);
 	}
 	
 	/**
-	 * Notifies a warning information event
+	 * Notifies a warning information event.
 	 *
 	 * @param e the event
 	 */
 	protected void notifyWarning(WarningEvent e) {
-		Iterator it = warningListeners.listIterator();
-		while (it.hasNext()) {
-			((WarningListener) it.next()).onWarning(e);
-		}
+		for (WarningListener wl : warningListeners)
+			wl.onWarning(e);
 	}
 	
-	
-	//
-	
 	/**
-	 * Notifies a new theory set or updated event
+	 * Notifies a new theory set or updated event.
 	 * 
 	 * @param e the event
 	 */
 	protected void notifyChangedTheory(TheoryEvent e) {
-		Iterator it = theoryListeners.listIterator();
-		while (it.hasNext()) {
-			((TheoryListener) it.next()).theoryChanged(e);
-		}
+		for (TheoryListener tl : theoryListeners)
+			tl.theoryChanged(e);
 	}
 	
 	/**
-	 * Notifies a library loaded event
+	 * Notifies a library loaded event.
 	 * 
 	 * @param e the event
 	 */
 	protected void notifyLoadedLibrary(LibraryEvent e) {
-		Iterator it = libraryListeners.listIterator();
-		while (it.hasNext()) {
-			((LibraryListener) it.next()).libraryLoaded(e);
-		}
+		for (LibraryListener ll : libraryListeners)
+			ll.libraryLoaded(e);
 	}
 	
 	/**
-	 * Notifies a library unloaded event
+	 * Notifies a library unloaded event.
 	 * 
 	 * @param e the event
 	 */
 	protected void notifyUnloadedLibrary(LibraryEvent e) {
-		Iterator it = libraryListeners.listIterator();
-		while (it.hasNext()) {
-			((LibraryListener) it.next()).libraryUnloaded(e);
-		}
+		for (LibraryListener ll : libraryListeners)
+			ll.libraryUnloaded(e);
 	}
 	
 	/**
-	 * Notifies a library loaded event
+	 * Notifies a library loaded event.
 	 * 
 	 * @param e the event
 	 */
 	protected void notifyNewQueryResultAvailable(QueryEvent e) {
-		Iterator it = queryListeners.listIterator();
-		while (it.hasNext()) {
-			((QueryListener) it.next()).newQueryResultAvailable(e);
-		}
+		for (QueryListener ql : queryListeners)
+			ql.newQueryResultAvailable(e);
 	}
-	
 	
 }

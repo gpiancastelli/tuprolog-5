@@ -13,7 +13,7 @@ class OneWayList {
 		this.tail = tail;
 	}
 
-	public static OneWayList transform(List list){
+	public static OneWayList transform(List<?> list){
 		if (list.isEmpty())
 			return null;
 		return new OneWayList(list.remove(0), transform(list));

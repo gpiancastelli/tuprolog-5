@@ -17,9 +17,8 @@
  */
 package alice.tuprolog;
 
-import java.util.*;
-
-
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Alex Benini
@@ -35,9 +34,9 @@ public class ChoicePointContext {
 	
 	
 	public String toString(){
-		return "     ChoicePointId: "+executionContext.getId()+":"+indexSubGoal+"\n"+
-			   //"varsToDeunify: "+getVarsToDeunify()+"\n"+
-			   "     compGoals:     "+compatibleGoals+"\n";
+		return "     ChoicePointId: " + executionContext.getId() + ":" + indexSubGoal + "\n" +
+			   //"varsToDeunify: " + getVarsToDeunify() + "\n" +
+			   "     compGoals:     " + compatibleGoals + "\n";
 	}
 	
 	/*
@@ -56,11 +55,11 @@ public class ChoicePointContext {
 		return indexSubGoal;
 	}
 	
-	public List getVarsToDeunify() {
-		ArrayList l = new ArrayList();
+	public List<Var> getVarsToDeunify() {
+		List<Var> l = new ArrayList<Var>();
 		OneWayList t = varsToDeunify;
 		while (t != null) {
-			l.add(t.getHead());
+			l.add((Var) t.getHead());
 			t = t.getTail();
 		}
 		return l;

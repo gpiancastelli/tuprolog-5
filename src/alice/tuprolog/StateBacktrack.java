@@ -17,9 +17,7 @@
  */
 package alice.tuprolog;
 
-import java.util.*;
-
-
+import java.util.List;
 
 /**
  * @author Alex Benini
@@ -27,21 +25,15 @@ import java.util.*;
  */
 public class StateBacktrack extends State {
 	
-
-	
 	public StateBacktrack(EngineManager c) {
 		this.c = c;
 		stateName = "Back";
 	}
 	
-	
-	/* (non-Javadoc)
-	 * @see alice.tuprolog.AbstractRunState#doJob()
-	 */
 	void doJob(Engine e) {
 		ChoicePointContext curChoice = e.choicePointSelector.fetch();
 		
-		//verify ChoicePoint
+		// verify ChoicePoint
 		if (curChoice == null) {
 			e.nextState = c.END_FALSE;
 			Struct goal = e.currentContext.currentGoal;
@@ -50,7 +42,7 @@ public class StateBacktrack extends State {
 		}
 		e.currentAlternative = curChoice;
 		
-		//deunify variables and reload old goal
+		// deunify variables and reload old goal
 		e.currentContext = curChoice.executionContext;
 		Term curGoal = e.currentContext.goalsToEval.backTo(curChoice.indexSubGoal).getTerm();
 		if (!(curGoal instanceof Struct)) {
@@ -59,12 +51,15 @@ public class StateBacktrack extends State {
 		}
 		e.currentContext.currentGoal = (Struct) curGoal;
 		
-		
-		// Rende coerente l'execution_stack
+		// ensure coherence in execution stack
 		ExecutionContext curCtx = e.currentContext;
 		OneWayList pointer = curCtx.trailingVars;
 		OneWayList stopDeunify = curChoice.varsToDeunify;
-		List varsToDeunify = (List) stopDeunify.getHead();
+		
+		// Unchecked cast from Object, but safe (thanks, OneWayList!)
+		@SuppressWarnings("unchecked")
+		List<Var> varsToDeunify = (List<Var>) stopDeunify.getHead();
+		
 		Var.free(varsToDeunify);
 		varsToDeunify.clear();
 		SubGoalId fatherIndex;
@@ -72,7 +67,11 @@ public class StateBacktrack extends State {
 		do {
 			// deunify variables in sibling contexts
 			while (pointer != stopDeunify) {
-				Var.free((List) pointer.getHead());
+				// Unchecked cast from Object, but safe (thanks, OneWayList!)
+				@SuppressWarnings("unchecked")
+				List<Var> varsList = (List<Var>) pointer.getHead();
+				
+				Var.free(varsList);
 				pointer = pointer.getTail();
 			}
 			curCtx.trailingVars = pointer;
@@ -89,7 +88,7 @@ public class StateBacktrack extends State {
 			pointer = curCtx.trailingVars;
 		} while (true);
 		
-		//set next state
+		// set next state
 		e.nextState = c.GOAL_EVALUATION;
 	}
 	

@@ -17,6 +17,7 @@
  */
 package alice.tuprolog;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -155,23 +156,27 @@ public abstract class Library implements IPrimitives {
 	
 	/**
 	 * method invoked when the engine has
-	 * finished a demostration
+	 * finished a demonstration
 	 */
 	public void onSolveEnd() {}
 	
 	/**
 	 * gets the list of predicates defined in the library
 	 */
-	public List[] getPrimitives() {
+	public List<PrimitiveInfo>[] getPrimitives() {
 		try {
-			java.lang.reflect.Method[] mlist = this.getClass().getMethods();
-			ArrayList[] tablePrimitives = {new ArrayList(), new ArrayList(), new ArrayList()};
+			Method[] mlist = this.getClass().getMethods();
+			
+			@SuppressWarnings("unchecked")
+			List<PrimitiveInfo>[] tablePrimitives = (List<PrimitiveInfo>[]) new List[] {
+				new ArrayList<PrimitiveInfo>(), new ArrayList<PrimitiveInfo>(), new ArrayList<PrimitiveInfo>()
+			};
 			
 			for (int i = 0; i < mlist.length; i++) {
 				String name = mlist[i].getName();
 				
-				Class[] clist = mlist[i].getParameterTypes();
-				Class rclass = mlist[i].getReturnType();
+				Class<?>[] clist = mlist[i].getParameterTypes();
+				Class<?> rclass = mlist[i].getReturnType();
 				String returnTypeName = rclass.getName();
 				
 				int type;
@@ -180,11 +185,11 @@ public abstract class Library implements IPrimitives {
 				else if (returnTypeName.equals("void")) type = PrimitiveInfo.DIRECTIVE;
 				else continue;
 				
-				int index=name.lastIndexOf('_');
-				if (index!=-1) {
+				int index = name.lastIndexOf('_');
+				if (index != -1) {
 					try {
 						int arity = Integer.parseInt(name.substring(index + 1, name.length()));
-						// check arg number
+						// check argument number
 						if (clist.length == arity) {
 							boolean valid = true;
 							for (int j=0; j<arity; j++) {
@@ -199,13 +204,13 @@ public abstract class Library implements IPrimitives {
 								PrimitiveInfo prim = new PrimitiveInfo(type, key, this, mlist[i], arity);
 								tablePrimitives[type].add(prim);
 								//
-								// adding also or synonims
+								// adding also or synonyms
 								//
-								String[] stringFormat = {"directive","predicate","functor"};
+								String[] stringFormat = {"directive", "predicate", "functor"};
 								if (opMappingCached != null) {
-									for (int j=0; j<opMappingCached.length; j++){
+									for (int j = 0; j < opMappingCached.length; j++){
 										String[] map = opMappingCached[j];
-										if (map[2].equals(stringFormat[type]) && map[1].equals(rawName)){
+										if (map[2].equals(stringFormat[type]) && map[1].equals(rawName)) {
 											key = map[0] + "/" + arity;
 											prim = new PrimitiveInfo(type, key, this, mlist[i], arity);
 											tablePrimitives[type].add(prim);
@@ -223,58 +228,5 @@ public abstract class Library implements IPrimitives {
 			return null;
 		}
 	}
-	
-	
-	/**
-	 * Gets the method linked to a builtin (null value if
-	 * the builtin has not any linked service)
-	 */
-	/*	public Method getLinkedMethod(Struct s){
-	 //System.out.println("get linked for "+s);         
-	  
-	  int arity = s.getArity();
-	  String name = s.getName()+"_"+arity; 
-	  
-	  // NOT found, Try with synonims
-	   Method m = findMethod(name,arity);	
-	   if (m!=null){
-	   return m;
-	   }
-	   
-	   // try with synonims
-	    if (opMappingCached!=null){
-	    String rawName=s.getName();
-	    for (int j=0; j<opMappingCached.length; j++){
-	    String[] map=opMappingCached[j];
-	    if (map[0].equals(rawName)){
-	    return findMethod(map[1]+"_"+s.getArity(),s.getArity());
-	    }
-	    }
-	    }
-	    return null;
-	    }
-	    
-	    private Method findMethod(String name, int arity){
-	    Method[] mlist = this.getClass().getMethods();
-	    for (int i=0; i<mlist.length; i++){
-	    if (mlist[i].getName().equals(name)){
-	    Class[] parms=mlist[i].getParameterTypes();
-	    if (parms.length==arity){
-	    boolean valid=true;
-	    for (int j=0; j<parms.length; j++){
-	    if (!Term.class.isAssignableFrom(parms[j])){
-	    valid=false;
-	    }
-	    }
-	    if (valid){
-	    return mlist[i];
-	    }
-	    }
-	    }
-	    }
-	    return null;
-	    }
-	    */
-	
 	
 }

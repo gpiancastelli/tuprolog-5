@@ -17,10 +17,8 @@
  */
 package alice.tuprolog;
 
-import java.util.*;
-
-import alice.tuprolog.Struct;
-
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -46,11 +44,8 @@ public class ExecutionContext {
 		
 	boolean haveAlternatives;
 	
-	/**
-	 * 
-	 */
 	ExecutionContext(int id) {
-		this.id=id;
+		this.id = id;
 	}
 	
 	
@@ -58,13 +53,11 @@ public class ExecutionContext {
 	
 	
 	public String toString(){
-		return "	     id: "+id+"\n"+
-		"     currentGoal:  "+currentGoal+"\n"+
-		"     clause:       "+clause+"\n"+
-		"     subGoalStore: "+goalsToEval+"\n"+
-		"     trailingVars: "+trailingVars+"\n"+
-		//((fatherCtx==null)?"":fatherCtx.toString());
-		"";
+		return "	     id: " + id + "\n" +
+		"     currentGoal:  " + currentGoal + "\n" +
+		"     clause:       " + clause + "\n" +
+		"     subGoalStore: " + goalsToEval + "\n" +
+		"     trailingVars: " + trailingVars + "\n";
 	}
 	
 	
@@ -96,11 +89,11 @@ public class ExecutionContext {
 		return goalsToEval;
 	}
 	
-	public List getTrailingVars() {
-		ArrayList l = new ArrayList();
+	public List<Var> getTrailingVars() {
+		List<Var> l = new ArrayList<Var>();
 		OneWayList t = trailingVars;
 		while (t != null) {
-			l.add(t.getHead());
+			l.add((Var) t.getHead());
 			t = t.getTail();
 		}
 		return l;		
