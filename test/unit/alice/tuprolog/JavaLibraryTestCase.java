@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
+
 import org.junit.Test;
 
 import alice.tuprolog.lib.InvalidObjectIdException;
@@ -13,7 +15,7 @@ public class JavaLibraryTestCase {
 	
 	@Test public void getPrimitives() {
 		Library library = new JavaLibrary();
-		java.util.List[] primitives = library.getPrimitives();
+		List<PrimitiveInfo>[] primitives = library.getPrimitives();
 		assertEquals(3, primitives.length);
 		assertEquals(0, primitives[PrimitiveInfo.DIRECTIVE].size());
 		assertTrue(primitives[PrimitiveInfo.PREDICATE].size() > 0);
@@ -26,11 +28,11 @@ public class JavaLibraryTestCase {
 		String theory = "demo(X) :- X <- update. \n";
 		engine.setTheory(new Theory(theory));
 		TestCounter counter = new TestCounter();
-		// check registering behaviour
+		// check registering behavior
 		Struct t = lib.register(counter);
 		engine.solve(new Struct("demo", t));
 		assertEquals(1, counter.getValue());
-		// check unregistering behaviour
+		// check unregistering behavior
 		lib.unregister(t);
 		SolveInfo goal = engine.solve(new Struct("demo", t));
 		assertFalse(goal.isSuccess());

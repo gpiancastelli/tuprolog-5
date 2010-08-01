@@ -3,6 +3,8 @@ package alice.tuprolog;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
+
 import org.junit.Test;
 
 import alice.tuprolog.lib.IOLibrary;
@@ -11,7 +13,7 @@ public class IOLibraryTestCase {
 	
 	@Test public void getPrimitives() {
 		Library library = new IOLibrary();
-		java.util.List[] primitives = library.getPrimitives();
+		List<PrimitiveInfo>[] primitives = library.getPrimitives();
 		assertEquals(3, primitives.length);
 		assertEquals(0, primitives[PrimitiveInfo.DIRECTIVE].size());
 		assertTrue(primitives[PrimitiveInfo.PREDICATE].size() > 0);

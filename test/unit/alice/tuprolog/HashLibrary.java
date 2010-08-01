@@ -20,24 +20,25 @@
  */
 package alice.tuprolog;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HashLibrary extends Library {
-	private HashMap dict;
+	private Map<String, Term> dict;
 		
 	public boolean hashtable_0(){
-		dict = new HashMap();
+		dict = new HashMap<String, Term>();
 		return true;
 	} 
 	
 	public boolean put_data_2(Term key, Term object){
-		dict.put(key.toString(),object);
+		dict.put(key.toString(), object);
 		return true;
 	}
 	
 	public boolean get_data_2(Term key, Term res){
-		Term result = (Term)dict.get(key.toString());
-		return unify(res,result);
+		Term result = (Term) dict.get(key.toString());
+		return unify(res, result);
 	}
 	
 	public boolean remove_data_1(Term key){
