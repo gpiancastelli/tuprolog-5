@@ -29,7 +29,6 @@ import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import alice.tuprolog.Int;
 import alice.tuprolog.Library;
@@ -1215,38 +1214,6 @@ public class JavaLibrary extends Library {
 	 */
 	protected Struct generateFreshId() {
 		return new Struct("$obj_" + id++);        
-	}
-	
-	/**
-	 *  handling writeObject method is necessary in order to
-	 *  make the library serializable, 'nullyfing'  eventually
-	 *  objects registered in maps
-	 */
-	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-		HashMap bak00 = currentObjects;
-		IdentityHashMap bak01 = currentObjectsInverse;
-		try {
-			currentObjects = null;
-			currentObjectsInverse = null;
-			out.defaultWriteObject();
-		} catch (IOException ex) {
-			currentObjects = bak00;
-			currentObjectsInverse = bak01;
-			throw new IOException();
-		}
-		currentObjects = bak00;
-		currentObjectsInverse = bak01;
-	}
-	
-	/**
-	 *  handling readObject method is necessary in order to
-	 *  have the library reconstructed after a serialization
-	 */
-	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-		in.defaultReadObject();
-		currentObjects = new HashMap();
-		currentObjectsInverse = new IdentityHashMap();
-		preregisterObjects();
 	}
 	
 	// --------------------------------------------------
