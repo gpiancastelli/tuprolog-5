@@ -28,13 +28,15 @@ public class TestLibrary extends StringLibrary {
 		return "TestLibraryName";
 	}
 
-	@Functor public Term sum_2(Number arg0, Number arg1) {
+	@Functor("sum/2")
+	public Term sum(Number arg0, Number arg1) {
 		int a0 = arg0.intValue();
 		int a1 = arg1.intValue();
 		return new Int(a0 + a1);
 	}
 	
-	@Predicate public boolean println_1(Term arg0) {
+	@Predicate("println/1")
+	public boolean println(Term arg0) {
 		getEngine().stdOutput(arg0.toString());
 		return true;
 	}

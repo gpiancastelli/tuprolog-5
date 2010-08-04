@@ -50,7 +50,8 @@ public class IOLibrary extends Library {
 		gen.setSeed(System.currentTimeMillis());
 	}
 	
-	@Predicate public boolean see_1(Term arg) throws Exception {
+	@Predicate("see/1")
+	public boolean see(Term arg) throws Exception {
 		Struct arg0 = (Struct) arg.getTerm();
 		if (!arg0.isAtom())
 			return false;
@@ -64,7 +65,8 @@ public class IOLibrary extends Library {
 		return true;
 	}
 	
-	@Predicate public boolean seen_0() throws Exception {
+	@Predicate("seen/0")
+	public boolean seen() throws Exception {
 		if (inputStream != System.in) {
 			inputStream.close();
 			inputStream = System.in;
@@ -73,11 +75,13 @@ public class IOLibrary extends Library {
 		return true;
 	}
 	
-	@Predicate public boolean seeing_1(Term t) {
+	@Predicate("seeing/1")
+	public boolean seeing(Term t) {
 		return unify(t, new Struct(inputStreamName));
 	}
 	
-	@Predicate public boolean tell_1(Term arg) throws Exception {
+	@Predicate("tell/1")
+	public boolean tell(Term arg) throws Exception {
 		Struct arg0 = (Struct) arg.getTerm();
 		if (!arg0.isAtom())
 			return false;
@@ -91,7 +95,8 @@ public class IOLibrary extends Library {
 		return true;
 	}
 	
-	@Predicate public boolean told_0() throws Exception {
+	@Predicate("told/0")
+	public boolean told() throws Exception {
 		if (outputStream != System.out) {
 			outputStream.close();
 			outputStream = System.out;
@@ -100,11 +105,13 @@ public class IOLibrary extends Library {
 		return true;
 	}
 	
-	@Predicate public boolean telling_1(Term arg0) {
+	@Predicate("telling/1")
+	public boolean telling(Term arg0) {
 		return unify(arg0, new Struct(outputStreamName));
 	}
 	
-	@Predicate public boolean put_1(Term arg) throws Exception {
+	@Predicate("put/1")
+	public boolean put(Term arg) throws Exception {
 		Struct arg0 = (Struct) arg.getTerm();
 		if (!arg0.isAtom())
 			return false;
@@ -122,7 +129,8 @@ public class IOLibrary extends Library {
 		}
 	}
 	
-	@Predicate public boolean get0_1(Term arg0) throws Exception {
+	@Predicate("get0/1")
+	public boolean get0(Term arg0) throws Exception {
 		int ch = inputStream.read();
 		if (ch == -1)
 			return unify(arg0, new Int(-1));
@@ -130,7 +138,8 @@ public class IOLibrary extends Library {
 			return unify(arg0, new Struct(new Character((char) ch).toString()));
 	}
 	
-	@Predicate public boolean get_1(Term arg0) throws Exception {
+	@Predicate("get/1")
+	public boolean get(Term arg0) throws Exception {
 		int ch = 0;
 		do {
 			ch = inputStream.read();
@@ -141,7 +150,8 @@ public class IOLibrary extends Library {
 			return unify(arg0, new Struct(new Character(((char) ch)).toString()));
 	}
 	
-	@Predicate public boolean tab_1(alice.tuprolog.Number arg) throws Exception {
+	@Predicate("tab/1")
+	public boolean tab(alice.tuprolog.Number arg) throws Exception {
 		int n = arg.intValue();
 		if (outputStreamName.equals("stdout"))
 			for (int i = 0; i < n; i++)
@@ -152,7 +162,8 @@ public class IOLibrary extends Library {
 		return true;
 	}
 	
-	@Predicate public boolean read_1(Term arg0) throws Exception {
+	@Predicate("read/1")
+	public boolean read(Term arg0) throws Exception {
 		arg0 = arg0.getTerm();
 		try {
 			int ch = 0;
@@ -198,7 +209,8 @@ public class IOLibrary extends Library {
 		}
 	}
 	
-	@Predicate public boolean write_1(Term arg0) throws Exception {
+	@Predicate("write/1")
+	public boolean write(Term arg0) throws Exception {
 		arg0 = arg0.getTerm();
 		try {
 			if (outputStreamName.equals("stdout"))
@@ -211,7 +223,8 @@ public class IOLibrary extends Library {
 		}
 	}
 	
-	@Predicate public boolean print_1(Term arg0) throws Exception {
+	@Predicate("print/1")
+	public boolean print(Term arg0) throws Exception {
 		arg0 = arg0.getTerm();
 		try {
 			if (outputStreamName.equals("stdout"))
@@ -224,7 +237,8 @@ public class IOLibrary extends Library {
 		}
 	}
 	
-	@Predicate public boolean nl_0() throws Exception {
+	@Predicate("nl/0")
+	public boolean nl() throws Exception {
 		if (outputStreamName.equals("stdout"))
 			getEngine().stdOutput("\n");
 		else
@@ -238,7 +252,8 @@ public class IOLibrary extends Library {
 	 * It's useful used with agent predicate:
 	 * text_from_file(File,Source), agent(Source).
 	 */
-	@Predicate public boolean text_from_file_2(Term file_name, Term text) {
+	@Predicate("text_from_file/2")
+	public boolean textFromFile(Term file_name, Term text) {
 		Struct fileName = (Struct) file_name.getTerm();
 		try {
 			Struct goal = new Struct(loadText(
@@ -252,11 +267,13 @@ public class IOLibrary extends Library {
 	
 	// miscellaneous
 	
-	@Predicate public boolean rand_float_1(Term t) {
+	@Predicate("rand_float/1")
+	public boolean randFloat(Term t) {
 		return unify(t, new alice.tuprolog.Double(gen.nextFloat()));
 	}
 	
-	@Predicate public boolean rand_int_2(Term argNum, Term num) {
+	@Predicate("rand_int/2")
+	public boolean randInt(Term argNum, Term num) {
 		alice.tuprolog.Number arg = (alice.tuprolog.Number) argNum.getTerm();
 		return unify(num, new Int(gen.nextInt(arg.intValue())));
 	}

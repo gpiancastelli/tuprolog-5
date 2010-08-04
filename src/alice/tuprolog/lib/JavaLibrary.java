@@ -39,7 +39,6 @@ import alice.tuprolog.Term;
 import alice.tuprolog.Var;
 
 /**
- *
  * This class represents a tuProlog library enabling the interaction
  * with the Java environment from tuProlog.
  *
@@ -70,8 +69,6 @@ public class JavaLibrary extends Library {
 	
 	/** progressive counter used to identify registered objects */
 	private int id = 0;
-	
-	
 	
 	/**
 	 * library theory
@@ -152,7 +149,8 @@ public class JavaLibrary extends Library {
 	/**
 	 * Creates of a java object - not backtrackable case
 	 */
-	@Predicate public boolean java_object_3(Term className, Term argl, Term id) {
+	@Predicate("java_object/3")
+	public boolean javaObject(Term className, Term argl, Term id) {
 		className = className.getTerm();
 		Struct arg = (Struct) argl.getTerm();
 		id = id.getTerm();
@@ -165,7 +163,7 @@ public class JavaLibrary extends Library {
 			if (clName.endsWith("[]")) {
 				Object[] list = getArrayFromList(arg);
 				int nargs = ((Number) list[0]).intValue();
-				return java_array(clName, nargs, id);
+				return javaArray(clName, nargs, id);
 			}
 			Signature args = parseArg(getArrayFromList(arg));
 			if (args == null) {
@@ -212,7 +210,8 @@ public class JavaLibrary extends Library {
 	 * Destroy the link to a java object - called not directly, but from
 	 * predicate java_object (as second choice, for backtracking)
 	 */
-	@Predicate public boolean destroy_object_1(Term id) {
+	@Predicate("destroy_object/1")
+	public boolean destroyObject(Term id) {
 		id = id.getTerm();
 		try {
 			if (id.isGround()) {
@@ -229,7 +228,8 @@ public class JavaLibrary extends Library {
 	/**
 	 * Creates a Java class.
 	 */
-	@Predicate public boolean java_class_4(Term clSource, Term clName, Term clPathes, Term id) {
+	@Predicate("java_class/4")
+	public boolean javaClass(Term clSource, Term clName, Term clPathes, Term id) {
 		Struct classSource = (Struct) clSource.getTerm();
 		Struct className = (Struct) clName.getTerm();
 		Struct classPathes = (Struct) clPathes.getTerm();
@@ -295,7 +295,8 @@ public class JavaLibrary extends Library {
 	/**
 	 * Calls a method of a Java object.
 	 */
-	@Predicate public boolean java_call_3(Term objId, Term method_name, Term idResult) {
+	@Predicate("java_call/3")
+	public boolean javaCall(Term objId, Term method_name, Term idResult) {
 		objId = objId.getTerm();
 		idResult = idResult.getTerm();
 		Struct method = (Struct) method_name.getTerm();
@@ -314,9 +315,9 @@ public class JavaLibrary extends Library {
 				Struct sel = (Struct) objId;
 				if (sel.getName().equals(".") && sel.getArity() == 2 && method.getArity() == 1) {
 					if (methodName.equals("set"))
-						return java_set(sel.getTerm(0), sel.getTerm(1), method.getTerm(0));
+						return javaSet(sel.getTerm(0), sel.getTerm(1), method.getTerm(0));
 					else if (methodName.equals("get"))
-						return java_get(sel.getTerm(0), sel.getTerm(1), method.getTerm(0));
+						return javaGet(sel.getTerm(0), sel.getTerm(1), method.getTerm(0));
 				}
 			}
 			
@@ -408,7 +409,7 @@ public class JavaLibrary extends Library {
 	/*
 	 * set the field value of an object
 	 */
-	private boolean java_set(Term objId, Term fieldTerm, Term what) {
+	private boolean javaSet(Term objId, Term fieldTerm, Term what) {
 		//System.out.println("SET "+objId+" "+fieldTerm+" "+what);
 		what = what.getTerm();
 		if (!fieldTerm.isAtom() || what instanceof Var)
@@ -477,7 +478,7 @@ public class JavaLibrary extends Library {
 	/*
 	 * get the value of the field
 	 */
-	private boolean java_get(Term objId, Term fieldTerm, Term what) {
+	private boolean javaGet(Term objId, Term fieldTerm, Term what) {
 		//System.out.println("GET "+objId+" "+fieldTerm+" "+what);
 		if (!fieldTerm.isAtom()) {
 			return false;
@@ -544,7 +545,8 @@ public class JavaLibrary extends Library {
 		}
 	}
 	
-	@Predicate public boolean java_array_set_primitive_3(Term obj_id, Term i, Term what) {
+	@Predicate("java_array_set_primitive/3")
+	public boolean javaArraySetPrimitive(Term obj_id, Term i, Term what) {
 		Struct objId = (Struct) obj_id.getTerm();
 		Number index = (Number) i.getTerm();
 		what = what.getTerm();
@@ -625,7 +627,8 @@ public class JavaLibrary extends Library {
 		}
 	}
 	
-	@Predicate public boolean java_array_get_primitive_3(Term obj_id, Term i, Term what) {
+	@Predicate("java_array_get_primitive/3")
+	public boolean javaArrayGetPrimitive(Term obj_id, Term i, Term what) {
 		Struct objId = (Struct) obj_id.getTerm();
 		Number index = (Number) i.getTerm();
 		what = what.getTerm();
@@ -686,7 +689,7 @@ public class JavaLibrary extends Library {
 		
 	}
 	
-	private boolean java_array(String type, int nargs, Term id) {
+	private boolean javaArray(String type, int nargs, Term id) {
 		try {
 			Object array = null;
 			String obtype = type.substring(0, type.length() - 2);
@@ -724,7 +727,7 @@ public class JavaLibrary extends Library {
 		Object[] values = new Object[method.getArity()];
 		Class<?>[] types = new Class[method.getArity()];
 		for (int i = 0; i < method.getArity(); i++) {
-			if (!parse_arg(values, types, i, (Term) method.getTerm(i)))
+			if (!parseArg(values, types, i, (Term) method.getTerm(i)))
 				return null;
 		}
 		return new Signature(values, types);
@@ -734,13 +737,13 @@ public class JavaLibrary extends Library {
 		Object[] values = new Object[objs.length];
 		Class<?>[] types = new Class[objs.length];
 		for (int i = 0; i < objs.length; i++) {
-			if (!parse_arg(values, types, i, (Term) objs[i]))
+			if (!parseArg(values, types, i, (Term) objs[i]))
 				return null;
 		}
 		return new Signature(values, types);
 	}
 	
-	private boolean parse_arg(Object[] values, Class<?>[] types, int i, Term term) {
+	private boolean parseArg(Object[] values, Class<?>[] types, int i, Term term) {
 		try {
 			if (term == null) {
 				values[i] = null;
@@ -781,7 +784,7 @@ public class JavaLibrary extends Library {
 				// argument descriptors
 				Struct tc = (Struct) term;
 				if (tc.getName().equals("as")) {
-					return parse_as(values, types, i, tc.getTerm(0), tc.getTerm(1));
+					return parseAs(values, types, i, tc.getTerm(0), tc.getTerm(1));
 				} else {
 					Object obj = currentObjects.get(tc.toStringWithoutApices());
 					if (obj == null) {
@@ -807,7 +810,7 @@ public class JavaLibrary extends Library {
 	 * parsing 'as' operator, which makes it possible
 	 * to define the specific class of an argument
 	 */
-	private boolean parse_as(Object[] values, Class<?>[] types, int i, Term castWhat, Term castTo) {
+	private boolean parseAs(Object[] values, Class<?>[] types, int i, Term castWhat, Term castTo) {
 		try {
 			if (!(castWhat instanceof Number)) {
 				String castTo_name = ((Struct) castTo).toStringWithoutApices();

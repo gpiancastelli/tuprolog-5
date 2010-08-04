@@ -48,7 +48,8 @@ public class BasicLibrary extends Library {
 	/**
 	 * sets a new theory provided as a text
 	 */
-	@Predicate public boolean set_theory_1(Term th) {
+	@Predicate("set_theory/1")
+	public boolean setTheory(Term th) {
 		Struct theory = (Struct) th.getTerm();
 		try {
 			if (!theory.isAtom())
@@ -64,7 +65,8 @@ public class BasicLibrary extends Library {
 	/**
 	 *  adds a new theory provided as a text
 	 */
-	@Predicate public boolean add_theory_1(Term th) {
+	@Predicate("add_theory/1")
+	public boolean addTheory(Term th) {
 		Struct theory = (Struct) th.getTerm();
 		try {
 			if (!theory.isAtom())
@@ -78,7 +80,8 @@ public class BasicLibrary extends Library {
 	}
 	
 	/** gets current theory text */
-	@Predicate public boolean get_theory_1(Term arg) {
+	@Predicate("get_theory/1")
+	public boolean getTheory(Term arg) {
 		arg = arg.getTerm();
 		try {
 			Term theory = new Struct(getEngine().getTheory().toString());
@@ -88,7 +91,8 @@ public class BasicLibrary extends Library {
 		}
 	}
 	
-	@Predicate public boolean load_library_2(Term className, Term libName) {
+	@Predicate("load_library/2")
+	public boolean loadLibrary(Term className, Term libName) {
 		Struct clName = (Struct) className.getTerm();
 		libName = libName.getTerm();
 		try {
@@ -106,7 +110,8 @@ public class BasicLibrary extends Library {
 	 * @param libName name of the library
 	 * @return true if the library has been successfully loaded.
 	 */
-	@Predicate public boolean load_library_from_theory_2(Term th, Term libName) {
+	@Predicate("load_library_from_theory/2")
+	public boolean loadLibraryFromTheory(Term th, Term libName) {
 		Struct theory = (Struct) th.getTerm();
 		Struct libN = (Struct) libName.getTerm();
 		try {
@@ -123,7 +128,8 @@ public class BasicLibrary extends Library {
 		}
 	}
 	
-	@Predicate public boolean get_operators_list_1(Term argument) {
+	@Predicate("get_operators_list/1")
+	public boolean getOperatorsList(Term argument) {
 		Term arg = argument.getTerm();
 		Struct list = new Struct();
 		for (Operator o : getEngine().getCurrentOperatorList())
@@ -139,7 +145,8 @@ public class BasicLibrary extends Library {
 	 * spawns a separate prolog agent
 	 * providing it a theory text
 	 */
-	@Predicate public boolean agent_1(Term th) {
+	@Predicate("agent/1")
+	public boolean agent(Term th) {
 		Struct theory = (Struct) th.getTerm();
 		try {
 			new Agent(theory.toStringWithoutApices()).spawn();
@@ -154,7 +161,8 @@ public class BasicLibrary extends Library {
 	 * spawns a separate prolog agent
 	 * providing it a theory text and a goal
 	 */
-	@Predicate public boolean agent_2(Term th, Term g) {
+	@Predicate("agent/2")
+	public boolean agentWithGoal(Term th, Term g) {
 		Struct theory = (Struct) th.getTerm();
 		Struct goal = (Struct) g.getTerm();
 		try {
@@ -167,22 +175,26 @@ public class BasicLibrary extends Library {
 		}
 	}
 	
-	@Predicate public boolean spy_0() {
+	@Predicate("spy/0")
+	public boolean spy() {
 		getEngine().setSpy(true);
 		return true;
 	}
 	
-	@Predicate public boolean nospy_0() {
+	@Predicate("nospy/0")
+	public boolean noSpy() {
 		getEngine().setSpy(false);
 		return true;
 	}
 	
-	@Predicate public boolean warning_0() {
+	@Predicate("warning/0")
+	public boolean warning() {
 		getEngine().setWarning(true);
 		return true;
 	}
 	
-	@Predicate public boolean nowarning_0() {
+	@Predicate("nowarning/0")
+	public boolean noWarning() {
 		getEngine().setWarning(false);
 		return true;
 	}
@@ -191,60 +203,71 @@ public class BasicLibrary extends Library {
 	// term type inspection
 	//
 	
-	@Predicate public boolean constant_1(Term t) {
+	@Predicate("constant/1")
+	public boolean isConstant(Term t) {
 		t = t.getTerm();
 		return (t.isAtomic());
 	}
 	
-	@Predicate public boolean number_1(Term t) {
+	@Predicate("number/1")
+	public boolean isNumber(Term t) {
 		return (t.getTerm() instanceof Number);
 	}
 	
-	@Predicate public boolean integer_1(Term t) {
+	@Predicate("integer/1")
+	public boolean isInteger(Term t) {
 		t = t.getTerm();
 		if (!(t instanceof Number))
 			return false;
 		return ((Number) t).isInteger();
 	}
 	
-	@Predicate public boolean float_1(Term t) {
+	@Predicate("float/1")
+	public boolean isFloat(Term t) {
 		t = t.getTerm();
 		if (!(t instanceof Number))
 			return false;
 		return ((Number) t).isReal();
 	}
 	
-	@Predicate public boolean atom_1(Term t) {
+	@Predicate("atom/1")
+	public boolean isAtom(Term t) {
 		t = t.getTerm();
 		return (t.isAtom());
 	}
 	
-	@Predicate public boolean compound_1(Term t) {
+	@Predicate("compound/1")
+	public boolean isCompound(Term t) {
 		t = t.getTerm();
 		return t.isCompound();
 	}
 	
-	@Predicate public boolean list_1(Term t) {
+	@Predicate("list/1")
+	public boolean isList(Term t) {
 		t = t.getTerm();
 		return (t.isList());
 	}
 	
-	@Predicate public boolean var_1(Term t) {
+	@Predicate("var/1")
+	public boolean isVar(Term t) {
 		t = t.getTerm();
 		return (t instanceof Var);
 	}
 	
-	@Predicate public boolean nonvar_1(Term t) {
+	@Predicate("nonvar/1")
+	public boolean isNotVar(Term t) {
 		t = t.getTerm();
 		return !(t instanceof Var);
 	}
 	
-	@Predicate public boolean atomic_1(Term t) {
+	@Predicate("atomic/1")
+	public boolean isAtomic(Term t) {
 		t = t.getTerm();
 		return t.isAtomic();
 	}
 	
-	@Predicate public boolean ground_1(Term t) {
+	@Predicate("ground/1")
+	public boolean isGround(Term t) {
 		t = t.getTerm();
 		return (t.isGround());
 	}
@@ -253,7 +276,8 @@ public class BasicLibrary extends Library {
 	// term/expression comparison
 	//
 	
-	@Predicate public boolean expression_equality_2(Term arg0, Term arg1) {
+	@Predicate("expression_equality/2")
+	public boolean expressionEquality(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
 		if (val0==null || val1==null || !(val0 instanceof Number) || !(val1 instanceof Number)) {
@@ -268,23 +292,25 @@ public class BasicLibrary extends Library {
 		}
 	}
 	
-	@Predicate public boolean expression_greater_than_2(Term arg0, Term arg1) {
+	@Predicate("expression_greater_than/2")
+	public boolean expressionGreaterThan(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
 		if (val0 == null || val1 == null || !(val0 instanceof Number) || !(val1 instanceof Number))
 			return false;
-		return expression_greater_than((alice.tuprolog.Number) val0, (alice.tuprolog.Number) val1);
+		return expressionGreaterThan((alice.tuprolog.Number) val0, (alice.tuprolog.Number) val1);
 	}
 	
-	@Predicate public boolean expression_less_or_equal_than_2(Term arg0, Term arg1) {
+	@Predicate("expression_less_or_equal_than/2")
+	public boolean expressionLessOrEqualThan(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
 		if (val0 == null || val1 == null || !(val0 instanceof Number) || !(val1 instanceof Number))
 			return false;
-		return !expression_greater_than((alice.tuprolog.Number) val0, (alice.tuprolog.Number) val1);
+		return !expressionGreaterThan((alice.tuprolog.Number) val0, (alice.tuprolog.Number) val1);
 	}
 
-	private boolean expression_greater_than(alice.tuprolog.Number num0, alice.tuprolog.Number num1) {
+	private boolean expressionGreaterThan(alice.tuprolog.Number num0, alice.tuprolog.Number num1) {
 		if (num0.isInteger() && num1.isInteger()) {
 			return num0.intValue() > num1.intValue();
 		} else {
@@ -292,23 +318,25 @@ public class BasicLibrary extends Library {
 		}
 	}
 	
-	@Predicate public boolean expression_less_than_2(Term arg0, Term arg1) {
+	@Predicate("expression_less_than/2")
+	public boolean expressionLessThan(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
 		if (val0 == null || val1 == null || !(val0 instanceof Number) || !(val1 instanceof Number))
 			return false;
-		return expression_less_than((alice.tuprolog.Number) val0, (alice.tuprolog.Number) val1);
+		return expressionLessThan((alice.tuprolog.Number) val0, (alice.tuprolog.Number) val1);
 	}
 	
-	@Predicate public boolean expression_greater_or_equal_than_2(Term arg0, Term arg1) {
+	@Predicate("expression_greater_or_equal_than/2")
+	public boolean expressionGreaterOrEqualThan(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
 		if (val0 == null || val1 == null || !(val0 instanceof Number) || !(val1 instanceof Number))
 			return false;
-		return !expression_less_than((alice.tuprolog.Number) val0, (alice.tuprolog.Number) val1);
+		return !expressionLessThan((alice.tuprolog.Number) val0, (alice.tuprolog.Number) val1);
 	}
 
-	private boolean expression_less_than(alice.tuprolog.Number num0, alice.tuprolog.Number num1) {
+	private boolean expressionLessThan(alice.tuprolog.Number num0, alice.tuprolog.Number num1) {
 		if (num0.isInteger() && num1.isInteger()) {
 			return num0.intValue() < num1.intValue();
 		} else {
@@ -316,25 +344,29 @@ public class BasicLibrary extends Library {
 		}
 	}
 	
-	@Predicate public boolean term_equality_2(Term arg0, Term arg1) {
+	@Predicate("term_equality/2")
+	public boolean termEquality(Term arg0, Term arg1) {
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
 		return arg0.isEqual(arg1);
 	}
 	
-	@Predicate public boolean term_greater_than_2(Term arg0, Term arg1) {
+	@Predicate("term_greater_than/2")
+	public boolean termGreaterThan(Term arg0, Term arg1) {
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
 		return arg0.isGreater(arg1);
 	}
 	
-	@Predicate public boolean term_less_than_2(Term arg0, Term arg1) {
+	@Predicate("term_less_than/2")
+	public boolean termLessThan(Term arg0, Term arg1) {
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
 		return !(arg0.isGreater(arg1) || arg0.isEqual(arg1));
 	}
 	
-	@Functor public Term expression_plus_1(Term arg0) {
+	@Functor("expression_plus/1")
+	public Term expressionPlus(Term arg0) {
 		Term val0 = evalExpression(arg0);
 		if (val0!=null && val0 instanceof Number)
 			return val0;
@@ -342,7 +374,8 @@ public class BasicLibrary extends Library {
 			return null;
 	}
 	
-	@Functor public Term expression_minus_1(Term arg1) {
+	@Functor("expression_minus/1")
+	public Term expressionMinus(Term arg1) {
 		Term val0 = evalExpression(arg1);
 		if (val0!=null && val0 instanceof Number) {
 			alice.tuprolog.Number val0n = (alice.tuprolog.Number) val0;
@@ -360,10 +393,11 @@ public class BasicLibrary extends Library {
 			return null;
 	}
 	
-	@Functor public Term expression_bitwise_not_1(Term arg0) {
+	@Functor("expression_bitwise_not/1")
+	public Term expressionBitwiseNot(Term arg0) {
 		Term val0 = evalExpression(arg0);
 		if (val0!=null && val0 instanceof Number)
-			return new Int(~((alice.tuprolog.Number)val0).intValue());
+			return new Int(~((alice.tuprolog.Number) val0).intValue());
 		else
 			return null;
 	}
@@ -375,7 +409,8 @@ public class BasicLibrary extends Library {
 			return new alice.tuprolog.Long(num);
 	}
 	
-	@Functor public Term expression_plus_2(Term arg0, Term arg1) {
+	@Functor("expression_plus/2")
+	public Term expressionPlus(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
 		if (val0!=null && val1!=null && val0 instanceof Number && (val1 instanceof Number)) {
@@ -389,7 +424,8 @@ public class BasicLibrary extends Library {
 			return null;
 	}
 	
-	@Functor public Term expression_minus_2(Term arg0, Term arg1) {
+	@Functor("expression_minus/2")
+	public Term expressionMinus(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
 		if (val0!=null && val1!=null && val0 instanceof Number && (val1 instanceof Number)) {
@@ -403,7 +439,8 @@ public class BasicLibrary extends Library {
 			return null;
 	}
 	
-	@Functor public Term expression_multiply_2(Term arg0, Term arg1) {
+	@Functor("expression_multiply/2")
+	public Term expressionMultiply(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
 		if (val0!=null && val1!=null && val0 instanceof Number && (val1 instanceof Number)) {
@@ -417,7 +454,8 @@ public class BasicLibrary extends Library {
 			return null;
 	}
 	
-	@Functor public Term expression_div_2(Term arg0, Term arg1) {
+	@Functor("expression_div/2")
+	public Term expressionDiv(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
 		if (val0 != null && val1 != null && val0 instanceof Number && val1 instanceof Number) {
@@ -432,7 +470,8 @@ public class BasicLibrary extends Library {
 			return null;
 	}
 	
-	@Functor public Term expression_integer_div_2(Term arg0, Term arg1) {
+	@Functor("expression_integer_div/2")
+	public Term expressionIntegerDiv(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
 		if (val0 != null && val1 != null && val0 instanceof Number && (val1 instanceof Number)) {
@@ -443,7 +482,8 @@ public class BasicLibrary extends Library {
 			return null;
 	}
 	
-	@Functor public Term expression_pow_2(Term arg0, Term arg1) {
+	@Functor("expression_pow/2")
+	public Term expressionPow(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
 		if (val0 != null && val1 != null && val0 instanceof Number && val1 instanceof Number) {
@@ -454,7 +494,8 @@ public class BasicLibrary extends Library {
 			return null;
 	}
 	
-	@Functor public Term expression_bitwise_shift_right_2(Term arg0, Term arg1) {
+	@Functor("expression_bitwise_shift_right/2")
+	public Term expressionBitwiseShiftRight(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
 		if (val0 != null && val1 != null && val0 instanceof Number && val1 instanceof Number) {
@@ -465,7 +506,8 @@ public class BasicLibrary extends Library {
 			return null;
 	}
 	
-	@Functor public Term expression_bitwise_shift_left_2(Term arg0, Term arg1) {
+	@Functor("expression_bitwise_shift_left/2")
+	public Term expressionBitwiseShiftLeft(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
 		if (val0 != null && val1 != null && val0 instanceof Number && val1 instanceof Number) {
@@ -476,7 +518,8 @@ public class BasicLibrary extends Library {
 			return null;
 	}
 	
-	@Functor public Term expression_bitwise_and_2(Term arg0, Term arg1) {
+	@Functor("expression_bitwise_and/2")
+	public Term expressionBitwiseAnd(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
 		if (val0 != null && val1 != null && val0 instanceof Number && val1 instanceof Number) {
@@ -487,7 +530,8 @@ public class BasicLibrary extends Library {
 			return null;
 	}
 	
-	@Functor public Term expression_bitwise_or_2(Term arg0, Term arg1) {
+	@Functor("expression_bitwise_or/2")
+	public Term expressionBitwiseOr(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
 		if (val0 != null && val1 != null && val0 instanceof Number && val1 instanceof Number) {
@@ -505,7 +549,8 @@ public class BasicLibrary extends Library {
 	/**
 	 * bidirectional text/term conversion.
 	 */
-	@Predicate public boolean text_term_2(Term arg0, Term arg1) {
+	@Predicate("text_term/2")
+	public boolean textTerm(Term arg0, Term arg1) {
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
 		if (!arg0.isGround()) {
@@ -520,7 +565,8 @@ public class BasicLibrary extends Library {
 		}
 	}
 	
-	@Predicate public boolean text_concat_3(Term source1, Term source2, Term dest) {
+	@Predicate("text_concat/3")
+	public boolean textConcat(Term source1, Term source2, Term dest) {
 		source1 = source1.getTerm();
 		source2 = source2.getTerm();
 		dest = dest.getTerm();
@@ -531,7 +577,8 @@ public class BasicLibrary extends Library {
 			return false;
 	}
 	
-	@Predicate public boolean num_atom_2(Term arg0,Term arg1) {
+	@Predicate("num_atom/2")
+	public boolean numAtom(Term arg0,Term arg1) {
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
 		if (arg1 instanceof Var) {
@@ -620,7 +667,7 @@ public class BasicLibrary extends Library {
 		"current_prolog_flag(Name,Value) :- get_prolog_flag(Name,Value),!.\n"+
 		"current_prolog_flag(Name,Value) :- flag_list(L), member(flag(Name,Value),L).\n"+
 		//
-		// espression/term comparison
+		// expression/term comparison
 		//
 		"'=:='(X,Y):- expression_equality(X,Y). \n"+
 		"'=\\='(X,Y):- not expression_equality(X,Y). \n"+
@@ -788,7 +835,8 @@ public class BasicLibrary extends Library {
 	
 	// Internal Java predicates which are part of the bagof/3 and setof/3 algorithm
 	
-	@Predicate public boolean $wt_unify_3(Term witness, Term wtList, Term tList) {
+	@Predicate("$wt_unify/3")
+	public boolean wtUnify(Term witness, Term wtList, Term tList) {
 		Struct list = (Struct) wtList.getTerm();
 		Struct result = new Struct();
 		for (Term wt : list) {
@@ -801,7 +849,8 @@ public class BasicLibrary extends Library {
 		return unify(tList, result);
 	}
 	
-	@Predicate public boolean $s_next0_3(Term witness, Term wtList, Term sNext) {
+	@Predicate("$s_next0/3")
+	public boolean sNext(Term witness, Term wtList, Term sNext) {
 		Struct list = (Struct) wtList.getTerm();
 		Struct result = new Struct();
 		for (Term wt : list) {
@@ -813,7 +862,8 @@ public class BasicLibrary extends Library {
 		return unify(sNext, result);
 	}
 	
-	@Predicate public boolean iterated_goal_term_2(Term term, Term goal) {
+	@Predicate("iterated_goal_term/2")
+	public boolean iteratedGoalTerm(Term term, Term goal) {
 		Term t = term.getTerm();
 		Term igt = t.iteratedGoalTerm();
 		return unify(igt, goal);

@@ -173,33 +173,40 @@ public abstract class Library implements IPrimitives {
 			};
 			
 			for (int i = 0; i < mlist.length; i++) {
-				String name = mlist[i].getName();
-				
-				Class<?>[] clist = mlist[i].getParameterTypes();
-				Class<?> returnType = mlist[i].getReturnType();
+				Method method = mlist[i];
+				Class<?>[] clist = method.getParameterTypes();
+				Class<?> returnType = method.getReturnType();
 				
 				int type;
-				if (mlist[i].isAnnotationPresent(Predicate.class)) {
+				String name = "";
+				if (method.isAnnotationPresent(Predicate.class)) {
 					if (returnType != Boolean.TYPE) {
-						String m = "Method " + name + "is declared as Predicate but " +
-						           "does not return a boolean.";
+						String m = "Method " + method.getName() + "is declared " +
+						           "as Predicate but does not return a boolean.";
 						getEngine().warn(m);
 						continue;
 					}
 					type = PrimitiveInfo.PREDICATE;
-				} else if (mlist[i].isAnnotationPresent(Functor.class)) {
+					Predicate annotation = method.getAnnotation(Predicate.class);
+					name = annotation.value();
+				} else if (method.isAnnotationPresent(Functor.class)) {
 					if (returnType != Term.class) {
-						String m = "Method " + name + "is declared as Functor but " +
-				                   "does not return a Term.";
+						String m = "Method " + method.getName() + "is declared " +
+				                   "as Functor but does not return a Term.";
 						getEngine().warn(m);
 						continue;
 					}
 					type = PrimitiveInfo.FUNCTOR;
-				} else if (mlist[i].isAnnotationPresent(Directive.class))
+					Functor annotation = method.getAnnotation(Functor.class);
+					name = annotation.value();
+				} else if (method.isAnnotationPresent(Directive.class)) {
 					type = PrimitiveInfo.DIRECTIVE;
-				else continue;
+					Directive annotation = method.getAnnotation(Directive.class);
+					name = annotation.value();
+				} else
+					continue;
 				
-				int index = name.lastIndexOf('_');
+				int index = name.lastIndexOf('/');
 				if (index != -1) {
 					try {
 						int arity = Integer.parseInt(name.substring(index + 1, name.length()));
@@ -215,7 +222,7 @@ public abstract class Library implements IPrimitives {
 							if (valid) {
 								String rawName = name.substring(0,index);
 								String key = rawName + "/" + arity;
-								PrimitiveInfo prim = new PrimitiveInfo(type, key, this, mlist[i], arity);
+								PrimitiveInfo prim = new PrimitiveInfo(type, key, this, method, arity);
 								tablePrimitives[type].add(prim);
 								//
 								// adding also or synonyms
@@ -226,7 +233,7 @@ public abstract class Library implements IPrimitives {
 										String[] map = opMappingCached[j];
 										if (map[2].equals(stringFormat[type]) && map[1].equals(rawName)) {
 											key = map[0] + "/" + arity;
-											prim = new PrimitiveInfo(type, key, this, mlist[i], arity);
+											prim = new PrimitiveInfo(type, key, this, method, arity);
 											tablePrimitives[type].add(prim);
 										}
 									}

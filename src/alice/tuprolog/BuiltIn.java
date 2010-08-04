@@ -69,24 +69,36 @@ public class BuiltIn extends Library {
 	 * PREDICATES
 	 */
 	
-	@Predicate public boolean fail_0() {
+	@Predicate("fail/0")
+	public boolean fail_0() {
 		return false;
 	}
 	
-	@Predicate public boolean true_0() {
+	@Predicate("true/0")
+	public boolean true_0() {
 		return true;
 	}
 	
-	@Predicate public boolean halt_0() throws HaltException {
+	@Predicate("halt/0")
+	public boolean halt_0() throws HaltException {
 		throw new HaltException();
 	}
 	
-	@Predicate public boolean cut_0() {
+	@Predicate("halt/1")
+	public boolean halt_1(Term arg0) throws HaltException {
+		if (arg0 instanceof Number)
+			throw new HaltException(((Number)arg0).intValue());
+		return false;
+	}
+	
+	@Predicate("cut/0")
+	public boolean cut_0() {
 		engineManager.cut();
 		return true;
 	}
 	
-	@Predicate public boolean asserta_1(Term arg0) {
+	@Predicate("asserta/1")
+	public boolean asserta_1(Term arg0) {
 		arg0 = arg0.getTerm();
 		if (arg0 instanceof Struct) {
 			theoryManager.assertA((Struct) arg0, true, null,false);
@@ -95,7 +107,8 @@ public class BuiltIn extends Library {
 		return false;
 	}
 	
-	@Predicate public boolean assertz_1(Term arg0) {
+	@Predicate("assertz/1")
+	public boolean assertz_1(Term arg0) {
 		arg0 = arg0.getTerm();
 		if (arg0 instanceof Struct) {
 			theoryManager.assertZ((Struct) arg0, true, null,false);
@@ -104,46 +117,39 @@ public class BuiltIn extends Library {
 		return false;
 	}
 	
-	@Predicate public boolean $retract_1(Term arg0) {
+	@Predicate("$retract/1")
+	public boolean $retract_1(Term arg0) {
 		arg0 = arg0.getTerm();
-		if (!(arg0 instanceof Struct)) {
+		if (!(arg0 instanceof Struct))
 			return false;
-		}
 		Struct sarg0 = (Struct) arg0;
 		ClauseInfo c = theoryManager.retract(sarg0);
 		// if clause to retract found -> retract + true
 		if (c != null) {
 			Struct clause = null;
-			if (!sarg0.isClause()) {
+			if (!sarg0.isClause())
 				clause = new Struct(":-", arg0, new Struct("true"));
-			} else {
+			else
 				clause = sarg0;
-			}
 			unify(clause,c.getClause());
 			return true;
 		}
 		return false;
 	}
 	
-	@Predicate public boolean abolish_1(Term arg0) {
+	@Predicate("abolish/1")
+	public boolean abolish_1(Term arg0) {
 		arg0 = arg0.getTerm();
 		if (!(arg0 instanceof Struct) || !arg0.isGround())
 			return false;
 		return theoryManager.abolish((Struct) arg0);
-	}
-	
-	
-	@Predicate public boolean halt_1(Term arg0) throws HaltException {
-		if (arg0 instanceof Number)
-			throw new HaltException(((Number)arg0).intValue());
-		return false;
-	}
-	
+	}	
 	
 	/**
 	 * Loads a library, given its Java class name.
 	 */
-	@Predicate public boolean load_library_1(Term arg0) {
+	@Predicate("load_library/1")
+	public boolean load_library_1(Term arg0) {
 		arg0 = arg0.getTerm();
 		if (!arg0.isAtom())
 			return false;
@@ -155,11 +161,11 @@ public class BuiltIn extends Library {
 		}
 	}
 	
-	
 	/**
 	 * Unloads a library, given its Java class name.
 	 */
-	@Predicate public boolean unload_library_1(Term arg0) {
+	@Predicate("unload_library/1")
+	public boolean unload_library_1(Term arg0) {
 		arg0 = arg0.getTerm();
 		if (!arg0.isAtom())
 			return false;
@@ -171,21 +177,22 @@ public class BuiltIn extends Library {
 		}
 	}
 	
-	
 	/**
 	 * Get flag list: flag_list(-List)
 	 */
-	@Predicate public boolean flag_list_1(Term arg0) {
+	@Predicate("flag_list/1")
+	public boolean flag_list_1(Term arg0) {
 		arg0 = arg0.getTerm();
 		Struct flist = flagManager.getPrologFlagList();
 		return unify(arg0, flist);
 	}
 	
 	
-	@Predicate public boolean comma_2(Term arg0, Term arg1) {
+	@Predicate("comma/2")
+	public boolean comma_2(Term arg0, Term arg1) {
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
-		Struct s = new Struct(",",arg0,arg1);
+		Struct s = new Struct(",", arg0, arg1);
 		engineManager.pushSubGoal(ClauseInfo.extractBody(s));
 		return true;
 	}
@@ -193,7 +200,8 @@ public class BuiltIn extends Library {
 	/**
 	 * It is the same as call/1, but it is not opaque to cut.
 	 */
-	@Predicate public boolean $call_1(Term goal) {
+	@Predicate("$call/1")
+	public boolean $call_1(Term goal) {
 		goal = goal.getTerm();
 		if ((goal instanceof Var) || !isCallable(goal))
 			return false;
@@ -243,7 +251,6 @@ public class BuiltIn extends Library {
 		return term;
 	}
 
-
 	/**
 	 * A callable term is an atom of a compound term. See
 	 * the ISO Standard definition in section 3.24.
@@ -252,8 +259,8 @@ public class BuiltIn extends Library {
 		return (goal.isAtom() || goal.isCompound());
 	}
 	
-	
-	@Predicate public boolean is_2(Term arg0, Term arg1) {
+	@Predicate("is/2")
+	public boolean is_2(Term arg0, Term arg1) {
 		Term val1 = evalExpression(arg1);
 		if (val1 == null)
 			return false;
@@ -261,20 +268,20 @@ public class BuiltIn extends Library {
 			return unify(arg0.getTerm(), val1);
 	}
 	
-	
-	@Predicate public boolean unify_2(Term arg0, Term arg1){
-		return unify(arg0,arg1);
+	@Predicate("unify/2")
+	public boolean unify_2(Term arg0, Term arg1){
+		return unify(arg0, arg1);
 	}
 	
-	
 	// \=
-	@Predicate public boolean deunify_2(Term arg0, Term arg1){
+	@Predicate("deunify/2")
+	public boolean deunify_2(Term arg0, Term arg1){
 		return !unify(arg0, arg1);
 	}	
 	
-	
 	// $tolist
-	@Predicate public boolean $tolist_2(Term arg0, Term arg1){
+	@Predicate("$tolist/2")
+	public boolean $tolist_2(Term arg0, Term arg1){
 		// transform arg0 to a list, unify it with arg1
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
@@ -283,23 +290,23 @@ public class BuiltIn extends Library {
 			return (val0 != null && unify(arg1, val0));
 		}
 		return false;
-	}	
-	
+	}
 	
 	// $fromlist
-	@Predicate public boolean $fromlist_2(Term arg0, Term arg1){
+	@Predicate("$fromlist/2")
+	public boolean $fromlist_2(Term arg0, Term arg1){
 		// get the compound representation of the list
 		// provided as arg1, and unify it with arg0
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
-		if (!arg1.isList()) {
+		if (!arg1.isList())
 			return false;
-		}
 		Term val1 = ((Struct) arg1).fromList();
-		return (val1 != null && unify(arg0, val1));
+		return val1 != null && unify(arg0, val1);
 	}	
 	
-	@Predicate public boolean copy_term_2(Term arg0, Term arg1){
+	@Predicate("copy_term/2")
+	public boolean copy_term_2(Term arg0, Term arg1){
 		// unify arg1 with a renamed copy of arg0
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
@@ -307,23 +314,22 @@ public class BuiltIn extends Library {
 		return unify(arg1, arg0.copy(new IdentityHashMap<Var, Var>(), id));
 	}	
 	
-	
 	// $append
-	@Predicate public boolean $append_2(Term arg0, Term arg1){
+	@Predicate("$append/2")
+	public boolean $append_2(Term arg0, Term arg1){
 		// append arg0 to arg1
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
-		if (!arg1.isList()) {
+		if (!arg1.isList())
 			return false;
-		}
 		((Struct) arg1).append(arg0);
 		return true;
 	}	
 	
-	
 	// $find
-	@Predicate public boolean $find_2(Term arg0, Term arg1) {
-		// look for clauses whose head unifies whith arg0 and enqueue them to list arg1
+	@Predicate("$find/2")
+	public boolean $find_2(Term arg0, Term arg1) {
+		// look for clauses whose head unifies with arg0 and enqueue them to list arg1
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
 		if (!arg1.isList())
@@ -336,9 +342,9 @@ public class BuiltIn extends Library {
 		return true;
 	}	
 	
-	
 	// set_prolog_flag(+Name,@Value)
-	@Predicate public boolean set_prolog_flag_2(Term arg0, Term arg1) {
+	@Predicate("set_prolog_flag/2")
+	public boolean set_prolog_flag_2(Term arg0, Term arg1) {
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
 		if ((!arg0.isAtom() && !(arg0 instanceof Struct)) || !arg1.isGround())
@@ -349,7 +355,8 @@ public class BuiltIn extends Library {
 	
 	
 	// get_prolog_flag(@Name,?Value)
-	@Predicate public boolean get_prolog_flag_2(Term arg0, Term arg1) {
+	@Predicate("get_prolog_flag/2")
+	public boolean get_prolog_flag_2(Term arg0, Term arg1) {
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
 		if (!arg0.isAtom() && !(arg0 instanceof Struct))
@@ -359,7 +366,8 @@ public class BuiltIn extends Library {
 		return (value != null) ? unify(value,arg1) : false;
 	}
 	
-	@Predicate public boolean $op_3(Term arg0, Term arg1, Term arg2) {
+	@Predicate("$op/3")
+	public boolean $op_3(Term arg0, Term arg1, Term arg2) {
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
 		arg2 = arg2.getTerm();
@@ -386,12 +394,13 @@ public class BuiltIn extends Library {
 	 * DIRECTIVES
 	 */
 	
-	@Directive public void op_3(Term arg0, Term arg1, Term arg2) {
+	@Directive("op/3")
+	public void op_3(Term arg0, Term arg1, Term arg2) {
 		$op_3(arg0, arg1, arg2);
 	}
 	
-	
-	@Directive public void flag_4(Term flagName, Term flagSet, Term flagDefault, Term flagModifiable) {
+	@Directive("flag/4")
+	public void flag_4(Term flagName, Term flagSet, Term flagDefault, Term flagModifiable) {
 		flagName       = flagName.getTerm();
 		flagSet        = flagSet.getTerm();
 		flagDefault    = flagDefault.getTerm();
@@ -402,8 +411,8 @@ public class BuiltIn extends Library {
 		}
 	}
 	
-	
-	@Directive public void initialization_1(Term goal) {
+	@Directive("initialization/1")
+	public void initialization_1(Term goal) {
 		goal = goal.getTerm();
 		if (goal instanceof Struct) {
 			primitiveManager.identifyPredicate(goal);
@@ -411,15 +420,15 @@ public class BuiltIn extends Library {
 		}		
 	}
 	
-	
-	@Directive public void $load_library_1(Term lib) throws InvalidLibraryException {
+	@Directive("$load_library/1")
+	public void $load_library_1(Term lib) throws InvalidLibraryException {
 		lib = lib.getTerm();
 		if (lib.isAtom())
 			libraryManager.loadLibrary(((Struct) lib).getName());
 	}
 	
-	
-	@Directive public void include_1(Term theory) throws InvalidTheoryException, IOException {
+	@Directive("include/1")
+	public void include_1(Term theory) throws InvalidTheoryException, IOException {
 		theory = theory.getTerm();
 		engine.addTheory(new Theory(
 				new FileInputStream(theory.toStringWithoutApices())));
