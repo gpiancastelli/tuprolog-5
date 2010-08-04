@@ -26,22 +26,22 @@ import java.util.Map;
 public class HashLibrary extends Library {
 	private Map<String, Term> dict;
 		
-	public boolean hashtable_0(){
+	@Predicate public boolean hashtable_0() {
 		dict = new HashMap<String, Term>();
 		return true;
 	} 
 	
-	public boolean put_data_2(Term key, Term object){
+	@Predicate public boolean put_data_2(Term key, Term object) {
 		dict.put(key.toString(), object);
 		return true;
 	}
 	
-	public boolean get_data_2(Term key, Term res){
+	@Predicate public boolean get_data_2(Term key, Term res) {
 		Term result = (Term) dict.get(key.toString());
 		return unify(res, result);
 	}
 	
-	public boolean remove_data_1(Term key){
+	@Predicate public boolean remove_data_1(Term key) {
 		dict.remove(key.toString());
 		return true;
 	}

@@ -69,24 +69,24 @@ public class BuiltIn extends Library {
 	 * PREDICATES
 	 */
 	
-	public boolean fail_0() {
+	@Predicate public boolean fail_0() {
 		return false;
 	}
 	
-	public boolean true_0() {
+	@Predicate public boolean true_0() {
 		return true;
 	}
 	
-	public boolean halt_0() throws HaltException {
+	@Predicate public boolean halt_0() throws HaltException {
 		throw new HaltException();
 	}
 	
-	public boolean cut_0() {
+	@Predicate public boolean cut_0() {
 		engineManager.cut();
 		return true;
 	}
 	
-	public boolean asserta_1(Term arg0) {
+	@Predicate public boolean asserta_1(Term arg0) {
 		arg0 = arg0.getTerm();
 		if (arg0 instanceof Struct) {
 			theoryManager.assertA((Struct) arg0, true, null,false);
@@ -95,7 +95,7 @@ public class BuiltIn extends Library {
 		return false;
 	}
 	
-	public boolean assertz_1(Term arg0) {
+	@Predicate public boolean assertz_1(Term arg0) {
 		arg0 = arg0.getTerm();
 		if (arg0 instanceof Struct) {
 			theoryManager.assertZ((Struct) arg0, true, null,false);
@@ -104,7 +104,7 @@ public class BuiltIn extends Library {
 		return false;
 	}
 	
-	public boolean $retract_1(Term arg0) {
+	@Predicate public boolean $retract_1(Term arg0) {
 		arg0 = arg0.getTerm();
 		if (!(arg0 instanceof Struct)) {
 			return false;
@@ -125,7 +125,7 @@ public class BuiltIn extends Library {
 		return false;
 	}
 	
-	public boolean abolish_1(Term arg0) {
+	@Predicate public boolean abolish_1(Term arg0) {
 		arg0 = arg0.getTerm();
 		if (!(arg0 instanceof Struct) || !arg0.isGround())
 			return false;
@@ -133,22 +133,20 @@ public class BuiltIn extends Library {
 	}
 	
 	
-	public boolean halt_1(Term arg0) throws HaltException {
+	@Predicate public boolean halt_1(Term arg0) throws HaltException {
 		if (arg0 instanceof Number)
 			throw new HaltException(((Number)arg0).intValue());
 		return false;
 	}
 	
 	
-	/*
-	 * loads a tuprolog library, given its java
-	 * class name
+	/**
+	 * Loads a library, given its Java class name.
 	 */
-	public boolean load_library_1(Term arg0) {
+	@Predicate public boolean load_library_1(Term arg0) {
 		arg0 = arg0.getTerm();
-		if (!arg0.isAtom()) {
+		if (!arg0.isAtom())
 			return false;
-		}
 		try {
 			libraryManager.loadLibrary(((Struct) arg0).getName());
 			return true;
@@ -158,15 +156,13 @@ public class BuiltIn extends Library {
 	}
 	
 	
-	/*
-	 * unloads a tuprolog library, given its java
-	 * class name
+	/**
+	 * Unloads a library, given its Java class name.
 	 */
-	public boolean unload_library_1(Term arg0) {
+	@Predicate public boolean unload_library_1(Term arg0) {
 		arg0 = arg0.getTerm();
-		if (!arg0.isAtom()) {
+		if (!arg0.isAtom())
 			return false;
-		}
 		try {
 			libraryManager.unloadLibrary(((Struct) arg0).getName());
 			return true;
@@ -176,17 +172,17 @@ public class BuiltIn extends Library {
 	}
 	
 	
-	/*
-	 * get flag list:  flag_list(-List)
+	/**
+	 * Get flag list: flag_list(-List)
 	 */
-	public boolean flag_list_1(Term arg0) {
+	@Predicate public boolean flag_list_1(Term arg0) {
 		arg0 = arg0.getTerm();
 		Struct flist = flagManager.getPrologFlagList();
 		return unify(arg0, flist);
 	}
 	
 	
-	public boolean comma_2(Term arg0, Term arg1) {
+	@Predicate public boolean comma_2(Term arg0, Term arg1) {
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
 		Struct s = new Struct(",",arg0,arg1);
@@ -197,7 +193,7 @@ public class BuiltIn extends Library {
 	/**
 	 * It is the same as call/1, but it is not opaque to cut.
 	 */
-	public boolean $call_1(Term goal) {
+	@Predicate public boolean $call_1(Term goal) {
 		goal = goal.getTerm();
 		if ((goal instanceof Var) || !isCallable(goal))
 			return false;
@@ -257,7 +253,7 @@ public class BuiltIn extends Library {
 	}
 	
 	
-	public boolean is_2(Term arg0, Term arg1) {
+	@Predicate public boolean is_2(Term arg0, Term arg1) {
 		Term val1 = evalExpression(arg1);
 		if (val1 == null)
 			return false;
@@ -266,19 +262,19 @@ public class BuiltIn extends Library {
 	}
 	
 	
-	public boolean unify_2(Term arg0, Term arg1){
+	@Predicate public boolean unify_2(Term arg0, Term arg1){
 		return unify(arg0,arg1);
 	}
 	
 	
 	// \=
-	public boolean deunify_2(Term arg0, Term arg1){
+	@Predicate public boolean deunify_2(Term arg0, Term arg1){
 		return !unify(arg0, arg1);
 	}	
 	
 	
 	// $tolist
-	public boolean $tolist_2(Term arg0, Term arg1){
+	@Predicate public boolean $tolist_2(Term arg0, Term arg1){
 		// transform arg0 to a list, unify it with arg1
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
@@ -291,7 +287,7 @@ public class BuiltIn extends Library {
 	
 	
 	// $fromlist
-	public boolean $fromlist_2(Term arg0, Term arg1){
+	@Predicate public boolean $fromlist_2(Term arg0, Term arg1){
 		// get the compound representation of the list
 		// provided as arg1, and unify it with arg0
 		arg0 = arg0.getTerm();
@@ -303,7 +299,7 @@ public class BuiltIn extends Library {
 		return (val1 != null && unify(arg0, val1));
 	}	
 	
-	public boolean copy_term_2(Term arg0, Term arg1){
+	@Predicate public boolean copy_term_2(Term arg0, Term arg1){
 		// unify arg1 with a renamed copy of arg0
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
@@ -313,7 +309,7 @@ public class BuiltIn extends Library {
 	
 	
 	// $append
-	public boolean $append_2(Term arg0, Term arg1){
+	@Predicate public boolean $append_2(Term arg0, Term arg1){
 		// append arg0 to arg1
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
@@ -326,13 +322,12 @@ public class BuiltIn extends Library {
 	
 	
 	// $find
-	public boolean $find_2(Term arg0, Term arg1){
+	@Predicate public boolean $find_2(Term arg0, Term arg1) {
 		// look for clauses whose head unifies whith arg0 and enqueue them to list arg1
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
-		if (/*!arg0 instanceof Struct ||*/ !arg1.isList()) {
+		if (!arg1.isList())
 			return false;
-		}
 		for (ClauseInfo b : theoryManager.find(arg0))
 			if (match(arg0,b.getHead())) {
 				b.getClause().resolveTerm();
@@ -343,30 +338,28 @@ public class BuiltIn extends Library {
 	
 	
 	// set_prolog_flag(+Name,@Value)
-	public boolean set_prolog_flag_2(Term arg0, Term arg1){
+	@Predicate public boolean set_prolog_flag_2(Term arg0, Term arg1) {
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
-		if ( (!arg0.isAtom() && !(arg0 instanceof Struct)) || !arg1.isGround()) {
+		if ((!arg0.isAtom() && !(arg0 instanceof Struct)) || !arg1.isGround())
 			return false;
-		}
 		String name = arg0.toString();
 		return flagManager.setFlag(name,arg1);
 	}	
 	
 	
 	// get_prolog_flag(@Name,?Value)
-	public boolean get_prolog_flag_2(Term arg0, Term arg1){
+	@Predicate public boolean get_prolog_flag_2(Term arg0, Term arg1) {
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
-		if (!arg0.isAtom() && !(arg0 instanceof Struct)) {
+		if (!arg0.isAtom() && !(arg0 instanceof Struct))
 			return false;
-		}
 		String name = arg0.toString();
 		Term value = flagManager.getFlag(name);
 		return (value != null) ? unify(value,arg1) : false;
 	}
 	
-	public boolean $op_3(Term arg0, Term arg1, Term arg2) {
+	@Predicate public boolean $op_3(Term arg0, Term arg1, Term arg2) {
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
 		arg2 = arg2.getTerm();

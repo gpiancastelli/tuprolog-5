@@ -16,21 +16,28 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package alice.tuprolog.lib;
-import alice.tuprolog.*;
+
+import alice.tuprolog.Agent;
+import alice.tuprolog.Int;
+import alice.tuprolog.InvalidTheoryException;
+import alice.tuprolog.Library;
 import alice.tuprolog.Number;
+import alice.tuprolog.Operator;
+import alice.tuprolog.Predicate;
+import alice.tuprolog.Struct;
+import alice.tuprolog.Term;
+import alice.tuprolog.Theory;
+import alice.tuprolog.Var;
 
 /**
  * This class defines a set of basic built-in
  * predicates for the tuProlog engine
  *
  * Library/Theory dependency: none
- *
- *
- *
  */
 public class BasicLibrary extends Library {
 	
-	public BasicLibrary(){
+	public BasicLibrary() {
 	}
 	
 	//
@@ -40,16 +47,15 @@ public class BasicLibrary extends Library {
 	/**
 	 * sets a new theory provided as a text
 	 */
-	public boolean set_theory_1(Term th) {
+	@Predicate public boolean set_theory_1(Term th) {
 		Struct theory = (Struct) th.getTerm();
 		try {
-			if (!theory.isAtom()){
+			if (!theory.isAtom())
 				return false;
-			}
 			getEngine().setTheory(new Theory(theory.getName()));
 			return true;
-		} catch (InvalidTheoryException ex){
-			System.err.println("invalid theory - line "+ex.line);
+		} catch (InvalidTheoryException ex) {
+			System.err.println("Invalid theory at line " + ex.line);
 			return false;
 		}
 	}
@@ -57,38 +63,37 @@ public class BasicLibrary extends Library {
 	/**
 	 *  adds a new theory provided as a text
 	 */
-	public boolean add_theory_1(Term th) {
+	@Predicate public boolean add_theory_1(Term th) {
 		Struct theory = (Struct) th.getTerm();
 		try {
-			if (!theory.isAtom()){
+			if (!theory.isAtom())
 				return false;
-			}
 			getEngine().addTheory(new Theory(theory.getName()));
 			return true;
-		} catch (InvalidTheoryException ex){
-			System.err.println("invalid theory - line "+ex.line);
+		} catch (InvalidTheoryException ex) {
+			System.err.println("Invalid theory at line "+ex.line);
 			return false;
 		}
 	}
 	
 	/** gets current theory text */
-	public boolean get_theory_1(Term arg) {
+	@Predicate public boolean get_theory_1(Term arg) {
 		arg = arg.getTerm();
 		try {
-			Term theory=new Struct(getEngine().getTheory().toString());
+			Term theory = new Struct(getEngine().getTheory().toString());
 			return (unify(arg,theory));
-		} catch (Exception ex){
+		} catch (Exception ex) {
 			return false;
 		}
 	}
 	
-	public boolean load_library_2(Term className, Term libName) {
+	@Predicate public boolean load_library_2(Term className, Term libName) {
 		Struct clName = (Struct) className.getTerm();
 		libName = libName.getTerm();
 		try {
 			Library lib = getEngine().loadLibrary(clName.toStringWithoutApices());
 			return unify(libName,new Struct(lib.getName()));
-		} catch (Exception ex){
+		} catch (Exception ex) {
 			return false;
 		}
 	}
@@ -100,26 +105,24 @@ public class BasicLibrary extends Library {
 	 * @param libName name of the library
 	 * @return true if the library has been successfully loaded.
 	 */
-	public boolean load_library_from_theory_2(Term th, Term libName){
+	@Predicate public boolean load_library_from_theory_2(Term th, Term libName) {
 		Struct theory = (Struct) th.getTerm();
 		Struct libN = (Struct) libName.getTerm();
 		try {
-			if (!theory.isAtom()){
+			if (!theory.isAtom())
 				return false;
-			}
-			if (!libN.isAtom()){
+			if (!libN.isAtom())
 				return false;
-			}
 			Theory t = new Theory(theory.getName());
 			TheoryLibrary thlib = new TheoryLibrary(libN.getName(),t);
 			getEngine().loadLibrary(thlib);
 			return true;
-		} catch (Exception ex){
+		} catch (Exception ex) {
 			return false;
 		}
 	}
 	
-	public boolean get_operators_list_1(Term argument) {
+	@Predicate public boolean get_operators_list_1(Term argument) {
 		Term arg = argument.getTerm();
 		Struct list = new Struct();
 		for (Operator o : getEngine().getCurrentOperatorList())
@@ -135,12 +138,12 @@ public class BasicLibrary extends Library {
 	 * spawns a separate prolog agent
 	 * providing it a theory text
 	 */
-	public boolean agent_1(Term th) {
+	@Predicate public boolean agent_1(Term th) {
 		Struct theory = (Struct) th.getTerm();
 		try {
 			new Agent(theory.toStringWithoutApices()).spawn();
 			return true;
-		} catch (Exception ex){
+		} catch (Exception ex) {
 			ex.printStackTrace();
 			return false;
 		}
@@ -150,35 +153,35 @@ public class BasicLibrary extends Library {
 	 * spawns a separate prolog agent
 	 * providing it a theory text and a goal
 	 */
-	public boolean agent_2(Term th, Term g) {
+	@Predicate public boolean agent_2(Term th, Term g) {
 		Struct theory = (Struct) th.getTerm();
 		Struct goal = (Struct) g.getTerm();
 		try {
 			new Agent(theory.toStringWithoutApices(),
                       goal.toString() + ".").spawn();
 			return true;
-		} catch (Exception ex){
+		} catch (Exception ex) {
 			ex.printStackTrace();
 			return false;
 		}
 	}
 	
-	public boolean spy_0() {
+	@Predicate public boolean spy_0() {
 		getEngine().setSpy(true);
 		return true;
 	}
 	
-	public boolean nospy_0() {
+	@Predicate public boolean nospy_0() {
 		getEngine().setSpy(false);
 		return true;
 	}
 	
-	public boolean warning_0() {
+	@Predicate public boolean warning_0() {
 		getEngine().setWarning(true);
 		return true;
 	}
 	
-	public boolean nowarning_0() {
+	@Predicate public boolean nowarning_0() {
 		getEngine().setWarning(false);
 		return true;
 	}
@@ -187,70 +190,69 @@ public class BasicLibrary extends Library {
 	// term type inspection
 	//
 	
-	public boolean constant_1(Term t) {
+	@Predicate public boolean constant_1(Term t) {
 		t = t.getTerm();
 		return (t.isAtomic());
 	}
 	
-	public boolean number_1(Term t) {
+	@Predicate public boolean number_1(Term t) {
 		return (t.getTerm() instanceof Number);
 	}
 	
-	public boolean integer_1(Term t) {
+	@Predicate public boolean integer_1(Term t) {
 		t = t.getTerm();
 		if (!(t instanceof Number))
 			return false;
 		return ((Number) t).isInteger();
 	}
 	
-	public boolean float_1(Term t) {
+	@Predicate public boolean float_1(Term t) {
 		t = t.getTerm();
 		if (!(t instanceof Number))
 			return false;
 		return ((Number) t).isReal();
 	}
 	
-	public boolean atom_1(Term t) {
+	@Predicate public boolean atom_1(Term t) {
 		t = t.getTerm();
 		return (t.isAtom());
 	}
 	
-	public boolean compound_1(Term t) {
+	@Predicate public boolean compound_1(Term t) {
 		t = t.getTerm();
 		return t.isCompound();
 	}
 	
-	public boolean list_1(Term t) {
+	@Predicate public boolean list_1(Term t) {
 		t = t.getTerm();
 		return (t.isList());
 	}
 	
-	public boolean var_1(Term t) {
+	@Predicate public boolean var_1(Term t) {
 		t = t.getTerm();
 		return (t instanceof Var);
 	}
 	
-	public boolean nonvar_1(Term t) {
+	@Predicate public boolean nonvar_1(Term t) {
 		t = t.getTerm();
 		return !(t instanceof Var);
 	}
 	
-	public boolean atomic_1(Term t) {
+	@Predicate public boolean atomic_1(Term t) {
 		t = t.getTerm();
 		return t.isAtomic();
 	}
 	
-	public boolean ground_1(Term t) {
+	@Predicate public boolean ground_1(Term t) {
 		t = t.getTerm();
 		return (t.isGround());
 	}
 	
-	
 	//
-	// term/espression comparison
+	// term/expression comparison
 	//
 	
-	public boolean expression_equality_2(Term arg0, Term arg1) {
+	@Predicate public boolean expression_equality_2(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
 		if (val0==null || val1==null || !(val0 instanceof Number) || !(val1 instanceof Number)) {
@@ -265,7 +267,7 @@ public class BasicLibrary extends Library {
 		}
 	}
 	
-	public boolean expression_greater_than_2(Term arg0, Term arg1) {
+	@Predicate public boolean expression_greater_than_2(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
 		if (val0 == null || val1 == null || !(val0 instanceof Number) || !(val1 instanceof Number))
@@ -273,7 +275,7 @@ public class BasicLibrary extends Library {
 		return expression_greater_than((alice.tuprolog.Number) val0, (alice.tuprolog.Number) val1);
 	}
 	
-	public boolean expression_less_or_equal_than_2(Term arg0, Term arg1) {
+	@Predicate public boolean expression_less_or_equal_than_2(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
 		if (val0 == null || val1 == null || !(val0 instanceof Number) || !(val1 instanceof Number))
@@ -289,7 +291,7 @@ public class BasicLibrary extends Library {
 		}
 	}
 	
-	public boolean expression_less_than_2(Term arg0, Term arg1) {
+	@Predicate public boolean expression_less_than_2(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
 		if (val0 == null || val1 == null || !(val0 instanceof Number) || !(val1 instanceof Number))
@@ -297,7 +299,7 @@ public class BasicLibrary extends Library {
 		return expression_less_than((alice.tuprolog.Number) val0, (alice.tuprolog.Number) val1);
 	}
 	
-	public boolean expression_greater_or_equal_than_2(Term arg0, Term arg1) {
+	@Predicate public boolean expression_greater_or_equal_than_2(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
 		if (val0 == null || val1 == null || !(val0 instanceof Number) || !(val1 instanceof Number))
@@ -313,24 +315,23 @@ public class BasicLibrary extends Library {
 		}
 	}
 	
-	public boolean term_equality_2(Term arg0, Term arg1) {
+	@Predicate public boolean term_equality_2(Term arg0, Term arg1) {
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
 		return arg0.isEqual(arg1);
 	}
 	
-	public boolean term_greater_than_2(Term arg0, Term arg1) {
+	@Predicate public boolean term_greater_than_2(Term arg0, Term arg1) {
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
 		return arg0.isGreater(arg1);
 	}
 	
-	public boolean term_less_than_2(Term arg0, Term arg1) {
+	@Predicate public boolean term_less_than_2(Term arg0, Term arg1) {
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
 		return !(arg0.isGreater(arg1) || arg0.isEqual(arg1));
 	}
-	
 	
 	public Term expression_plus_1(Term arg0) {
 		Term val0 = evalExpression(arg0);
@@ -513,7 +514,7 @@ public class BasicLibrary extends Library {
 	/**
 	 * bidirectional text/term conversion.
 	 */
-	public boolean text_term_2(Term arg0, Term arg1) {
+	@Predicate public boolean text_term_2(Term arg0, Term arg1) {
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
 		if (!arg0.isGround()) {
@@ -528,68 +529,54 @@ public class BasicLibrary extends Library {
 		}
 	}
 	
-	
-	public boolean text_concat_3(Term source1, Term source2, Term dest) {
+	@Predicate public boolean text_concat_3(Term source1, Term source2, Term dest) {
 		source1 = source1.getTerm();
 		source2 = source2.getTerm();
 		dest = dest.getTerm();
-		if (source1.isAtom() && source2.isAtom()) {
+		if (source1.isAtom() && source2.isAtom())
 			return unify(dest,
 					new Struct( ((Struct)source1).getName()+ ((Struct)source2).getName()));
-		} else {
+		else
 			return false;
-		}
 	}
 	
-	public boolean num_atom_2(Term arg0,Term arg1) {
+	@Predicate public boolean num_atom_2(Term arg0,Term arg1) {
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
 		if (arg1 instanceof Var) {
-			if (!(arg0 instanceof Number)){
+			if (!(arg0 instanceof Number))
 				return false;
-			}
-			alice.tuprolog.Number n0=(alice.tuprolog.Number)arg0;
-			String st=null;
-			if (n0.isInteger()){
-				st=new java.lang.Integer(n0.intValue()).toString();
-			} /*else if (arg0.isLong()){
-			st=new Long(arg0.getLong()).toString();
-			} else if (arg0.isFloat()){
-			st=new Float(arg0.getFloat()).toString();
-			} else if (arg0.isDouble()){
-			st=new Double(arg0.doubleValue()).toString();
-			}*/ else {
-				st=new java.lang.Double(n0.doubleValue()).toString();
-			}
-			return (unify(arg1,new Struct(st)));
+			alice.tuprolog.Number n0 = (alice.tuprolog.Number) arg0;
+			String st = null;
+			if (n0.isInteger())
+				st = new java.lang.Integer(n0.intValue()).toString();
+			else
+				st = new java.lang.Double(n0.doubleValue()).toString();
+			return unify(arg1,new Struct(st));
 		} else {
-			if (!arg1.isAtom()){
+			if (!arg1.isAtom())
 				return false;
-			}
-			String st=((Struct)arg1).getName();
+			String st = ((Struct) arg1).getName();
 			try {
-				if (st.startsWith("'") && st.endsWith("'")){
-					st=st.substring(1,st.length()-1);
-				}
-			} catch (Exception ex){};
-			Term term=null;
+				if (st.startsWith("'") && st.endsWith("'"))
+					st = st.substring(1, st.length() - 1);
+			} catch (Exception ex) {}
+			Term term = null;
 			try {
-				term=new alice.tuprolog.Int(java.lang.Integer.parseInt(st));
-			} catch (Exception ex){}
-			if (term==null){
+				term = new alice.tuprolog.Int(java.lang.Integer.parseInt(st));
+			} catch (Exception ex) {}
+			if (term == null)
 				try {
-					term=new alice.tuprolog.Double(java.lang.Double.parseDouble(((Struct)arg1).getName()));
+					term = new alice.tuprolog.Double(java.lang.Double.parseDouble(((Struct)arg1).getName()));
 				} catch (Exception ex){}
-			}
-			if (term==null){
-				return  false;
-			}
-			return (unify(arg0,term));
+			if (term == null)
+				return false;
+			return unify(arg0,term);
 		}
 	}
 	
 	
-	public String getTheory(){
+	public String getTheory() {
 		return
 		//
 		// operators defined by the BasicLibrary theory
@@ -810,7 +797,7 @@ public class BasicLibrary extends Library {
 	
 	// Internal Java predicates which are part of the bagof/3 and setof/3 algorithm
 	
-	public boolean $wt_unify_3(Term witness, Term wtList, Term tList) {
+	@Predicate public boolean $wt_unify_3(Term witness, Term wtList, Term tList) {
 		Struct list = (Struct) wtList.getTerm();
 		Struct result = new Struct();
 		for (Term wt : list) {
@@ -823,7 +810,7 @@ public class BasicLibrary extends Library {
 		return unify(tList, result);
 	}
 	
-	public boolean $s_next0_3(Term witness, Term wtList, Term sNext) {
+	@Predicate public boolean $s_next0_3(Term witness, Term wtList, Term sNext) {
 		Struct list = (Struct) wtList.getTerm();
 		Struct result = new Struct();
 		for (Term wt : list) {
@@ -835,7 +822,7 @@ public class BasicLibrary extends Library {
 		return unify(sNext, result);
 	}
 	
-	public boolean iterated_goal_term_2(Term term, Term goal) {
+	@Predicate public boolean iterated_goal_term_2(Term term, Term goal) {
 		Term t = term.getTerm();
 		Term igt = t.iteratedGoalTerm();
 		return unify(igt, goal);

@@ -33,6 +33,7 @@ import java.util.Map;
 import alice.tuprolog.Int;
 import alice.tuprolog.Library;
 import alice.tuprolog.Number;
+import alice.tuprolog.Predicate;
 import alice.tuprolog.Struct;
 import alice.tuprolog.Term;
 import alice.tuprolog.Var;
@@ -52,9 +53,6 @@ import alice.tuprolog.Var;
  *     CMP  Media Inc., a United News and Media Company
  *
  * Library/Theory Dependency:  BasicLibrary
- *
- *
- *
  */
 public class JavaLibrary extends Library {
 	
@@ -122,7 +120,7 @@ public class JavaLibrary extends Library {
 		staticObjectsInverse.clear();
 	}
 	
-	public   void onSolveBegin(Term goal) {
+	public void onSolveBegin(Term goal) {
 		//id = 0;
 		currentObjects.clear();
 		currentObjectsInverse.clear();
@@ -131,7 +129,7 @@ public class JavaLibrary extends Library {
 		preregisterObjects();
 	}
 	
-	public   void onSolveEnd() {
+	public void onSolveEnd() {
 	}
 	
 	/**
@@ -154,7 +152,7 @@ public class JavaLibrary extends Library {
 	/**
 	 * Creates of a java object - not backtrackable case
 	 */
-	public boolean java_object_3(Term className, Term argl, Term id) {
+	@Predicate public boolean java_object_3(Term className, Term argl, Term id) {
 		className = className.getTerm();
 		Struct arg = (Struct) argl.getTerm();
 		id = id.getTerm();
@@ -214,7 +212,7 @@ public class JavaLibrary extends Library {
 	 * Destroy the link to a java object - called not directly, but from
 	 * predicate java_object (as second choice, for backtracking)
 	 */
-	public   boolean destroy_object_1(Term id) {
+	@Predicate public boolean destroy_object_1(Term id) {
 		id = id.getTerm();
 		try {
 			if (id.isGround()) {
@@ -229,9 +227,9 @@ public class JavaLibrary extends Library {
 	
 	
 	/**
-	 * Creates of a java class
+	 * Creates a Java class.
 	 */
-	public   boolean java_class_4(Term clSource, Term clName, Term clPathes, Term id) {
+	@Predicate public boolean java_class_4(Term clSource, Term clName, Term clPathes, Term id) {
 		Struct classSource = (Struct) clSource.getTerm();
 		Struct className = (Struct) clName.getTerm();
 		Struct classPathes = (Struct) clPathes.getTerm();
@@ -295,11 +293,9 @@ public class JavaLibrary extends Library {
 	
 	
 	/**
-	 *
-	 * Calls a method of a Java object
-	 *
+	 * Calls a method of a Java object.
 	 */
-	public boolean java_call_3(Term objId, Term method_name, Term idResult) {
+	@Predicate public boolean java_call_3(Term objId, Term method_name, Term idResult) {
 		objId = objId.getTerm();
 		idResult = idResult.getTerm();
 		Struct method = (Struct) method_name.getTerm();
@@ -548,7 +544,7 @@ public class JavaLibrary extends Library {
 		}
 	}
 	
-	public boolean java_array_set_primitive_3(Term obj_id, Term i, Term what) {
+	@Predicate public boolean java_array_set_primitive_3(Term obj_id, Term i, Term what) {
 		Struct objId = (Struct) obj_id.getTerm();
 		Number index = (Number) i.getTerm();
 		what = what.getTerm();
@@ -629,7 +625,7 @@ public class JavaLibrary extends Library {
 		}
 	}
 	
-	public   boolean java_array_get_primitive_3(Term obj_id, Term i, Term what) {
+	@Predicate public boolean java_array_get_primitive_3(Term obj_id, Term i, Term what) {
 		Struct objId = (Struct) obj_id.getTerm();
 		Number index = (Number) i.getTerm();
 		what = what.getTerm();
@@ -689,7 +685,6 @@ public class JavaLibrary extends Library {
 		}
 		
 	}
-	
 	
 	private boolean java_array(String type, int nargs, Term id) {
 		try {
@@ -992,7 +987,7 @@ public class JavaLibrary extends Library {
 	 * @return true if the operation is successful 
 	 * @throws InvalidObjectIdException if the object id is not valid
 	 */
-	public   boolean register(Struct id, Object obj) throws InvalidObjectIdException {
+	public boolean register(Struct id, Object obj) throws InvalidObjectIdException {
 		/*
 		 * note that this method act on the staticObject
 		 * and staticObject_inverse hashmaps
@@ -1025,7 +1020,7 @@ public class JavaLibrary extends Library {
 	 * @param obj object to be registered. 
 	 * @return fresh id
 	 */	
-	public   Struct register(Object obj) {
+	public Struct register(Object obj) {
 		//System.out.println("lib: "+this+" current id: "+this.id);
 		
 		// already registered object?
@@ -1069,7 +1064,7 @@ public class JavaLibrary extends Library {
 	 * @return true if the operation is successful
 	 * @throws InvalidObjectIdException if the id is not valid (e.g. is not ground)
 	 */
-	public   boolean unregister(Struct id) throws InvalidObjectIdException {
+	public boolean unregister(Struct id) throws InvalidObjectIdException {
 		if (!id.isGround()) {
 			throw new InvalidObjectIdException();
 		}
@@ -1111,7 +1106,7 @@ public class JavaLibrary extends Library {
 	 * @param obj object to be registered
 	 * @return identifier
 	 */
-	public   Struct registerDynamic(Object obj) {
+	public Struct registerDynamic(Object obj) {
 		//System.out.println("lib: "+this+" current id: "+this.id);
 		
 		// already registered object?
@@ -1135,7 +1130,7 @@ public class JavaLibrary extends Library {
 	 * Gets a registered dynamic object
 	 * (returns null if not presents)
 	 */
-	public   Object getRegisteredDynamicObject(Struct id) throws InvalidObjectIdException {
+	public Object getRegisteredDynamicObject(Struct id) throws InvalidObjectIdException {
 		if (!id.isGround()) {
 			throw new InvalidObjectIdException();
 		}
@@ -1458,7 +1453,6 @@ public class JavaLibrary extends Library {
 			return null;
 		}
 	}
-	
 	
 }
 

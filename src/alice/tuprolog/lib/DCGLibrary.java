@@ -16,15 +16,13 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package alice.tuprolog.lib;
-import alice.tuprolog.*;
+
+import alice.tuprolog.Library;
 
 /**
  * Library for managing DCGs.
  * 
  * Library/Theory dependency: BasicLibrary
- *
- *
- *
  */
 public class DCGLibrary extends Library {
 	
@@ -48,4 +46,5 @@ public class DCGLibrary extends Library {
 		"dcg_connect([], Xs \\ Xs). \n" +
 		"dcg_connect([W | Ws], [W | Xs] \\ Ys) :- dcg_connect(Ws, Xs \\ Ys). \n";
 	}
+
 }

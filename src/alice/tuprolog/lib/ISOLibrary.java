@@ -16,24 +16,27 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 package alice.tuprolog.lib;
-import alice.tuprolog.*;
+
+import alice.tuprolog.Int;
+import alice.tuprolog.Library;
 import alice.tuprolog.Number;
+import alice.tuprolog.Predicate;
+import alice.tuprolog.Struct;
+import alice.tuprolog.Term;
+import alice.tuprolog.Var;
 
 /**
  * This class represents a tuProlog library providing most of the built-ins
  * predicates and functors defined by ISO standard.
  *
  * Library/Theory dependency:  BasicLibrary
- *
- *
- *
  */
 public class ISOLibrary extends Library {
 	
-	public ISOLibrary(){
+	public ISOLibrary() {
 	}
 	
-	public boolean atom_length_2(Term arg, Term len) {
+	@Predicate public boolean atom_length_2(Term arg, Term len) {
 		arg = arg.getTerm();
 		if (!(arg instanceof Struct))
 			return false;
@@ -43,52 +46,40 @@ public class ISOLibrary extends Library {
 		return unify(len,new Int(arg0.getName().length()));
 	}
 	
-	
-	public boolean atom_chars_2(Term arg0, Term arg1) {
+	@Predicate public boolean atom_chars_2(Term arg0, Term arg1) {
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
 		if (arg0 instanceof Var) {
-			if (!arg1.isList()) {
+			if (!arg1.isList())
 				return false;
-			}
 			Struct list = (Struct) arg1;
-			if (list.isEmptyList()) {
-				return unify(arg0,new Struct(""));
-			}
-			String st="";
+			if (list.isEmptyList())
+				return unify(arg0, new Struct(""));
+			String st = "";
 			while (!(list.isEmptyList())) {
 				String st1 = list.getTerm(0).toString();
 				try {
-					if (st1.startsWith("'") && st1.endsWith("'")) {
-						st1 = st1.substring(1,st1.length()-1);
-					}
-				} catch (Exception ex){};
+					if (st1.startsWith("'") && st1.endsWith("'"))
+						st1 = st1.substring(1, st1.length() - 1);
+				} catch (Exception ex) {};
 				st = st.concat(st1);
 				list = (Struct) list.getTerm(1);
 			}
-			return unify(arg0,new Struct(st));
+			return unify(arg0, new Struct(st));
 		} else {
-			if (!arg0.isAtom()) {
+			if (!arg0.isAtom())
 				return false;
-			}
 			String st = ((Struct)arg0).getName();
 			Term[] tlist = new Term[st.length()];
-			for (int i=0; i<st.length(); i++) {
-				tlist[i] = new Struct(new String(new char[]{ st.charAt(i)} ));
-			}
+			for (int i = 0; i < st.length(); i++)
+				tlist[i] = new Struct(new String(new char[] { st.charAt(i) }));
 			Struct list = new Struct(tlist);
-			/*
-			 for (int i=0; i<st.length(); i++){
-			 Struct ch=new Struct(new String(new char[]{ st.charAt(st.length()-i-1)} ));
-			 list=new Struct( ch, list);
-			 }*/
 			
 			return unify(arg1,list);
 		}
 	}
 	
-	
-	public boolean char_code_2(Term arg0, Term arg1) {
+	@Predicate public boolean char_code_2(Term arg0, Term arg1) {
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
 		if (arg1 instanceof Var) {
@@ -103,8 +94,6 @@ public class ISOLibrary extends Library {
 		}
 		return false;
 	}
-	
-	//
 	
 	// functors
 	
