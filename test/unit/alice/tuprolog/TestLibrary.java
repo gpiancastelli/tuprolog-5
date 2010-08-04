@@ -28,7 +28,7 @@ public class TestLibrary extends StringLibrary {
 		return "TestLibraryName";
 	}
 
-	public Term sum_2(Number arg0, Number arg1) {
+	@Functor public Term sum_2(Number arg0, Number arg1) {
 		int a0 = arg0.intValue();
 		int a1 = arg1.intValue();
 		return new Int(a0 + a1);

@@ -17,6 +17,7 @@
  */
 package alice.tuprolog.lib;
 
+import alice.tuprolog.Functor;
 import alice.tuprolog.Int;
 import alice.tuprolog.Library;
 import alice.tuprolog.Number;
@@ -97,49 +98,49 @@ public class ISOLibrary extends Library {
 	
 	// functors
 	
-	public Term sin_1(Term val) {
+	@Functor public Term sin_1(Term val) {
 		Term val0 = evalExpression(val);
 		if (val0 instanceof Number)
 			return new alice.tuprolog.Double(Math.sin(((Number)val0).doubleValue()));
 		return null;
 	}
 	
-	public Term cos_1(Term val) {
+	@Functor public Term cos_1(Term val) {
 		Term val0 = evalExpression(val);
 		if (val0 instanceof Number)
 			return new alice.tuprolog.Double(Math.cos(((Number)val0).doubleValue()));
 		return null;
 	}
 	
-	public Term exp_1(Term val) {
+	@Functor public Term exp_1(Term val) {
 		Term val0 = evalExpression(val);
 		if (val0 instanceof Number)
 			return new alice.tuprolog.Double(Math.exp(((Number)val0).doubleValue()));
 		return null;
 	}
 	
-	public Term atan_1(Term val) {
+	@Functor public Term atan_1(Term val) {
 		Term val0 = evalExpression(val);
 		if (val0 instanceof Number)
 			return new alice.tuprolog.Double(Math.atan(((Number)val0).doubleValue()));
 		return null;
 	}
 	
-	public Term log_1(Term val) {
+	@Functor public Term log_1(Term val) {
 		Term val0 = evalExpression(val);
 		if (val0 instanceof Number)
 			return new alice.tuprolog.Double(Math.log(((Number)val0).doubleValue()));
 		return null;
 	}
 	
-	public Term sqrt_1(Term val) {
+	@Functor public Term sqrt_1(Term val) {
 		Term val0 = evalExpression(val);
 		if (val0 instanceof Number)
 			return new alice.tuprolog.Double(Math.sqrt(((Number)val0).doubleValue()));
 		return null;
 	}
 	
-	public Term abs_1(Term val) {
+	@Functor public Term abs_1(Term val) {
 		Term val0 = evalExpression(val);
 		if (val0 instanceof Int || val0 instanceof alice.tuprolog.Long)
 			return new alice.tuprolog.Int(Math.abs(((Number)val0).intValue()));
@@ -148,7 +149,7 @@ public class ISOLibrary extends Library {
 		return null;
 	}
 	
-	public Term sign_1(Term val) {
+	@Functor public Term sign_1(Term val) {
 		Term val0 = evalExpression(val);
 		if (val0 instanceof Int || val0 instanceof alice.tuprolog.Long)
 			return new alice.tuprolog.Double(((Number)val0).intValue()>0 ? 1.0: -1.0);
@@ -157,14 +158,14 @@ public class ISOLibrary extends Library {
 		return null;
 	}
 	
-	public Term float_integer_part_1(Term val) {
+	@Functor public Term float_integer_part_1(Term val) {
 		Term val0 = evalExpression(val);
 		if (val0 instanceof Number)
 			return new alice.tuprolog.Double((long)Math.rint(((Number)val0).doubleValue()));
 		return null;
 	}
 	
-	public Term float_fractional_part_1(Term val) {
+	@Functor public Term float_fractional_part_1(Term val) {
 		Term val0 = evalExpression(val);
 		if (val0 instanceof Number) {
 			double fl = ((Number)val0).doubleValue();
@@ -173,50 +174,50 @@ public class ISOLibrary extends Library {
 		return null;
 	}
 	
-	public Term float_1(Term val) {
+	@Functor public Term float_1(Term val) {
 		Term val0 = evalExpression(val);
 		if (val0 instanceof Number)
 			return new alice.tuprolog.Double(((Number) val0).doubleValue());
 		return null;
 	}
 	
-	public Term floor_1(Term val) {
+	@Functor public Term floor_1(Term val) {
 		Term val0 = evalExpression(val);
 		if (val0 instanceof Number)
 			return new Int((int) Math.floor(((Number) val0).doubleValue()));
 		return null;
 	}
 	
-	public Term round_1(Term val) {
+	@Functor public Term round_1(Term val) {
 		Term val0 = evalExpression(val);
 		if (val0 instanceof Number)
-			return new alice.tuprolog.Long(Math.round(((Number)val0).doubleValue()));
+			return new alice.tuprolog.Long(Math.round(((Number) val0).doubleValue()));
 		return null;
 	}
 	
-	public Term truncate_1(Term val) {
+	@Functor public Term truncate_1(Term val) {
 		Term val0 = evalExpression(val);
 		if (val0 instanceof Number)
 			return new Int((int) Math.rint(((Number) val0).doubleValue()));
 		return null;
 	}
 	
-	public Term ceiling_1(Term val) {
+	@Functor public Term ceiling_1(Term val) {
 		Term val0 = evalExpression(val);
 		if (val0 instanceof Number)
 			return new Int((int) Math.ceil(((Number) val0).doubleValue()));
 		return null;
 	}
 	
-	public Term div_2(Term v0, Term v1) {
+	@Functor public Term div_2(Term v0, Term v1) {
 		Term val0 = evalExpression(v0);
 		Term val1 = evalExpression(v1);
 		if (val0 instanceof Number && val1 instanceof Number)
-			return new alice.tuprolog.Int(((Number)val0).intValue()/((Number)val1).intValue());
+			return new alice.tuprolog.Int(((Number) val0).intValue() / ((Number) val1).intValue());
 		return null;
 	}
 	
-	public Term mod_2(Term v0, Term v1) {
+	@Functor public Term mod_2(Term v0, Term v1) {
 		Term val0 = evalExpression(v0);
 		Term val1 = evalExpression(v1);
 		if (val0 instanceof Number && val1 instanceof Number) {
@@ -228,12 +229,11 @@ public class ISOLibrary extends Library {
 		return null;
 	}
 	
-	public Term rem_2(Term v0, Term v1) {
+	@Functor public Term rem_2(Term v0, Term v1) {
 		Term val0 = evalExpression(v0);
 		Term val1 = evalExpression(v1);
-		if (val0 instanceof Number && val1 instanceof Number) {
-			return new alice.tuprolog.Double(Math.IEEEremainder(((Number)val0).doubleValue(),((Number)val1).doubleValue()));
-		}
+		if (val0 instanceof Number && val1 instanceof Number)
+			return new alice.tuprolog.Double(Math.IEEEremainder(((Number) val0).doubleValue(), ((Number) val1).doubleValue()));
 		return null;
 	}
 	

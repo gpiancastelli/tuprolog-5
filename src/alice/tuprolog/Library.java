@@ -182,7 +182,8 @@ public abstract class Library implements IPrimitives {
 				int type;
 				if (mlist[i].isAnnotationPresent(Predicate.class)) type = PrimitiveInfo.PREDICATE;
 				//if (returnTypeName.equals("boolean")) type = PrimitiveInfo.PREDICATE;
-				else if (returnTypeName.equals("alice.tuprolog.Term")) type = PrimitiveInfo.FUNCTOR;
+				else if (mlist[i].isAnnotationPresent(Functor.class)) type = PrimitiveInfo.FUNCTOR;
+				//else if (returnTypeName.equals("alice.tuprolog.Term")) type = PrimitiveInfo.FUNCTOR;
 				else if (returnTypeName.equals("void")) type = PrimitiveInfo.DIRECTIVE;
 				else continue;
 				

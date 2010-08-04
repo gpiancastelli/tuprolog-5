@@ -18,6 +18,7 @@
 package alice.tuprolog.lib;
 
 import alice.tuprolog.Agent;
+import alice.tuprolog.Functor;
 import alice.tuprolog.Int;
 import alice.tuprolog.InvalidTheoryException;
 import alice.tuprolog.Library;
@@ -333,42 +334,38 @@ public class BasicLibrary extends Library {
 		return !(arg0.isGreater(arg1) || arg0.isEqual(arg1));
 	}
 	
-	public Term expression_plus_1(Term arg0) {
+	@Functor public Term expression_plus_1(Term arg0) {
 		Term val0 = evalExpression(arg0);
-		if (val0!=null && val0 instanceof Number){
+		if (val0!=null && val0 instanceof Number)
 			return val0;
-		} else {
+		else
 			return null;
-		}
 	}
 	
-	public Term expression_minus_1(Term arg1) {
+	@Functor public Term expression_minus_1(Term arg1) {
 		Term val0 = evalExpression(arg1);
 		if (val0!=null && val0 instanceof Number) {
 			alice.tuprolog.Number val0n = (alice.tuprolog.Number) val0;
-			if (val0n instanceof Int) {
+			if (val0n instanceof Int)
 				return new Int(val0n.intValue() * -1);
-			} else if (val0n instanceof alice.tuprolog.Double) {
+			else if (val0n instanceof alice.tuprolog.Double)
 				return new alice.tuprolog.Double(val0n.doubleValue() * -1);
-			} else if (val0n instanceof alice.tuprolog.Long) {
+			else if (val0n instanceof alice.tuprolog.Long)
 				return new alice.tuprolog.Long(val0n.longValue() * -1);
-			} else if (val0n instanceof alice.tuprolog.Float) {
+			else if (val0n instanceof alice.tuprolog.Float)
 				return new alice.tuprolog.Float(val0n.floatValue() * -1);
-			} else {
+			else
 				return null;
-			}
-		} else {
+		} else
 			return null;
-		}
 	}
 	
-	public Term expression_bitwise_not_1(Term arg0) {
+	@Functor public Term expression_bitwise_not_1(Term arg0) {
 		Term val0 = evalExpression(arg0);
-		if (val0!=null && val0 instanceof Number) {
+		if (val0!=null && val0 instanceof Number)
 			return new Int(~((alice.tuprolog.Number)val0).intValue());
-		} else {
+		else
 			return null;
-		}
 	}
 	
 	alice.tuprolog.Number getIntegerNumber(long num) {
@@ -378,7 +375,7 @@ public class BasicLibrary extends Library {
 			return new alice.tuprolog.Long(num);
 	}
 	
-	public Term expression_plus_2(Term arg0,Term arg1) {
+	@Functor public Term expression_plus_2(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
 		if (val0!=null && val1!=null && val0 instanceof Number && (val1 instanceof Number)) {
@@ -392,7 +389,7 @@ public class BasicLibrary extends Library {
 			return null;
 	}
 	
-	public Term expression_minus_2(Term arg0,Term arg1) {
+	@Functor public Term expression_minus_2(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
 		if (val0!=null && val1!=null && val0 instanceof Number && (val1 instanceof Number)) {
@@ -406,7 +403,7 @@ public class BasicLibrary extends Library {
 			return null;
 	}
 	
-	public Term expression_multiply_2(Term arg0,Term arg1) {
+	@Functor public Term expression_multiply_2(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
 		if (val0!=null && val1!=null && val0 instanceof Number && (val1 instanceof Number)) {
@@ -420,7 +417,7 @@ public class BasicLibrary extends Library {
 			return null;
 	}
 	
-	public Term expression_div_2(Term arg0, Term arg1) {
+	@Functor public Term expression_div_2(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
 		if (val0 != null && val1 != null && val0 instanceof Number && val1 instanceof Number) {
@@ -435,76 +432,70 @@ public class BasicLibrary extends Library {
 			return null;
 	}
 	
-	public Term expression_integer_div_2(Term arg0,Term arg1) {
+	@Functor public Term expression_integer_div_2(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
 		if (val0 != null && val1 != null && val0 instanceof Number && (val1 instanceof Number)) {
 			alice.tuprolog.Number val0n = (alice.tuprolog.Number) val0;
 			alice.tuprolog.Number val1n = (alice.tuprolog.Number) val1;
 			return getIntegerNumber(val0n.longValue() / val1n.longValue());
-		} else {
+		} else
 			return null;
-		}
 	}
 	
-	public Term expression_pow_2(Term arg0,Term arg1) {
+	@Functor public Term expression_pow_2(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
-		if (val0!=null && val1!=null && val0 instanceof Number && (val1 instanceof Number)) {
+		if (val0 != null && val1 != null && val0 instanceof Number && val1 instanceof Number) {
 			alice.tuprolog.Number val0n = (alice.tuprolog.Number) val0;
 			alice.tuprolog.Number val1n = (alice.tuprolog.Number) val1;
-			return new alice.tuprolog.Double( Math.pow(val0n.doubleValue(),val1n.doubleValue()) );
-		} else {
+			return new alice.tuprolog.Double(Math.pow(val0n.doubleValue(), val1n.doubleValue()));
+		} else
 			return null;
-		}
 	}
 	
-	public Term expression_bitwise_shift_right_2(Term arg0,Term arg1) {
+	@Functor public Term expression_bitwise_shift_right_2(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
-		if (val0!=null && val1!=null && val0 instanceof Number&&val1 instanceof Number) {
+		if (val0 != null && val1 != null && val0 instanceof Number && val1 instanceof Number) {
 			alice.tuprolog.Number val0n = (alice.tuprolog.Number) val0;
 			alice.tuprolog.Number val1n = (alice.tuprolog.Number) val1;
 			return new Int(val0n.intValue() >> val1n.intValue());
-		} else {
+		} else
 			return null;
-		}
 	}
 	
-	public Term expression_bitwise_shift_left_2(Term arg0,Term arg1) {
+	@Functor public Term expression_bitwise_shift_left_2(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
-		if (val0!=null && val1!=null && val0 instanceof Number&&val1 instanceof Number) {
+		if (val0 != null && val1 != null && val0 instanceof Number && val1 instanceof Number) {
 			alice.tuprolog.Number val0n = (alice.tuprolog.Number) val0;
 			alice.tuprolog.Number val1n = (alice.tuprolog.Number) val1;
 			return new Int(val0n.intValue() << val1n.intValue());
-		} else {
+		} else
 			return null;
-		}
 	}
 	
-	public Term expression_bitwise_and_2(Term arg0,Term arg1) {
+	@Functor public Term expression_bitwise_and_2(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
-		if (val0!=null && val1!=null && val0 instanceof Number&&val1 instanceof Number) {
+		if (val0 != null && val1 != null && val0 instanceof Number && val1 instanceof Number) {
 			alice.tuprolog.Number val0n = (alice.tuprolog.Number) val0;
 			alice.tuprolog.Number val1n = (alice.tuprolog.Number) val1;
 			return new Int(val0n.intValue() & val1n.intValue());
-		} else {
+		} else
 			return null;
-		}
 	}
 	
-	public Term expression_bitwise_or_2(Term arg0,Term arg1) {
+	@Functor public Term expression_bitwise_or_2(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
-		if (val0!=null && val1!=null && val0 instanceof Number&&val1 instanceof Number) {
+		if (val0 != null && val1 != null && val0 instanceof Number && val1 instanceof Number) {
 			alice.tuprolog.Number val0n = (alice.tuprolog.Number) val0;
 			alice.tuprolog.Number val1n = (alice.tuprolog.Number) val1;
 			return new Int(val0n.intValue() | val1n.intValue());
-		} else {
+		} else
 			return null;
-		}
 	}
 	
 	//
