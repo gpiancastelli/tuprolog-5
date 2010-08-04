@@ -35,6 +35,8 @@ public class PrimitiveManager {
 	private Map<String, PrimitiveInfo> predicateHashMap;
 	private Map<String, PrimitiveInfo> functorHashMap;
 	
+	private Prolog engine;
+	
 	public PrimitiveManager() {
 		libHashMap        = new IdentityHashMap<IPrimitives, List<PrimitiveInfo>>();
 		directiveHashMap  = new HashMap<String, PrimitiveInfo>();
@@ -46,6 +48,7 @@ public class PrimitiveManager {
 	 * Configure this Manager
 	 */
 	void initialize(Prolog vm) {
+		engine = vm;
 		createPrimitiveInfo(new BuiltIn(vm));
 	}
 	
@@ -89,17 +92,25 @@ public class PrimitiveManager {
 		return term;
 	}
 	
-	public boolean evalAsDirective(Struct d) throws Throwable {
+	public boolean evalAsDirective(Struct d) {
 		PrimitiveInfo pd = ((Struct) identifyDirective(d)).getPrimitive();
 		if (pd != null) {
 			try {
-				pd.evalAsDirective(d);
-				return true;
+				return pd.evalAsDirective(d);
 			} catch (InvocationTargetException ite) {
-				throw ite.getTargetException();
+				Throwable t = ite.getTargetException();
+				engine.warn("An exception occurred during the execution of the " +
+						    d.getPredicateIndicator() + " directive:\n" + t.getMessage());
+				return false;
+			} catch (IllegalAccessException e) {
+				engine.warn("Cannot access the method defining the" +
+					        d.getPredicateIndicator() + " directive.\n");
+				return false;
 			}
-		} else
+		} else {
+			engine.warn("The directive " + d.getPredicateIndicator() + " is unknown.");
 			return false;
+		}
 	}
 	
 	public void identifyPredicate(Term term) {

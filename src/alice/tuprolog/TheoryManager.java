@@ -211,16 +211,9 @@ public class TheoryManager {
     private boolean runDirective(Struct c) {
         if ("':-'".equals(c.getName()) || ":-".equals(c.getName()) && c.getArity() == 1 && c.getTerm(0) instanceof Struct) {
             Struct dir = (Struct) c.getTerm(0);
-            try {
-            	if (!primitiveManager.evalAsDirective(dir))
-                    engine.warn("The directive " + dir.getPredicateIndicator() + " is unknown.");
-            } catch (Throwable t) {
-                engine.warn("An exception has been thrown during the execution of the " +
-            		    dir.getPredicateIndicator() + " directive.\n" + t.getMessage());
-            }
-            return true;
-        }
-        return false;
+            return primitiveManager.evalAsDirective(dir);
+        } else
+        	return false;
     }
 
     /**

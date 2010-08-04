@@ -43,12 +43,8 @@ public abstract class Library implements IPrimitives {
 	
 	/** prolog core which loaded the library */
 	protected Prolog engine;
-	
-	/** operator mapping*/
-	private String[][] opMappingCached;
-	
-	public Library(){
-		opMappingCached = getSynonymMap();
+		
+	public Library() {
 	}
 	
 	/**
@@ -69,14 +65,6 @@ public abstract class Library implements IPrimitives {
 	 */
 	public String getTheory() {
 		return "";
-	}
-	
-	/**
-	 * Gets the synonym mapping, as array of
-	 * elements like  { synonym, original name}
-	 */
-	public String[][] getSynonymMap() {
-		return null;
 	}
 	
 	/**
@@ -141,7 +129,6 @@ public abstract class Library implements IPrimitives {
 		return null;
 	}
 	
-	
 	/**
 	 * method invoked by prolog engine when library is
 	 * going to be removed
@@ -174,11 +161,8 @@ public abstract class Library implements IPrimitives {
 			
 			for (int i = 0; i < mlist.length; i++) {
 				Method method = mlist[i];
-				Class<?>[] clist = method.getParameterTypes();
 				Class<?> returnType = method.getReturnType();
 				
-				int type;
-				String name = "";
 				if (method.isAnnotationPresent(Predicate.class)) {
 					if (returnType != Boolean.TYPE) {
 						String m = "Method " + method.getName() + "is declared " +
@@ -186,67 +170,61 @@ public abstract class Library implements IPrimitives {
 						getEngine().warn(m);
 						continue;
 					}
-					type = PrimitiveInfo.PREDICATE;
 					Predicate annotation = method.getAnnotation(Predicate.class);
-					name = annotation.value();
-				} else if (method.isAnnotationPresent(Functor.class)) {
+					String name = annotation.value();
+					addValidMethod(tablePrimitives, PrimitiveInfo.PREDICATE, method, name);
+				} 
+				
+				if (method.isAnnotationPresent(Functor.class)) {
 					if (returnType != Term.class) {
 						String m = "Method " + method.getName() + "is declared " +
 				                   "as Functor but does not return a Term.";
 						getEngine().warn(m);
 						continue;
 					}
-					type = PrimitiveInfo.FUNCTOR;
 					Functor annotation = method.getAnnotation(Functor.class);
-					name = annotation.value();
-				} else if (method.isAnnotationPresent(Directive.class)) {
-					type = PrimitiveInfo.DIRECTIVE;
+					String name = annotation.value();
+					addValidMethod(tablePrimitives, PrimitiveInfo.FUNCTOR, method, name);
+				} 
+				
+				if (method.isAnnotationPresent(Directive.class)) {
+					if (returnType != Boolean.TYPE) {
+						String m = "Method " + method.getName() + "is declared " +
+						           "as Directive but does not return a boolean.";
+						getEngine().warn(m);
+						continue;
+					}
 					Directive annotation = method.getAnnotation(Directive.class);
-					name = annotation.value();
-				} else
-					continue;
-				
-				int index = name.lastIndexOf('/');
-				if (index != -1) {
-					try {
-						int arity = Integer.parseInt(name.substring(index + 1, name.length()));
-						// check argument number
-						if (clist.length == arity) {
-							boolean valid = true;
-							for (int j=0; j<arity; j++) {
-								if (!(Term.class.isAssignableFrom(clist[j]))) {
-									valid = false;
-									break;
-								}
-							}
-							if (valid) {
-								String rawName = name.substring(0,index);
-								String key = rawName + "/" + arity;
-								PrimitiveInfo prim = new PrimitiveInfo(type, key, this, method, arity);
-								tablePrimitives[type].add(prim);
-								//
-								// adding also or synonyms
-								//
-								String[] stringFormat = {"directive", "predicate", "functor"};
-								if (opMappingCached != null) {
-									for (int j = 0; j < opMappingCached.length; j++){
-										String[] map = opMappingCached[j];
-										if (map[2].equals(stringFormat[type]) && map[1].equals(rawName)) {
-											key = map[0] + "/" + arity;
-											prim = new PrimitiveInfo(type, key, this, method, arity);
-											tablePrimitives[type].add(prim);
-										}
-									}
-								}
-							}
-						}
-					} catch (Exception ex) {}
+					String name = annotation.value();
+					addValidMethod(tablePrimitives, PrimitiveInfo.DIRECTIVE, method, name);
 				}
-				
 			}
 			return tablePrimitives;
-		} catch (Exception ex) {
+		} catch (Exception e) {
 			return null;
+		}
+	}
+	
+	private void addValidMethod(List<PrimitiveInfo>[] table, int type, Method method, String name) {
+		int index = name.lastIndexOf('/');
+		if (index != -1) {
+			Class<?>[] clist = method.getParameterTypes();
+			try {
+				int arity = Integer.parseInt(name.substring(index + 1, name.length()));
+				// check the number of arguments
+				if (clist.length == arity) {
+					boolean valid = true;
+					for (int j = 0; j < arity; j++)
+						if (!(Term.class.isAssignableFrom(clist[j]))) {
+							valid = false;
+							break;
+						}
+					if (valid) {
+						PrimitiveInfo p = new PrimitiveInfo(type, name, this, method, arity);
+						table[type].add(p);
+					}
+				}
+			} catch (Exception e) {}
 		}
 	}
 	

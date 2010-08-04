@@ -365,7 +365,7 @@ public class BasicLibrary extends Library {
 		return !(arg0.isGreater(arg1) || arg0.isEqual(arg1));
 	}
 	
-	@Functor("expression_plus/1")
+	@Functor("+/1")
 	public Term expressionPlus(Term arg0) {
 		Term val0 = evalExpression(arg0);
 		if (val0!=null && val0 instanceof Number)
@@ -374,7 +374,7 @@ public class BasicLibrary extends Library {
 			return null;
 	}
 	
-	@Functor("expression_minus/1")
+	@Functor("-/1")
 	public Term expressionMinus(Term arg1) {
 		Term val0 = evalExpression(arg1);
 		if (val0!=null && val0 instanceof Number) {
@@ -393,7 +393,7 @@ public class BasicLibrary extends Library {
 			return null;
 	}
 	
-	@Functor("expression_bitwise_not/1")
+	@Functor("\\/1")
 	public Term expressionBitwiseNot(Term arg0) {
 		Term val0 = evalExpression(arg0);
 		if (val0!=null && val0 instanceof Number)
@@ -409,7 +409,7 @@ public class BasicLibrary extends Library {
 			return new alice.tuprolog.Long(num);
 	}
 	
-	@Functor("expression_plus/2")
+	@Functor("+/2")
 	public Term expressionPlus(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
@@ -424,7 +424,7 @@ public class BasicLibrary extends Library {
 			return null;
 	}
 	
-	@Functor("expression_minus/2")
+	@Functor("-/2")
 	public Term expressionMinus(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
@@ -439,7 +439,7 @@ public class BasicLibrary extends Library {
 			return null;
 	}
 	
-	@Functor("expression_multiply/2")
+	@Functor("*/2")
 	public Term expressionMultiply(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
@@ -454,7 +454,7 @@ public class BasicLibrary extends Library {
 			return null;
 	}
 	
-	@Functor("expression_div/2")
+	@Functor("//2")
 	public Term expressionDiv(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
@@ -470,7 +470,7 @@ public class BasicLibrary extends Library {
 			return null;
 	}
 	
-	@Functor("expression_integer_div/2")
+	@Functor("///2")
 	public Term expressionIntegerDiv(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
@@ -482,7 +482,7 @@ public class BasicLibrary extends Library {
 			return null;
 	}
 	
-	@Functor("expression_pow/2")
+	@Functor("**/2")
 	public Term expressionPow(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
@@ -494,7 +494,7 @@ public class BasicLibrary extends Library {
 			return null;
 	}
 	
-	@Functor("expression_bitwise_shift_right/2")
+	@Functor(">>/2")
 	public Term expressionBitwiseShiftRight(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
@@ -506,7 +506,7 @@ public class BasicLibrary extends Library {
 			return null;
 	}
 	
-	@Functor("expression_bitwise_shift_left/2")
+	@Functor("<</2")
 	public Term expressionBitwiseShiftLeft(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
@@ -518,7 +518,7 @@ public class BasicLibrary extends Library {
 			return null;
 	}
 	
-	@Functor("expression_bitwise_and/2")
+	@Functor("/\\/2")
 	public Term expressionBitwiseAnd(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
@@ -530,7 +530,7 @@ public class BasicLibrary extends Library {
 			return null;
 	}
 	
-	@Functor("expression_bitwise_or/2")
+	@Functor("\\//2")
 	public Term expressionBitwiseOr(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
@@ -867,26 +867,6 @@ public class BasicLibrary extends Library {
 		Term t = term.getTerm();
 		Term igt = t.iteratedGoalTerm();
 		return unify(igt, goal);
-	}
-	
-	/**
-	 * Defines some synonyms
-	 */
-	public String[][] getSynonymMap(){
-		return
-		new String[][]{
-				{"+", "expression_plus", "functor"},
-				{"-", "expression_minus", "functor"},
-				{"*", "expression_multiply", "functor"},
-				{"/", "expression_div", "functor"},
-				{"**", "expression_pow", "functor"},
-				{">>", "expression_bitwise_shift_right", "functor"},
-				{"<<", "expression_bitwise_shift_left", "functor"},
-				{"/\\", "expression_bitwise_and", "functor"},
-				{"\\/", "expression_bitwise_or", "functor"},
-				{"//", "expression_integer_div", "functor"},
-				{"\\", "expression_bitwise_not", "functor"}
-		};
 	}
 	
 }

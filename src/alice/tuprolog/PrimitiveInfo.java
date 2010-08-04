@@ -90,15 +90,15 @@ public class PrimitiveInfo {
 	
 	
 	/**
-	 * evaluates the primitive as a directive
+	 * Evaluates the primitive as a directive.
+	 * @return true if the directive had success, false otherwise 
 	 * @throws InvocationTargetException 
-	 * @throws IllegalAccessException 
-	 * @throws Exception if invocation directive failure
+	 * @throws IllegalAccessException
 	 */
-	public void evalAsDirective(Struct g) throws IllegalAccessException, InvocationTargetException {
+	public boolean evalAsDirective(Struct g) throws IllegalAccessException, InvocationTargetException {
 		for (int i = 0; i < primitive_args.length; i++)
 			primitive_args[i] = g.getTerm(i);
-		method.invoke(source, (Object[]) primitive_args);
+		return ((Boolean) method.invoke(source, (Object[]) primitive_args)).booleanValue();
 	}
 	
 	
