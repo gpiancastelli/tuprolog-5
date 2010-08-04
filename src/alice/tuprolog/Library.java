@@ -176,16 +176,27 @@ public abstract class Library implements IPrimitives {
 				String name = mlist[i].getName();
 				
 				Class<?>[] clist = mlist[i].getParameterTypes();
-				//Class<?> rclass = mlist[i].getReturnType();
-				//String returnTypeName = rclass.getName();
+				Class<?> returnType = mlist[i].getReturnType();
 				
 				int type;
-				if (mlist[i].isAnnotationPresent(Predicate.class)) type = PrimitiveInfo.PREDICATE;
-				//if (returnTypeName.equals("boolean")) type = PrimitiveInfo.PREDICATE;
-				else if (mlist[i].isAnnotationPresent(Functor.class)) type = PrimitiveInfo.FUNCTOR;
-				//else if (returnTypeName.equals("alice.tuprolog.Term")) type = PrimitiveInfo.FUNCTOR;
-				else if (mlist[i].isAnnotationPresent(Directive.class)) type = PrimitiveInfo.DIRECTIVE;
-				//else if (returnTypeName.equals("void")) type = PrimitiveInfo.DIRECTIVE;
+				if (mlist[i].isAnnotationPresent(Predicate.class)) {
+					if (returnType != Boolean.TYPE) {
+						String m = "Method " + name + "is declared as Predicate but " +
+						           "does not return a boolean.";
+						getEngine().warn(m);
+						continue;
+					}
+					type = PrimitiveInfo.PREDICATE;
+				} else if (mlist[i].isAnnotationPresent(Functor.class)) {
+					if (returnType != Term.class) {
+						String m = "Method " + name + "is declared as Functor but " +
+				                   "does not return a Term.";
+						getEngine().warn(m);
+						continue;
+					}
+					type = PrimitiveInfo.FUNCTOR;
+				} else if (mlist[i].isAnnotationPresent(Directive.class))
+					type = PrimitiveInfo.DIRECTIVE;
 				else continue;
 				
 				int index = name.lastIndexOf('_');
