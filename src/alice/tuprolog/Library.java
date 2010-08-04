@@ -176,15 +176,16 @@ public abstract class Library implements IPrimitives {
 				String name = mlist[i].getName();
 				
 				Class<?>[] clist = mlist[i].getParameterTypes();
-				Class<?> rclass = mlist[i].getReturnType();
-				String returnTypeName = rclass.getName();
+				//Class<?> rclass = mlist[i].getReturnType();
+				//String returnTypeName = rclass.getName();
 				
 				int type;
 				if (mlist[i].isAnnotationPresent(Predicate.class)) type = PrimitiveInfo.PREDICATE;
 				//if (returnTypeName.equals("boolean")) type = PrimitiveInfo.PREDICATE;
 				else if (mlist[i].isAnnotationPresent(Functor.class)) type = PrimitiveInfo.FUNCTOR;
 				//else if (returnTypeName.equals("alice.tuprolog.Term")) type = PrimitiveInfo.FUNCTOR;
-				else if (returnTypeName.equals("void")) type = PrimitiveInfo.DIRECTIVE;
+				else if (mlist[i].isAnnotationPresent(Directive.class)) type = PrimitiveInfo.DIRECTIVE;
+				//else if (returnTypeName.equals("void")) type = PrimitiveInfo.DIRECTIVE;
 				else continue;
 				
 				int index = name.lastIndexOf('_');

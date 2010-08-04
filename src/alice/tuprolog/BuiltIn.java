@@ -386,39 +386,40 @@ public class BuiltIn extends Library {
 	 * DIRECTIVES
 	 */
 	
-	public void op_3(Term arg0, Term arg1, Term arg2) {
+	@Directive public void op_3(Term arg0, Term arg1, Term arg2) {
 		$op_3(arg0, arg1, arg2);
 	}
 	
 	
-	public void flag_4(Term flagName, Term flagSet, Term flagDefault, Term flagModifiable) {
+	@Directive public void flag_4(Term flagName, Term flagSet, Term flagDefault, Term flagModifiable) {
 		flagName       = flagName.getTerm();
 		flagSet        = flagSet.getTerm();
 		flagDefault    = flagDefault.getTerm();
 		flagModifiable = flagModifiable.getTerm();
-		if (flagSet.isList() && (flagModifiable.equals(Term.TRUE)||flagModifiable.equals(Term.FALSE))) {
+		if (flagSet.isList() && (flagModifiable.equals(Term.TRUE) || flagModifiable.equals(Term.FALSE))) {
 			String libName = ""; // TODO What's the future of libName?
 			flagManager.defineFlag(flagName.toString(), (Struct)flagSet, flagDefault, flagModifiable.equals(Term.TRUE), libName);
 		}
 	}
 	
 	
-	public void initialization_1(Term goal) {
+	@Directive public void initialization_1(Term goal) {
 		goal = goal.getTerm();
-		if (goal instanceof Struct){
+		if (goal instanceof Struct) {
 			primitiveManager.identifyPredicate(goal);
-			theoryManager.addStartGoal((Struct)goal);
+			theoryManager.addStartGoal((Struct) goal);
 		}		
 	}
 	
 	
-	public void $load_library_1(Term lib) throws InvalidLibraryException {
+	@Directive public void $load_library_1(Term lib) throws InvalidLibraryException {
 		lib = lib.getTerm();
-		if (lib.isAtom()) libraryManager.loadLibrary(((Struct) lib).getName());
+		if (lib.isAtom())
+			libraryManager.loadLibrary(((Struct) lib).getName());
 	}
 	
 	
-	public void include_1(Term theory) throws InvalidTheoryException, IOException {
+	@Directive public void include_1(Term theory) throws InvalidTheoryException, IOException {
 		theory = theory.getTerm();
 		engine.addTheory(new Theory(
 				new FileInputStream(theory.toStringWithoutApices())));
