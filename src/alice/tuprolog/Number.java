@@ -56,39 +56,7 @@ public abstract class Number extends Term {
 	public abstract boolean isReal();
 	
 	//
-	
-	/** is an int Integer number? 
-     * @deprecated Use <tt>instanceof Int</tt> instead. */
-    public abstract boolean isTypeInt();
-
-    /** is an int Integer number?
-     * @deprecated Use <tt>instanceof Int</tt> instead. */
-	public abstract boolean isInt();
-	
-	/** is a float Real number? 
-     * @deprecated Use <tt>instanceof alice.tuprolog.Float</tt> instead. */
-    public abstract boolean isTypeFloat();
-
-    /** is a float Real number?
-     * @deprecated Use <tt>instanceof alice.tuprolog.Float</tt> instead. */
-	public abstract boolean isFloat();
-	
-	/** is a double Real number? 
-     * @deprecated Use <tt>instanceof alice.tuprolog.Double</tt> instead.*/
-    public abstract boolean isTypeDouble();
-
-    /** is a double Real number?
-     * @deprecated Use <tt>instanceof alice.tuprolog.Double</tt> instead. */
-	public abstract boolean isDouble();
-	
-	/** is a long Integer number? 
-     * @deprecated Use <tt>instanceof alice.tuprolog.Long</tt> instead. */
-    public abstract boolean isTypeLong();
-
-    /** is a long Integer number?
-     * @deprecated Use <tt>instanceof alice.tuprolog.Long</tt> instead. */
-	public abstract boolean isLong();
-	
+		
 	public static Number createNumber(String s) {
 		Term t = Term.createTerm(s);
 		if (t instanceof Number)
