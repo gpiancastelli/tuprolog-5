@@ -24,6 +24,7 @@ import alice.tuprolog.Number;
 
 public class TestLibrary extends StringLibrary {
 	
+	@Override
 	public String getName() {
 		return "TestLibraryName";
 	}

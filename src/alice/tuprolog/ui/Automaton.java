@@ -55,6 +55,7 @@ public abstract class Automaton implements Runnable {
     /** boot state of automaton */
     public abstract void boot();
 
+    @Override
     public void run() {
         while (true) {
             try {

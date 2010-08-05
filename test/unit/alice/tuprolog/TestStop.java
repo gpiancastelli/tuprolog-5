@@ -1,14 +1,17 @@
 package alice.tuprolog;
 
 class PrologThread extends Thread {
+	
 	Prolog core;
 	String goal;
+	
 	PrologThread(Prolog core, String goal){
 		this.core = core;
 		this.goal = goal;
 	}
 
-	public void run(){
+	@Override
+	public void run() {
 		try {
 			System.out.println("STARTING...");
 			SolveInfo info = core.solve(goal);

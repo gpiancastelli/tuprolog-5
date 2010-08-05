@@ -12,10 +12,12 @@ public class SubGoalElement extends AbstractSubGoalTree {
 		return term;
 	}
 	
+	@Override
 	public boolean isLeaf() {
 		return true;
 	}
 	
+	@Override
 	public boolean isRoot() {
 		return false;
 	}

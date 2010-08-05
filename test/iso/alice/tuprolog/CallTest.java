@@ -54,6 +54,7 @@ public class CallTest {
 	public void callIndirectInstantiationError() throws PrologException {
 		output = "";
 		engine.addOutputListener(new OutputListener() {
+			@Override
 			public void onOutput(OutputEvent e) {
 				output += e.getMsg();
 			}
@@ -69,6 +70,7 @@ public class CallTest {
 	public void callIndirectTypeError() throws PrologException {
 		output = "";
 		engine.addOutputListener(new OutputListener() {
+			@Override
 			public void onOutput(OutputEvent e) {
 				output += e.getMsg();
 			}
@@ -111,6 +113,7 @@ public class CallTest {
 	@Test public void callOutputWithInstantiationError() throws PrologException {
 		output = "";
 		engine.addOutputListener(new OutputListener() {
+			@Override
 			public void onOutput(OutputEvent e) {
 				output += e.getMsg();
 			}
@@ -125,6 +128,7 @@ public class CallTest {
 	@Test public void callOutputWithTypeError() throws PrologException {
 		output = "";
 		engine.addOutputListener(new OutputListener() {
+			@Override
 			public void onOutput(OutputEvent e) {
 				output += e.getMsg();
 			}
@@ -157,6 +161,7 @@ public class CallTest {
 	@Test public void callConjunctionTypeErrorWithoutOutput() throws PrologException {
 		output = "";
 		engine.addOutputListener(new OutputListener() {
+			@Override
 			public void onOutput(OutputEvent e) {
 				output += e.getMsg();
 			}

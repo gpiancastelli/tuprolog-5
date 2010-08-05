@@ -211,6 +211,7 @@ public class BugsTest {
 	
 	@Test public void simpleCallConjunction() throws PrologException {
 		engine.addOutputListener(new OutputListener() {
+			@Override
 			public void onOutput(OutputEvent e) {
 				output += e.getMsg();
 			}
@@ -224,6 +225,7 @@ public class BugsTest {
 	@Test public void callConjunctionOnTheory() throws PrologException {
 		engine.setTheory(new Theory("b :- write(b1).\nb :- write(b2).\nb :- write(b3)."));
 		engine.addOutputListener(new OutputListener() {
+			@Override
 			public void onOutput(OutputEvent e) {
 				output += e.getMsg();
 			}
@@ -245,6 +247,7 @@ public class BugsTest {
 	@Test public void cutInIfThenElse() throws PrologException {
 		engine.setTheory(new Theory("p :- a, (a -> write(a) ; write(b)), fail.\na.\na."));
 		engine.addOutputListener(new OutputListener() {
+			@Override
 			public void onOutput(OutputEvent e) {
 				output += e.getMsg();
 			}
@@ -262,6 +265,7 @@ public class BugsTest {
 				                    "c :- write(c1).\n" +
 				                    "c :- write(c2)."));
 		engine.addOutputListener(new OutputListener() {
+			@Override
 			public void onOutput(OutputEvent e) {
 				output += e.getMsg();
 			}
@@ -279,6 +283,7 @@ public class BugsTest {
 				                    "z :- ';'((write(cut), !, fail), true).\n" +
 				                    "z :- write(z)."));
 		engine.addOutputListener(new OutputListener() {
+			@Override
 			public void onOutput(OutputEvent e) {
 				output += e.getMsg();
 			}
@@ -294,6 +299,7 @@ public class BugsTest {
 				                    "go :- write(1), X = ','(write(cut), !), X, write(2), fail.\n" +
 				                    "go :- write(3)."));
 		engine.addOutputListener(new OutputListener() {
+			@Override
 			public void onOutput(OutputEvent e) {
 				output += e.getMsg();
 			}
@@ -328,6 +334,7 @@ public class BugsTest {
 				              "go :- print(ingo2),nl.");
 		engine.setTheory(t);
 		engine.addOutputListener(new OutputListener() {
+			@Override
 			public void onOutput(OutputEvent e) {
 				output += e.getMsg();
 			}
@@ -353,6 +360,7 @@ public class BugsTest {
 				              "goa :- print(ingo3X), nl.");
 		engine.setTheory(t);
 		engine.addOutputListener(new OutputListener() {
+			@Override
 			public void onOutput(OutputEvent e) {
 				output += e.getMsg();
 			}
@@ -369,6 +377,7 @@ public class BugsTest {
 				              "gob :- print(ingo2X), nl.");
 		engine.setTheory(t);
 		engine.addOutputListener(new OutputListener() {
+			@Override
 			public void onOutput(OutputEvent e) {
 				output += e.getMsg();
 			}
@@ -391,6 +400,7 @@ public class BugsTest {
 				              "goc :- print(a222), nl.");
 		engine.setTheory(t);
 		engine.addOutputListener(new OutputListener() {
+			@Override
 			public void onOutput(OutputEvent e) {
 				output += e.getMsg();
 			}
@@ -418,6 +428,7 @@ public class BugsTest {
 				              "goe :- print(ingo2X), nl.");
 		engine.setTheory(t);
 		engine.addOutputListener(new OutputListener() {
+			@Override
 			public void onOutput(OutputEvent e) {
 				output += e.getMsg();
 			}
@@ -440,6 +451,7 @@ public class BugsTest {
 				              "gof :- print(a222), nl.");
 		engine.setTheory(t);
 		engine.addOutputListener(new OutputListener() {
+			@Override
 			public void onOutput(OutputEvent e) {
 				output += e.getMsg();
 			}
@@ -463,6 +475,7 @@ public class BugsTest {
 				              "gog :- print(a222), nl.");
 		engine.setTheory(t);
 		engine.addOutputListener(new OutputListener() {
+			@Override
 			public void onOutput(OutputEvent e) {
 				output += e.getMsg();
 			}
@@ -494,6 +507,7 @@ public class BugsTest {
 				              "goh :- print(ingo2X), nl.");
 		engine.setTheory(t);
 		engine.addOutputListener(new OutputListener() {
+			@Override
 			public void onOutput(OutputEvent e) {
 				output += e.getMsg();
 			}
@@ -513,6 +527,7 @@ public class BugsTest {
 				              "goi :- print(ingoi222), nl.");
 		engine.setTheory(t);
 		engine.addOutputListener(new OutputListener() {
+			@Override
 			public void onOutput(OutputEvent e) {
 				output += e.getMsg();
 			}
@@ -538,6 +553,7 @@ public class BugsTest {
 				              "goj :- print(ingoj222), nl.");
 		engine.setTheory(t);
 		engine.addOutputListener(new OutputListener() {
+			@Override
 			public void onOutput(OutputEvent e) {
 				output += e.getMsg();
 			}
@@ -557,6 +573,7 @@ public class BugsTest {
 				              "gok :- print(ingok222), nl.");
 		engine.setTheory(t);
 		engine.addOutputListener(new OutputListener() {
+			@Override
 			public void onOutput(OutputEvent e) {
 				output += e.getMsg();
 			}
@@ -586,6 +603,7 @@ public class BugsTest {
 				              "gocp :- print(gocpa), nl ; print(gocpb), nl.");
 		engine.setTheory(t);
 		engine.addOutputListener(new OutputListener() {
+			@Override
 			public void onOutput(OutputEvent e) {
 				output += e.getMsg();
 			}

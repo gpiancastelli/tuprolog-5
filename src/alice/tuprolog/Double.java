@@ -30,40 +30,38 @@ public class Double extends Number {
 		value = v;
 	}
 	
-	/**
-	 *  Returns the value of the Double as int.
-	 */
+	/** Returns the value of the Double as int. */
+	@Override
 	final public int intValue() {
 		return (int) value;
 	}
 	
-	/**
-	 *  Returns the value of the Double as float.
-	 */
+	/** Returns the value of the Double as float. */
+	@Override
 	final public float floatValue() {
 		return (float) value;
 	}
 	
-	/**
-	 *  Returns the value of the Double as double.
-	 */
+	/** Returns the value of the Double as double. */
+	@Override
 	final public double doubleValue() {
 		return value;
 	}
 	
-	/**
-	 *  Returns the value of the Double as long.
-	 */
+	/** Returns the value of the Double as long. */
+	@Override
 	final public long longValue() {
 		return (long) value;
 	}
 	
 	/** Is this term a Prolog integer term? */
+	@Override
 	final public boolean isInteger() {
 		return false;
 	}
 	
 	/** Is this term a Prolog real term? */
+	@Override
 	final public boolean isReal() {
 		return true;
 	}
@@ -72,6 +70,7 @@ public class Double extends Number {
 	 * Returns true if this Double term is grater that the term provided.
 	 * For number term argument, the int value is considered.
 	 */
+	@Override
 	public boolean isGreater(Term t) {
 		t = t.getTerm();
 		if (t instanceof Number) {
@@ -85,9 +84,8 @@ public class Double extends Number {
 		}
 	}
 	
-	/**
-	 * Returns true if this Double term is equal to the term provided.
-	 */
+	/** Returns true if this Double term is equal to the term provided. */
+	@Override
 	public boolean isEqual(Term t) {
 		t = t.getTerm();
 		if (t instanceof Number) {
@@ -104,6 +102,7 @@ public class Double extends Number {
 	 * Tries to unify a term with the provided term argument.
 	 * This service is to be used in demonstration context.
 	 */
+	@Override
 	boolean unify(List<Var> vl1, List<Var> vl2, Term t) {
 		t = t.getTerm();
 		if (t instanceof Var) {

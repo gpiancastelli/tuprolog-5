@@ -102,6 +102,7 @@ public class Parser implements Iterable<Term> {
     
 //  user interface
     
+    @Override
     public Iterator<Term> iterator() {
     	return new TermIterator(this);
     }

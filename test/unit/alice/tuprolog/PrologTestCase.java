@@ -66,9 +66,11 @@ public class PrologTestCase {
 	@Test public void spyListenerManagement() {
 		Prolog engine = new Prolog();
 		SpyListener listener1 = new SpyListener() {
+			@Override
 			public void onSpy(SpyEvent e) {}
 		};
 		SpyListener listener2 = new SpyListener() {
+			@Override
 			public void onSpy(SpyEvent e) {}
 		};
 		engine.addSpyListener(listener1);

@@ -60,6 +60,7 @@ class ClauseDatabase extends HashMap<String, LinkedList<ClauseInfo>> implements 
         return (List<ClauseInfo>) family.clone();
     }
 
+    @Override
     public Iterator<ClauseInfo> iterator() {
         return new CompleteIterator(this);
     }
@@ -72,6 +73,7 @@ class ClauseDatabase extends HashMap<String, LinkedList<ClauseInfo>> implements 
             values = clauseDatabase.values().iterator();
         }
 
+        @Override
         public boolean hasNext() {
             if (workingList != null && workingList.hasNext())
                 return true;
@@ -82,10 +84,12 @@ class ClauseDatabase extends HashMap<String, LinkedList<ClauseInfo>> implements 
             return false;
         }
 
+        @Override
         public ClauseInfo next() {
             return workingList.next();
         }
 
+        @Override
         public void remove() {
             workingList.remove();
         }

@@ -69,6 +69,7 @@ public class RetractTest {
 	public void retractInsect() throws PrologException {
 		output = "";
 		engine.addOutputListener(new OutputListener() {
+			@Override
 			public void onOutput(OutputEvent e) {
 				output += e.getMsg();
 			}

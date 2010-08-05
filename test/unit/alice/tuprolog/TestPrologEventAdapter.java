@@ -9,21 +9,26 @@ public class TestPrologEventAdapter extends PrologEventAdapter {
 	String firstMessage = "";
 	String secondMessage = "";
     
+	@Override
     public void theoryChanged(TheoryEvent ev) {
     	firstMessage = ev.getOldTheory().toString();
     	secondMessage = ev.getNewTheory().toString();
     }
     
+	@Override
     public void newQueryResultAvailable(QueryEvent ev) {
     	firstMessage = ev.getSolveInfo().getQuery().toString();
     	secondMessage = ev.getSolveInfo().toString();
     }
     
+	@Override
     public void libraryLoaded(LibraryEvent ev) {
     	firstMessage = ev.getLibraryName();
     }
 
+	@Override
     public void libraryUnloaded(LibraryEvent ev) {
     	firstMessage = ev.getLibraryName();
     }
+
 }

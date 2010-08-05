@@ -39,7 +39,7 @@ public class Struct extends Term implements Iterable<Term> {
 	/** primitive behavior */
 	private transient PrimitiveInfo primitive;
 	/** it indicates if the term is resolved */
-	private boolean resolved=false;
+	private boolean resolved = false;
 	
 	/**
 	 * Builds a compound term, with a series of arguments.
@@ -177,28 +177,31 @@ public class Struct extends Term implements Iterable<Term> {
 	
 	// check type services
 	
+	@Override
 	public boolean isAtomic() {
 		return  arity == 0;
 	}
 	
+	@Override
 	public boolean isCompound() {
 		return arity > 0;
 	}
 	
+	@Override
 	public boolean isAtom() {
 		return (arity == 0 || isEmptyList());
 	}
 	
+	@Override
 	public boolean isList() {
 		return (name.equals(".") && arity == 2 && args[1].isList()) || isEmptyList();
 	}
 	
+	@Override
 	public boolean isGround() {
-		for (int i=0; i<arity; i++) {
-			if (!args[i].isGround()) {
+		for (int i = 0; i < arity; i++)
+			if (!args[i].isGround())
 				return false;
-			}
-		}
 		return true;
 	}
 	
@@ -210,6 +213,7 @@ public class Struct extends Term implements Iterable<Term> {
 		//return(name.equals(":-") && arity == 2 && arg[0].getTerm() instanceof Struct);
 	}    
 	
+	@Override
 	public Term getTerm() {
 		return this;
 	}
@@ -243,9 +247,8 @@ public class Struct extends Term implements Iterable<Term> {
 	
 	//
 	
-	/**
-	 * Test if a term is greater than other.
-	 */
+	/** Test if a term is greater than other. */
+	@Override
 	public boolean isGreater(Term t) {
 		t = t.getTerm();
 		if (!(t instanceof Struct)) {
@@ -272,9 +275,8 @@ public class Struct extends Term implements Iterable<Term> {
 		return false;
 	}
 	
-	/**
-	 * Test if a term is equal to other.
-	 */
+	/** Test if a term is equal to other. */
+	@Override
 	public boolean isEqual(Term t) {
 		t = t.getTerm();
 		if (t instanceof Struct) {
@@ -298,8 +300,10 @@ public class Struct extends Term implements Iterable<Term> {
 	
 	/**
 	 * Gets a copy of this structure.
+	 * 
 	 * @param vMap is needed for register occurrence of same variables
 	 */
+	@Override
 	Term copy(Map<Var, Var> vMap, int idExecCtx) {
 		Struct t = new Struct(arity);
 		t.resolved = resolved;
@@ -314,8 +318,10 @@ public class Struct extends Term implements Iterable<Term> {
 	
 	/**
 	 * Gets a copy of this structure.
+	 * 
 	 * @param vMap is needed for register occurrence of same variables
 	 */
+	@Override
 	Term copy(Map<Var, Var> vMap, Map<Var, Var> substMap) {
 		Struct t = new Struct(arity);
 		t.resolved = false;
@@ -328,9 +334,8 @@ public class Struct extends Term implements Iterable<Term> {
 	}
 	
 	
-	/**
-	 * Resolve term.
-	 */
+	/** Resolve term. */
+	@Override
 	long resolveTerm(long count) {
 		if (resolved)
 			return count;
@@ -343,6 +348,7 @@ public class Struct extends Term implements Iterable<Term> {
 	
 	/**
 	 * Resolve name of terms.
+	 * 
 	 * @param vl list of variables resolved
 	 * @param count start timestamp for variables of this term
 	 * @return next timestamp for other terms
@@ -385,9 +391,8 @@ public class Struct extends Term implements Iterable<Term> {
 	
 	// services for list structures
 	
-	/**
-	 * Is this structure an empty list?
-	 */
+	/** Is this structure an empty list? */
+	@Override
 	public boolean isEmptyList() {
 		return name.equals("[]") && arity == 0;
 	}
@@ -448,6 +453,7 @@ public class Struct extends Term implements Iterable<Term> {
 	 * If the callee structure is not a list, throws an
 	 * <code>UnsupportedOperationException</code>
 	 */
+	@Override
 	public Iterator<Term> iterator() {
 		if (!isList()) {
 			String message = "The structure " + this + " is not a list.";
@@ -520,11 +526,13 @@ public class Struct extends Term implements Iterable<Term> {
 	
 	/**
 	 * Try to unify two terms.
+	 * 
 	 * @param t the term to unify
 	 * @param vl1 list of variables unified
 	 * @param vl2 list of variables unified
 	 * @return true if the term is unifiable with this one
 	 */
+	@Override
 	boolean unify(List<Var> vl1, List<Var> vl2, Term t) {
 		// During unification we need to take note of
 		// all the variables in the complete struct
@@ -545,6 +553,7 @@ public class Struct extends Term implements Iterable<Term> {
 	}
 	
 	/* dummy method */
+	@Override
 	public void free() {}
 	
 	//

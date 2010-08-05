@@ -40,6 +40,7 @@ public class Agent {
 	private String goalText;
 	
 	private OutputListener defaultOutputListener = new OutputListener() {
+		@Override
 		public void onOutput(OutputEvent ev) {
 			System.out.print(ev.getMsg());
 		}
@@ -115,7 +116,7 @@ public class Agent {
 	/**
 	 * Removes all output event listeners
 	 */
-	public void removeAllOutputListener() {
+	public void removeAllOutputListeners() {
 		core.removeAllOutputListeners();
 	}
 	

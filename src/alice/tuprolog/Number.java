@@ -20,7 +20,7 @@ package alice.tuprolog;
 import java.util.Map;
 
 /**
- * Number abstract class represents numbers prolog data type
+ * Number abstract class represents numbers Prolog data type.
  *
  * @see Int
  * @see Long
@@ -64,51 +64,52 @@ public abstract class Number extends Term {
 		throw new InvalidTermException("Term " + t + " is not a number.");
 	}
 	
-	/**
-	 * Gets the actual term referred by this Term.
-	 */
+	/** Gets the actual term referred by this Term. */
+	@Override
 	public Term getTerm() {
 		return this;
 	}
 	
 	// checking type and properties of the Term
 	
+	@Override
 	final public boolean isEmptyList() {
 		return false;
 	}
 	
-	//
-	
-	/** is this term a constant prolog term? */
+	/** Is this term a constant Prolog term? */
+	@Override
 	final public boolean isAtomic() {
 		return true;
 	}
 	
-	/** is this term a prolog compound term? */
+	/** Is this term a Prolog compound term? */
+	@Override
 	final public boolean isCompound() {
 		return false;
 	}
 	
-	/** is this term a prolog (alphanumeric) atom? */
+	/** Is this term a Prolog (alphanumeric) atom? */
+	@Override
 	final public boolean isAtom() {
 		return false;
 	}
 	
-	/** is this term a prolog list? */
+	/** Is this term a Prolog list? */
+	@Override
 	final public boolean isList() {
 		return false;
 	}
 	
-	/** is this term a ground term? */
+	/** Is this term a ground term? */
+	@Override
 	final public boolean isGround() {
 		return true;
 	}
 	
 	//
 	
-	/**
-	 * Gets a copy of this term.
-	 */
+	/** Gets a copy of this term. */
 	public Term copy(int idExecCtx) {
 		return this;
 	}
@@ -119,23 +120,23 @@ public abstract class Number extends Term {
 	 * The list argument passed contains the list of variables to be renamed
 	 * (if empty list then no renaming)
 	 */
+	@Override
 	Term copy(Map<Var, Var> vMap, int idExecCtx) {
 		return this;
 	}
 	
-	/**
-	 * Gets a copy of the term.
-	 */
+	/** Gets a copy of the term. */
+	@Override
 	Term copy(Map<Var, Var> vMap, Map<Var, Var> substMap) {
 		return this;
 	}
 	
+	@Override
 	long resolveTerm(long count) {
 		return count;
 	}
 	
+	@Override
 	public void free() {}
-	
-	void restoreVariables() {}
 	
 }

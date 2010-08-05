@@ -33,10 +33,12 @@ class StructIterator implements Iterator<Term> {
 		this.list = t;
 	}
 	
+	@Override
 	public boolean hasNext() {
 		return !list.isEmptyList();
 	}
 	
+	@Override
 	public Term next() {
 		if (list.isEmptyList())
 			throw new NoSuchElementException();
@@ -48,6 +50,7 @@ class StructIterator implements Iterator<Term> {
 		return head;
 	}
 	
+	@Override
 	public void remove() {
 		throw new UnsupportedOperationException();
 	}

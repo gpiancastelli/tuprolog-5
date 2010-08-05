@@ -147,6 +147,7 @@ public abstract class Library implements IPrimitives {
 	/**
 	 * Gets the list of predicates defined in the library.
 	 */
+	@Override
 	public List<PrimitiveInfo>[] getPrimitives() {
 		try {
 			Method[] mlist = this.getClass().getMethods();

@@ -55,6 +55,7 @@ public class CUIConsole extends Automaton implements OutputListener, SpyListener
         }
     }
 
+    @Override
     public void boot() {
         System.out.println(incipit);
         become("goalRequest");
@@ -154,12 +155,17 @@ public class CUIConsole extends Automaton implements OutputListener, SpyListener
 		}
     }
 
+    @Override
     public void onOutput(OutputEvent e) {
         System.out.print(e.getMsg());
     }
+    
+    @Override
     public void onSpy(SpyEvent e) {
         System.out.println(e.getMsg());
     }
+    
+    @Override
     public void onWarning(WarningEvent e) {
         System.out.println(e.getMsg());
     }
@@ -167,4 +173,5 @@ public class CUIConsole extends Automaton implements OutputListener, SpyListener
     public static void main(String[] args) {
         new Thread(new CUIConsole(args)).start();
     }
+
 }

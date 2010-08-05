@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-
 public class SubGoalTree extends AbstractSubGoalTree implements Iterable<AbstractSubGoalTree> {
 	
 	private List<AbstractSubGoalTree> terms;
@@ -27,7 +26,8 @@ public class SubGoalTree extends AbstractSubGoalTree implements Iterable<Abstrac
 	public AbstractSubGoalTree getChild(int i) {
 		return terms.get(i);
 	}
-	
+
+	@Override
 	public Iterator<AbstractSubGoalTree> iterator() {
 		return terms.iterator();
 	}
@@ -36,10 +36,12 @@ public class SubGoalTree extends AbstractSubGoalTree implements Iterable<Abstrac
 		return terms.size();
 	}
 	
+	@Override
 	public boolean isLeaf() {
 		return false;
 	}
 	
+	@Override
 	public boolean isRoot() {
 		return true;
 	}

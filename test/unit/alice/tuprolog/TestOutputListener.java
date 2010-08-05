@@ -7,6 +7,7 @@ class TestOutputListener implements OutputListener {
 	
 	public String output = "";
 
+	@Override
 	public void onOutput(OutputEvent e) {
 		output += e.getMsg();
 	}

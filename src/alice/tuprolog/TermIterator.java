@@ -42,6 +42,7 @@ class TermIterator implements Iterator<Term> {
 		hasNext = (next != null);	
 	}
 	
+	@Override
 	public Term next() {
 		if (hasNext) {
 			if (next == null) {
@@ -67,6 +68,7 @@ class TermIterator implements Iterator<Term> {
 	 * @throws InvalidTermException if, while the parser checks for the
 	 * existence of the next term, a syntax error is encountered.
 	 */
+	@Override
 	public boolean hasNext() {
 		if (hasNext)
 			return hasNext;
@@ -76,6 +78,7 @@ class TermIterator implements Iterator<Term> {
 		return hasNext;
 	}
 	
+	@Override
 	public void remove() {
 		throw new UnsupportedOperationException();
 	}

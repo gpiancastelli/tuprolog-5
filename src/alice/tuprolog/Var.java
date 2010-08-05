@@ -118,6 +118,7 @@ public class Var extends Term {
 	 * a variable with the same time identifier is found in the list,
 	 * then the variable in the list is returned.
 	 */
+	@Override
 	Term copy(Map<Var, Var> vMap, int idExecCtx) {
 		Term tt = getTerm();
 		if (tt == this) {
@@ -132,9 +133,8 @@ public class Var extends Term {
 			return tt.copy(vMap, idExecCtx);
 	}
 	
-	/**
-	 * Gets a copy of this variable.
-	 */
+	/** Gets a copy of this variable. */
+	@Override
 	Term copy(Map<Var, Var> vMap, Map<Var, Var> substMap) {
 		Var v;
 		Object temp = vMap.get(this);
@@ -160,6 +160,7 @@ public class Var extends Term {
 	}
 	
 	/** De-unify the variable. */
+	@Override
 	public void free() {
 		link = null;
 	}
@@ -196,6 +197,7 @@ public class Var extends Term {
 	 * For unbound variable it is the variable itself, while
 	 * for bound variable it is the bound term.
 	 */
+	@Override
 	public Term getTerm() {
 		Term tt = this;
 		Term t  = link;
@@ -228,6 +230,7 @@ public class Var extends Term {
 	
 	//
 	
+	@Override
 	public boolean isEmptyList() {
 		Term t=getTerm();
 		if (t==this) {
@@ -237,6 +240,7 @@ public class Var extends Term {
 		}
 	}
 	
+	@Override
 	public boolean isAtomic() {
 		Term t=getTerm();
 		if (t==this) {
@@ -246,6 +250,7 @@ public class Var extends Term {
 		}
 	}
 	
+	@Override
 	public boolean isCompound() {
 		Term t=getTerm();
 		if (t==this) {
@@ -255,6 +260,7 @@ public class Var extends Term {
 		}
 	}
 	
+	@Override
 	public boolean isAtom() {
 		Term t=getTerm();
 		if (t==this) {
@@ -264,6 +270,7 @@ public class Var extends Term {
 		}
 	}
 	
+	@Override
 	public boolean isList() {
 		Term t = getTerm();
 		if (t == this)
@@ -272,6 +279,7 @@ public class Var extends Term {
 			return t.isList();
 	}
 	
+	@Override
 	public boolean isGround(){
 		Term t=getTerm();
 		if (t==this) {
@@ -318,9 +326,8 @@ public class Var extends Term {
 	
 	//
 	
-	/**
-	 * Resolve the occurrence of variables in a Term
-	 */
+	/** Resolve the occurrence of variables in a Term. */
+	@Override
 	long resolveTerm(long count) {
 		Term tt=getTerm();
 		if (tt != this) {
@@ -359,6 +366,7 @@ public class Var extends Term {
 	 * or p(X,X)=p(Y,f(Y)) ); if occur check is ok
 	 * then it's success and a new link is created (retractable by a code)
 	 */
+	@Override
 	boolean unify(List<Var> vl1, List<Var> vl2, Term t) {
 		Term tt = getTerm();
 		if(tt == this) {
@@ -395,6 +403,7 @@ public class Var extends Term {
 		}
 	}
 	
+	@Override
 	public boolean isGreater(Term t) {
 		Term tt = getTerm();
 		if (tt == this) {
@@ -407,6 +416,7 @@ public class Var extends Term {
 		}
 	}
 	
+	@Override
 	public boolean isEqual(Term t) {
 		Term tt = getTerm();
 		if(tt == this) {
