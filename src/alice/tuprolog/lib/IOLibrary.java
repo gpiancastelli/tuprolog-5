@@ -17,9 +17,10 @@
  */
 package alice.tuprolog.lib;
 
+import static alice.tuprolog.Agent.loadText;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Random;
@@ -29,8 +30,6 @@ import alice.tuprolog.Library;
 import alice.tuprolog.Predicate;
 import alice.tuprolog.Struct;
 import alice.tuprolog.Term;
-
-import static alice.tuprolog.Agent.loadText;
 
 /**
  * This class provides basic I/O predicates.
@@ -287,32 +286,4 @@ public class IOLibrary extends Library {
 		"agent_file(X)  :- text_from_file(X,Y),agent(Y).\n";
 	}
 	
-	
-	// to allow serialization -> nullify streams before serialization
-	
-	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-		InputStream inputStreamBak = inputStream;
-		OutputStream outputStreamBak = outputStream;
-		inputStream = null;
-		outputStream = null;
-		try {
-			out.defaultWriteObject();
-		} catch (IOException ex) {
-			inputStream = inputStreamBak;
-			outputStream = outputStreamBak;
-			throw new IOException();
-		}
-		inputStream = inputStreamBak;
-		outputStream = outputStreamBak;
-	}
-	
-	private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-		in.defaultReadObject();
-		if (outputStreamName.equals("user")) {
-			outputStream = System.out;
-		}
-		if (inputStreamName.equals("user")) {
-			inputStream = System.in;
-		}
-	}
 }
