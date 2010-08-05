@@ -33,7 +33,6 @@ public class EngineManager {
 	private PrimitiveManager primitiveManager;
 	private LibraryManager   libraryManager;
 	
-	
 	/* Current environment */
 	Engine env;
 	/* Last environment used */
@@ -42,7 +41,6 @@ public class EngineManager {
 	private LinkedList<Engine> stackEnv = new LinkedList<Engine>();
 	
 	private SolveInfo sinfo;
-	
 	
 	/** States */
 	final State INIT;
@@ -59,7 +57,6 @@ public class EngineManager {
 	public static final int FALSE   =  0;
 	public static final int TRUE    =  1;
 	public static final int TRUE_CP =  2;
-	
 	
 	public EngineManager() {
 		/* Instantiate states */
@@ -94,7 +91,7 @@ public class EngineManager {
 	}
 	
 	/**
-	 *  Solves a query
+	 * Solves a query
 	 *
 	 * @param g the term representing the goal to be demonstrated
 	 * @return the result of the demonstration
@@ -167,7 +164,6 @@ public class EngineManager {
 //		theoryManager.optimize();
 		libraryManager.onSolveEnd();
 	}
-	
 	
 	private void freeze() {
 		if(env == null) return;

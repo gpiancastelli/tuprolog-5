@@ -30,12 +30,12 @@ public class OutputEvent extends EventObject {
 	/** text produced */
     private String msg;
 
-    public OutputEvent(Object source, String msg){
+    public OutputEvent(Object source, String msg) {
         super(source);
         this.msg = msg;
     }
 
-    public String getMsg(){
+    public String getMsg() {
         return msg;
     }
 }

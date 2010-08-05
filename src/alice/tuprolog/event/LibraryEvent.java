@@ -30,7 +30,7 @@ public class LibraryEvent extends PrologEvent {
 	
 	private String libName;
     
-    public LibraryEvent(Prolog source, String libName){
+    public LibraryEvent(Prolog source, String libName) {
         super(source);
         this.libName = libName; 
     }

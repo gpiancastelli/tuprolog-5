@@ -67,8 +67,8 @@ public class Parser implements Iterable<Term> {
     private OperatorManager opManager = defaultOperatorManager;
 
     /**
-     * creating a Parser specifying how to handle operators
-     * and what text to parse
+     * Creating a Parser specifying how to handle operators
+     * and what text to parse.
      */
     public Parser(OperatorManager op, InputStream theoryText) {
         this(theoryText);
@@ -77,8 +77,8 @@ public class Parser implements Iterable<Term> {
     }
 
     /**
-     * creating a Parser specifying how to handle operators
-     * and what text to parse
+     * Creating a Parser specifying how to handle operators
+     * and what text to parse.
      */
     public Parser(OperatorManager op, String theoryText) {
         this(theoryText);
@@ -87,14 +87,14 @@ public class Parser implements Iterable<Term> {
     }
 
     /**
-     * creating a parser with default operator interpretation
+     * Creating a parser with default operator interpretation.
      */
     public Parser(String theoryText) {
         tokenizer = new Tokenizer(theoryText);
     }
 
     /**
-     * creating a parser with default operator interpretation
+     * Creating a parser with default operator interpretation.
      */
     public Parser(InputStream theoryText) {
         tokenizer = new Tokenizer(new BufferedReader(new InputStreamReader(theoryText)));
@@ -134,7 +134,7 @@ public class Parser implements Iterable<Term> {
     }
 
     /**
-     * Static service to get a term from its string representation
+     * Static service to get a term from its string representation.
      */
     public static Term parseSingleTerm(String st) throws InvalidTermException {
         return parseSingleTerm(st, null);
@@ -142,7 +142,7 @@ public class Parser implements Iterable<Term> {
 
     /**
      * Static service to get a term from its string representation,
-     * providing a specific operator manager
+     * providing a specific operator manager.
      */
     public static Term parseSingleTerm(String st, OperatorManager op) throws InvalidTermException {
         try {

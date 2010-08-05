@@ -18,7 +18,7 @@
 package alice.tuprolog;
 
 /**
- * This exceptions means that a not valid tuProlog theory has been specified
+ * This exceptions means that a not valid tuProlog theory has been specified.
  *
  * @see Theory
  */

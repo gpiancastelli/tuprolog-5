@@ -32,7 +32,7 @@ public abstract class PrologEvent extends EventObject {
 	
 	private long when;
     
-    public PrologEvent(Prolog source){
+    public PrologEvent(Prolog source) {
         super(source);
         when = System.currentTimeMillis();
     }
@@ -41,7 +41,7 @@ public abstract class PrologEvent extends EventObject {
      * Gets the VM time of  event occurrence.
      * @return time in milliseconds
      */
-    public long getTime(){
+    public long getTime() {
         return when;
     }
 }

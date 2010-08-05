@@ -31,7 +31,7 @@ public class QueryEvent extends PrologEvent {
 	
 	private SolveInfo info;
     
-    public QueryEvent(Prolog source, SolveInfo info){
+    public QueryEvent(Prolog source, SolveInfo info) {
         super(source);
         this.info = info;
     }
@@ -41,7 +41,7 @@ public class QueryEvent extends PrologEvent {
      * 
      * @return solve info
      */
-    public SolveInfo getSolveInfo(){
+    public SolveInfo getSolveInfo() {
         return info;
     }
 

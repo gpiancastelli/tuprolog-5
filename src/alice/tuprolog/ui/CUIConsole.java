@@ -30,9 +30,9 @@ public class CUIConsole extends Automaton implements OutputListener, SpyListener
         "tuProlog " + Prolog.getVersion() + " - DEIS, Università di Bologna a Cesena\n"+
         new java.util.Date();
        
-    public CUIConsole(String[] args){
+    public CUIConsole(String[] args) {
 
-        if (args.length>1){
+        if (args.length>1) {
             System.err.println("args: { theory file }");
             System.exit(-1);
         }
@@ -55,12 +55,12 @@ public class CUIConsole extends Automaton implements OutputListener, SpyListener
         }
     }
 
-    public void boot(){
+    public void boot() {
         System.out.println(incipit);
         become("goalRequest");
     }
 
-    public void goalRequest(){
+    public void goalRequest() {
         String goal="";
         while (goal.equals("")){
             System.out.print("\n?- ");
@@ -73,7 +73,7 @@ public class CUIConsole extends Automaton implements OutputListener, SpyListener
         solveGoal(goal);
     }
 
-    void solveGoal(String goal){
+    void solveGoal(String goal) {
         try {
         	info = engine.solve(goal);
         	if (engine.isHalted())
@@ -119,7 +119,7 @@ public class CUIConsole extends Automaton implements OutputListener, SpyListener
     	return s;
     }
 
-    public void getChoice(){
+    public void getChoice() {
         String choice = "";
         try {
             while (true){
@@ -129,7 +129,7 @@ public class CUIConsole extends Automaton implements OutputListener, SpyListener
                 else
                     break;
             }
-        } catch (IOException ex){
+        } catch (IOException ex) {
         }
         if (!choice.equals(";")) {
 		    System.out.println("yes.");
@@ -164,7 +164,7 @@ public class CUIConsole extends Automaton implements OutputListener, SpyListener
         System.out.println(e.getMsg());
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         new Thread(new CUIConsole(args)).start();
     }
 }

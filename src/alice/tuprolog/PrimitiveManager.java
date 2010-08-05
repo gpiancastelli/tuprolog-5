@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Administration of primitive predicates
+ * Administration of primitive predicates.
  * @author Alex Benini
  */
 public class PrimitiveManager {
@@ -67,7 +67,6 @@ public class PrimitiveManager {
 		libHashMap.put(src, libraryPrimitives);
 	}
 	
-	
 	void deletePrimitiveInfo(IPrimitives src) {
 		for (PrimitiveInfo p : libHashMap.remove(src)) {
 			String k = p.invalidate();
@@ -77,12 +76,12 @@ public class PrimitiveManager {
 		}
 	}
 	
-	
 	/**
 	 * Identifies the term passed as argument.
 	 *
 	 * This involves identifying structs representing built-in
-	 * predicates and functors, and setting up related structures and links
+	 * predicates and functors, and setting up related structures
+	 * and links.
 	 *
 	 * @param term the term to be identified
 	 * @return term with the identified built-in directive
@@ -159,7 +158,6 @@ public class PrimitiveManager {
 		}
 		t.setPrimitive(prim);
 	}
-	
 	
 	Library getLibraryDirective(String name, int nArgs) {
 		try {

@@ -20,8 +20,8 @@ package alice.tuprolog.event;
 import java.util.EventObject;
 
 /**
- *  This class defines an event defining a warning emitted by
- *  a prolog engine
+ * This class defines an event defining a warning emitted by
+ * a prolog engine.
  */
 public class WarningEvent extends EventObject {
 
@@ -30,12 +30,12 @@ public class WarningEvent extends EventObject {
 	/** event description */
     private String msg;
 
-    public WarningEvent(Object source, String msg){
+    public WarningEvent(Object source, String msg) {
         super(source);
         this.msg = msg;
     }
 
-    public String getMsg(){
+    public String getMsg() {
         return "WARNING: " + msg;
     }
     

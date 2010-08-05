@@ -18,7 +18,7 @@
 package alice.tuprolog;
 
 /**
- * This exception means that a solution is asked, but actually none exists
+ * This exception means that a solution is asked, but actually none exists.
  *
  * @see SolveInfo
  */

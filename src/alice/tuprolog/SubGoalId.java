@@ -5,6 +5,5 @@ package alice.tuprolog;
  * @see DefaultSubGoalId
  * 
  * @author Alex Benini
- *
  */
 public interface SubGoalId {}

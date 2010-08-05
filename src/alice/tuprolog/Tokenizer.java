@@ -84,7 +84,7 @@ class Tokenizer extends StreamTokenizer {
         this(new StringReader(text));
     }
     /**
-     * creating a tokenizer for the source stream
+     * Creating a tokenizer for the source stream.
      */
     public Tokenizer(Reader text) {
         super(text);
@@ -131,14 +131,14 @@ class Tokenizer extends StreamTokenizer {
     }
 
     /**
-     * reads next available token
+     * Reads next available token.
      */
     Token readToken() throws InvalidTermException, IOException {
     	return !tokenList.isEmpty() ? (Token) tokenList.removeFirst() : readNextToken();
     }
 
     /**
-     * puts back token to be read again
+     * Puts back token to be read again.
      */
     void unreadToken(Token token) {
         tokenList.addFirst(token);
@@ -409,7 +409,7 @@ class Tokenizer extends StreamTokenizer {
      * @param typec
      * @param svalc
      * @return the intValue of the next character token, -1 if invalid
-     * todo needs a lookahead if typec is \
+     * TODO needs a lookahead if typec is \
      */
     private static int isCharacterCodeConstantToken(int typec, String svalc) {
         if (svalc != null) {
@@ -437,7 +437,7 @@ class Tokenizer extends StreamTokenizer {
     }
 
     /**
-     * used to implement lookahead for two tokens, super.pushBack() only handles one pushBack..
+     * Uused to implement lookahead for two tokens, super.pushBack() only handles one pushBack.
      */
     private static class PushBack {
         int typea;
@@ -448,4 +448,5 @@ class Tokenizer extends StreamTokenizer {
             svala = s;
         }
     }
+    
 }

@@ -17,12 +17,9 @@
  */
 package alice.tuprolog.event;
 
-
 /**
- * 
  *
  * @author aricci
- *
  */
 public abstract class PrologEventAdapter implements TheoryListener, QueryListener, LibraryListener {
 

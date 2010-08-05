@@ -20,7 +20,7 @@ package alice.tuprolog;
 import java.util.List;
 
 /**
- * Template for predicate
+ * Template for predicate.
  * @author Alex Benini
  */
 public interface IPrimitives {

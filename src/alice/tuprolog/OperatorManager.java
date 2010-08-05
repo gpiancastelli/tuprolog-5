@@ -41,7 +41,7 @@ class OperatorManager {
 	
 	/**
 	 * Creates a new operator. If the operator is already provided,
-	 * it replaces it with the new one
+	 * it replaces it with the new one.
 	 */
 	public void opNew(String name,String type,int prio) {
 		final Operator op = new Operator(name, type, prio);
@@ -58,7 +58,8 @@ class OperatorManager {
 	}
 	
 	/**
-	 * Returns the priority nearest (lower) to the priority of a defined operator
+	 * Returns the priority nearest (lower) to the priority of a
+	 * defined operator.
 	 */
 	public int opNext(int prio) {
 		int n = 0;
@@ -69,7 +70,7 @@ class OperatorManager {
 	}
 	
 	/**
-	 *  Gets the list of the operators currently defined
+	 * Gets the list of the operators currently defined.
 	 *
 	 *  @return the list of the operators
 	 */

@@ -19,8 +19,7 @@ package alice.tuprolog;
 
 /**
  *  This class defines an operator manager with
- *  some standard operators defined
- *
+ *  some standard operators defined.
  */
 class DefaultOperatorManager extends OperatorManager {
 	

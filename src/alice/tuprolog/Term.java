@@ -24,9 +24,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-
 /**
- * Term class is the root abstract class for prolog data type
+ * Term class is the root abstract class for Prolog data type.
  *
  * @see Struct
  * @see Var
@@ -83,14 +82,13 @@ public abstract class Term {
 	 *
 	 * The comparison follows the same semantic of
 	 * the isEqual method.
-	 *
 	 */
+	@Override
 	public boolean equals(Object t) {
 		if (!(t instanceof Term))
 			return false;
 		return isEqual((Term) t);
 	}
-	
 	
 	/**
 	 * is term greater than term t?
@@ -105,17 +103,15 @@ public abstract class Term {
 	/**
 	 * Gets the actual term referred by this Term.
 	 *
-	 * if the Term is a bound variable, the method gets
-	 * the Term linked to the variable
+	 * If the Term is a bound variable, the method gets
+	 * the Term linked to the variable.
 	 */
 	public abstract Term getTerm();
 	
-	
 	/**
-	 * Unlink variables inside the term
+	 * Unlink variables inside the term.
 	 */
 	public abstract void free();
-	
 	
 	/**
 	 * Resolves variables inside the term, starting from a specific time count.
@@ -127,7 +123,7 @@ public abstract class Term {
 	abstract long resolveTerm(long count);
 	
 	/**
-	 * Resolves variables inside the term
+	 * Resolves variables inside the term.
 	 * 
 	 * If the variables has been already resolved, no renaming is done.
 	 */
@@ -136,7 +132,7 @@ public abstract class Term {
 	}
 	
 	/**
-	 * gets a copy of this term for the output
+	 * Gets a copy of this term for the output.
 	 */
 	public Term copyResult(Collection<Var> goalVars, List<Var> resultVars) {
 		Map<Var, Var> originals = new IdentityHashMap<Var, Var>();
@@ -151,7 +147,7 @@ public abstract class Term {
 	}
 	
 	/**
-	 * gets a copy (with renamed variables) of the term.
+	 * Gets a copy (with renamed variables) of the term.
 	 *
 	 * The list argument passed contains the list of variables to be renamed
 	 * (if empty list then no renaming)
@@ -160,7 +156,7 @@ public abstract class Term {
 	abstract Term copy(Map<Var, Var> vMap, int idExecCtx);
 	
 	/**
-	 * gets a copy for result.
+	 * Gets a copy for result.
 	 */
 	abstract Term copy(Map<Var, Var> vMap, Map<Var, Var> substMap);
 	
@@ -197,14 +193,13 @@ public abstract class Term {
 		return false;
 	}
 	
-	
 	/**
 	 * Tests if this term is unifiable with an other term.
 	 * No unification is done.
 	 *
-	 * The test is done outside any demonstration context
+	 * The test is done outside any demonstration context.
+	 * 
 	 * @param t the term to checked
-	 *
 	 * @return true if the term is unifiable with this one
 	 */
 	public boolean match(Term t) {
@@ -218,20 +213,20 @@ public abstract class Term {
 		return ok;
 	}
 	
-	
 	/**
 	 * Tries to unify two terms, given a demonstration context
 	 * identified by the mark integer.
 	 *
-	 * Try the unification among the term and the term specified
+	 * Try the unification among the term and the term specified.
+	 * 
 	 * @param varsUnifiedArg1 Vars unified in myself
 	 * @param varsUnifiedArg2 Vars unified in term t
 	 */
 	abstract boolean unify(List<Var> varsUnifiedArg1, List<Var> varsUnifiedArg2, Term t);
 	
-	
 	/**
 	 * Static service to create a Term from a string.
+	 * 
 	 * @param st the string representation of the term
 	 * @return the term represented by the string
 	 * @throws InvalidTermException if the string does not represent a valid term
@@ -250,6 +245,7 @@ public abstract class Term {
 	/**
 	 * Static service to create a Term from a string, providing an
 	 * external operator manager.
+	 * 
 	 * @param st the string representation of the term
 	 * @param op the operator manager used to build the term
 	 * @return the term represented by the string
@@ -267,8 +263,7 @@ public abstract class Term {
 	}
 	
 	/**
-	 * Gets an iterator providing
-	 * a term stream from a source text
+	 * Gets an iterator providing a term stream from a source text.
 	 */
 	public static Iterator<Term> getIterator(String text) {
 		return new Parser(text).iterator();
@@ -277,27 +272,27 @@ public abstract class Term {
 	// term representation
 	
 	/**
-	 * Gets the string representation of this term
-	 * as an X argument of an operator, considering the associative property.
+	 * Gets the string representation of this term as an X argument
+	 * of an operator, considering the associative property.
 	 */
 	String toStringAsArgX(OperatorManager op,int prio) {
 		return toStringAsArg(op,prio,true);
 	}
 	
 	/**
-	 * Gets the string representation of this term
-	 * as an Y argument of an operator, considering the associative property.
+	 * Gets the string representation of this term as an Y argument
+	 * of an operator, considering the associative property.
 	 */
 	String toStringAsArgY(OperatorManager op,int prio) {
 		return toStringAsArg(op,prio,false);
 	}
 	
 	/**
-	 * Gets the string representation of this term
-	 * as an argument of an operator, considering the associative property.
+	 * Gets the string representation of this term as an argument
+	 * of an operator, considering the associative property.
 	 *
-	 *  If the boolean argument is true, then the term must be considered
-	 *  as X arg, otherwise as Y arg (referring to prolog associative rules)
+	 * If the boolean argument is true, then the term must be considered as
+	 * X arg, otherwise as Y arg (referring to prolog associative rules).
 	 */
 	String toStringAsArg(OperatorManager op,int prio,boolean x) {
 		return toString();
@@ -325,4 +320,5 @@ public abstract class Term {
 	public Term iteratedGoalTerm() {
 		return this;
 	}
+	
 }

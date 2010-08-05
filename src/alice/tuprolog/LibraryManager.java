@@ -12,28 +12,26 @@ import alice.tuprolog.event.LibraryEvent;
 import alice.tuprolog.event.WarningEvent;
 
 /**
+ * 
  * @author Alex Benini
- *
  */
 class LibraryManager {
 	
 	/* dynamically loaded built-in libraries */
 	private List<Library> currentLibraries;
 	
-	/*  */
 	private Prolog prolog;
 	private TheoryManager theoryManager;
 	private PrimitiveManager primitiveManager;
 	
-	
-	LibraryManager(){
+	LibraryManager() {
 		currentLibraries = new ArrayList<Library>();
 	}
 	
 	/**
 	 * Configure this Manager
 	 */
-	void initialize(Prolog vm){
+	void initialize(Prolog vm) {
 		prolog = vm;
 		theoryManager = vm.getTheoryManager();
 		primitiveManager = vm.getPrimitiveManager();
@@ -62,7 +60,7 @@ class LibraryManager {
 				}
 				return alib;
 			}
-		} catch (Exception ex){
+		} catch (Exception ex) {
 			throw new InvalidLibraryException(className, -1, -1);
 		}
 		bindLibrary(lib);
@@ -97,7 +95,7 @@ class LibraryManager {
 	}
 	
 	/**
-	 * Gets the list of current libraries loaded
+	 * Gets the list of current libraries loaded.
 	 *
 	 * @return the list of the library names
 	 */
@@ -109,7 +107,7 @@ class LibraryManager {
 	}
 	
 	/**
-	 * Unloads a previously loaded library
+	 * Unloads a previously loaded library.
 	 *
 	 * @param name of the library to be unloaded
 	 * @throws InvalidLibraryException if name is not a valid loaded library
@@ -126,15 +124,13 @@ class LibraryManager {
 				break;
 			}
 		}
-		if (!found) {
+		if (!found)
 			throw new InvalidLibraryException();
-		}
 		theoryManager.removeLibraryTheory(name);
 		theoryManager.rebindPrimitives();
 		LibraryEvent ev = new LibraryEvent(prolog, name);
 		prolog.notifyUnloadedLibrary(ev);
 	}
-	
 	
 	/**
 	 * Binds a library.
@@ -163,10 +159,10 @@ class LibraryManager {
 			return lib;
 		} catch (InvalidTheoryException ex) {
 			//System.out.println("line "+ex.line+"  "+ex.pos);
-			throw new InvalidLibraryException(lib.getName(),ex.line,ex.pos);
+			throw new InvalidLibraryException(lib.getName(), ex.line, ex.pos);
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			throw new InvalidLibraryException(lib.getName(),-1,-1);
+			throw new InvalidLibraryException(lib.getName(), -1, -1);
 		}
 	}
 	

@@ -19,23 +19,22 @@ package alice.tuprolog;
 
 /**
  * This class defines a tuProlog operator, in terms of a name,
- * a type, and a  priority.
- *
+ * a type, and a priority.
  */
 final public class Operator {
 	
 	/** operator name */
 	public String name;
 	
-	/** type(xf,yf,fx,fy,xfx,xfy,yfy,yfx */
+	/** type: xf, yf, fx, fy, xfx, xfy, yfy, yfx */
 	public String type;
 	
 	/** priority */
 	public int prio;
 	
-	Operator(String name_,String type_,int prio_) {
-		name = name_;
-		type = type_;
-		prio = prio_;
+	Operator(String name, String type, int prio) {
+		this.name = name;
+		this.type = type;
+		this.prio = prio;
 	}
 }

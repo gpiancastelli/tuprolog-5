@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * This abstract class is the base class for developing
  * tuProlog built-in libraries, which can be dynamically
  * loaded by prolog objects.
@@ -34,10 +33,9 @@ import java.util.List;
  *       boolean name_arity(Term arg0, Term arg1,...)
  *   is considered a built-in predicate provided by the library
  * <li> builtin evaluable functors: each method whose signature is
- *       Term name_arity(Term arg0, Term arg1,...)
+ *       Term name_arity(Term arg0, Term arg1, ...)
  *   is considered a built-in functors provided by the library
  * </ul>
- * <p>
  */
 public abstract class Library implements IPrimitives {
 	
@@ -59,7 +57,7 @@ public abstract class Library implements IPrimitives {
 	}
 	
 	/**
-	 * Gets the theory provided with the library
+	 * Gets the theory provided with the library.
 	 *
 	 * Empty theory is provided by default.
 	 */
@@ -68,7 +66,7 @@ public abstract class Library implements IPrimitives {
 	}
 	
 	/**
-	 * Gets the engine to which the library is bound
+	 * Gets the engine to which the library is bound.
 	 *
 	 * @return the engine
 	 */
@@ -81,7 +79,7 @@ public abstract class Library implements IPrimitives {
 	}
 	
 	/**
-	 * tries to unify two terms
+	 * Tries to unify two terms.
 	 *
 	 * The runtime (demonstration) context currently used by the engine
 	 * is deployed and altered.
@@ -91,7 +89,7 @@ public abstract class Library implements IPrimitives {
 	}
 	
 	/**
-	 * tries to unify two terms
+	 * Tries to unify two terms.
 	 *
 	 * The runtime (demonstration) context currently used by the engine
 	 * is deployed and altered.
@@ -100,10 +98,9 @@ public abstract class Library implements IPrimitives {
 		return engine.match(a0,a1);
 	}
 	
-	
 	/**
 	 * Evaluates an expression. Returns null value if the argument
-	 * is not an evaluable expression
+	 * is not an evaluable expression.
 	 *
 	 * The runtime (demo) context currently used by the engine
 	 * is deployed and altered.
@@ -130,25 +127,25 @@ public abstract class Library implements IPrimitives {
 	}
 	
 	/**
-	 * method invoked by prolog engine when library is
-	 * going to be removed
+	 * Method invoked by prolog engine when library is
+	 * going to be removed.
 	 */
 	public void dismiss() {}
 	
 	/**
-	 * method invoked when the engine is going
-	 * to demonstrate a goal
+	 * Method invoked when the engine is going
+	 * to demonstrate a goal.
 	 */
 	public void onSolveBegin(Term goal) {}
 	
 	/**
-	 * method invoked when the engine has
-	 * finished a demonstration
+	 * Method invoked when the engine has
+	 * finished a demonstration.
 	 */
 	public void onSolveEnd() {}
 	
 	/**
-	 * gets the list of predicates defined in the library
+	 * Gets the list of predicates defined in the library.
 	 */
 	public List<PrimitiveInfo>[] getPrimitives() {
 		try {

@@ -30,25 +30,24 @@ import java.util.Map;
 public abstract class Number extends Term {
 	
 	/**
-	 *  Returns the value of the number as int
+	 * Returns the value of the number as int.
 	 */
 	public abstract int intValue();
 	
 	/**
-	 *  Returns the value of the number as float
+	 * Returns the value of the number as float.
 	 */
 	public abstract float floatValue();
 	
 	/**
-	 *  Returns the value of the number as long
+	 * Returns the value of the number as long.
 	 */
 	public abstract long longValue();
 	
 	/**
-	 *  Returns the value of the number as double
+	 * Returns the value of the number as double.
 	 */
 	public abstract double doubleValue();
-	
 	
 	/** is this term a prolog integer term? */
 	public abstract boolean isInteger();
@@ -155,16 +154,16 @@ public abstract class Number extends Term {
 	//
 	
 	/**
-	 * gets a copy of this term.
+	 * Gets a copy of this term.
 	 */
 	public Term copy(int idExecCtx) {
 		return this;
 	}
 	
 	/**
-	 * gets a copy (with renamed variables) of the term.
+	 * Gets a copy (with renamed variables) of the term.
 	 * <p>
-	 * the list argument passed contains the list of variables to be renamed
+	 * The list argument passed contains the list of variables to be renamed
 	 * (if empty list then no renaming)
 	 */
 	Term copy(Map<Var, Var> vMap, int idExecCtx) {
@@ -172,7 +171,7 @@ public abstract class Number extends Term {
 	}
 	
 	/**
-	 * gets a copy of the term.
+	 * Gets a copy of the term.
 	 */
 	Term copy(Map<Var, Var> vMap, Map<Var, Var> substMap) {
 		return this;
@@ -182,9 +181,6 @@ public abstract class Number extends Term {
 		return count;
 	}
 	
-	/**
-	 *
-	 */
 	public void free() {}
 	
 	void restoreVariables() {}

@@ -8,6 +8,8 @@ import java.lang.annotation.Target;
 
 /**
  * Marks a Java method representing a Prolog predicate in a library.
+ * 
+ * @author Giulio Piancastelli
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

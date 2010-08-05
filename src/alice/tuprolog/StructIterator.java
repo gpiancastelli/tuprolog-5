@@ -17,6 +17,7 @@
  */
 package alice.tuprolog;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
@@ -24,7 +25,7 @@ import java.util.NoSuchElementException;
  *
  * @see Struct
  */
-class StructIterator implements java.util.Iterator<Term> {
+class StructIterator implements Iterator<Term> {
 	
 	Struct list;
 	

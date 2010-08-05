@@ -18,12 +18,10 @@
 package alice.tuprolog;
 
 /**
- * This class represents a token read by the prolog term tokenizer
- *
- *
- *
+ * This class represents a token read by the prolog term tokenizer.
  */
 class Token {
+	
 	// token textual representation
 	String seq;
 	// token type and attribute
@@ -39,7 +37,7 @@ class Token {
 	}
 
 	/**
-	 * attribute could be EOF or ERROR
+	 * Attribute could be EOF or ERROR.
 	 */
 	public int getAttribute() {
 		return type & Tokenizer.ATTRMASK;
@@ -70,4 +68,5 @@ class Token {
     boolean isType(int type) {
         return getType() == type;
     }
+    
 }

@@ -72,7 +72,6 @@ public class Prolog {
 	/* listeners to query events */
 	private ArrayList<QueryListener> queryListeners;
 	
-	
 	/**
 	 * Builds a prolog engine with default libraries loaded.
 	 *
@@ -103,10 +102,8 @@ public class Prolog {
 		}
 	}
 	
-	
 	/**
-	 * Builds a tuProlog engine with loaded
-	 * the specified libraries
+	 * Builds a tuProlog engine with loaded the specified libraries.
 	 *
 	 * @param libs the (class) name of the libraries to be loaded
 	 */
@@ -118,7 +115,6 @@ public class Prolog {
 			}
 		}
 	}
-	
 	
 	/**
 	 * Initialize basic engine structures.
@@ -138,7 +134,6 @@ public class Prolog {
 		initializeManagers();
 	}
 	
-	
 	private void initializeManagers() {
 		flagManager      = new FlagManager();
 		libraryManager   = new LibraryManager();		
@@ -154,50 +149,47 @@ public class Prolog {
 		engineManager.initialize(this);
 	}
 	
-	
-	/** Gets the component managing flags */
+	/** Gets the component managing flags. */
 	FlagManager getFlagManager() {
 		return flagManager;
 	}
 	
-	/** Gets the component managing theory */
+	/** Gets the component managing theory. */
 	TheoryManager getTheoryManager() {
 		return theoryManager;
 	}
 	
-	/** Gets the component managing primitives */
+	/** Gets the component managing primitives. */
 	PrimitiveManager getPrimitiveManager() {
 		return primitiveManager;
 	}
 	
-	/** Gets the component managing libraries */
+	/** Gets the component managing libraries. */
 	LibraryManager getLibraryManager() {
 		return libraryManager;
 	}
 	
-	/** Gets the component managing operators */
+	/** Gets the component managing operators. */
 	OperatorManager getOperatorManager() {
 		return opManager; 
 	}
 	
-	/** Gets the component managing engine */
+	/** Gets the component managing engine. */
 	EngineManager getEngineManager() {
 		return engineManager; 
 	}
 	
-	
 	/**
-	 * Gets the current version of the tuProlog system
+	 * Gets the current version of the tuProlog system.
 	 */
 	public static String getVersion() {
 		return VERSION;
 	}
 	
-	
 	// theory management interface
 	
 	/**
-	 * Sets a new theory
+	 * Sets a new theory.
 	 *
 	 * @param th is the new theory
 	 * @throws InvalidTheoryException if the new theory is not valid
@@ -208,9 +200,8 @@ public class Prolog {
 		addTheory(th);
 	}
 	
-	
 	/**
-	 * Adds (appends) a theory
+	 * Adds (appends) a theory.
 	 *
 	 * @param th is the theory to be added
 	 * @throws InvalidTheoryException if the new theory is not valid
@@ -226,7 +217,7 @@ public class Prolog {
 	}	
 	
 	/**
-	 * Gets current theory
+	 * Gets current theory.
 	 *
 	 * @return current(dynamic) theory
 	 */
@@ -238,9 +229,8 @@ public class Prolog {
 		}
 	}
 	
-	
 	/**
-	 * Gets last consulted theory, with the original textual format
+	 * Gets last consulted theory, with the original textual format.
 	 *  
 	 * @return theory
 	 */
@@ -248,9 +238,8 @@ public class Prolog {
 		return theoryManager.getLastConsultedTheory();
 	}
 	
-	
 	/**
-	 * Clears current theory
+	 * Clears current theory.
 	 */
 	public synchronized void clearTheory() {
 		try {
@@ -259,7 +248,6 @@ public class Prolog {
 			// this should never happen
 		}
 	}
-	
 	
 	// libraries management interface
 	
@@ -277,12 +265,11 @@ public class Prolog {
 		return libraryManager.loadLibrary(className);
 	}
 	
-	
 	/**
-	 * Loads a specific instance of a library
+	 * Loads a specific instance of a library.
 	 *
 	 * If a library with the same name is already present,
-	 * a warning event is notified 
+	 * a warning event is notified.
 	 * 
 	 * @param lib the (Java class) name of the library to be loaded
 	 * @throws InvalidLibraryException if name is not a valid library
@@ -291,9 +278,8 @@ public class Prolog {
 		libraryManager.loadLibrary(lib);
 	}
 	
-	
 	/**
-	 * Gets the list of current libraries loaded
+	 * Gets the list of current libraries loaded.
 	 *
 	 * @return the list of the library names
 	 */
@@ -301,9 +287,8 @@ public class Prolog {
 		return libraryManager.getCurrentLibraries();
 	}
 	
-	
 	/**
-	 * Unloads a previously loaded library
+	 * Unloads a previously loaded library.
 	 *
 	 * @param name of the library to be unloaded
 	 * @throws InvalidLibraryException if name is not a valid loaded library
@@ -312,9 +297,8 @@ public class Prolog {
 		libraryManager.unloadLibrary(name);
 	}
 	
-	
 	/**
-	 * Gets the reference to a loaded library
+	 * Gets the reference to a loaded library.
 	 *
 	 * @param name the name of the library already loaded
 	 * @return the reference to the library loaded, null if the library is
@@ -324,39 +308,34 @@ public class Prolog {
 		return libraryManager.getLibrary(name);
 	}
 	
-	
 	protected Library getLibraryPredicate(String name, int nArgs) {
 		return primitiveManager.getLibraryPredicate(name,nArgs);
 	}
-	
 	
 	protected Library getLibraryFunctor(String name, int nArgs) {
 		return primitiveManager.getLibraryFunctor(name,nArgs);
 	}
 	
-	
-	
 	// operators management
 	
 	/**
-	 *  Gets the list of the operators currently defined
+	 * Gets the list of the operators currently defined.
 	 *
-	 *  @return the list of the operators
+	 * @return the list of the operators
 	 */
 	public synchronized List<Operator> getCurrentOperatorList() {
 		return opManager.getOperators();
 	}
 	
-	
 	// solve interface
 	
 	/**
-	 *  Solves a query
+	 * Solves a query.
 	 *
 	 * @param g the term representing the goal to be demonstrated
 	 * @return the result of the demonstration
 	 * @see SolveInfo
-	 **/
+	 */
 	public synchronized SolveInfo solve(Term g) {
 		//System.out.println("ENGINE SOLVE #0: "+g);
 		if (g == null) return null;
@@ -367,16 +346,15 @@ public class Prolog {
 		notifyNewQueryResultAvailable(ev);
 		
 		return sinfo;
-		
 	}
 	
 	/**
-	 * Solves a query
+	 * Solves a query.
 	 *
 	 * @param st the string representing the goal to be demonstrated
 	 * @return the result of the demonstration
 	 * @see SolveInfo
-	 **/
+	 */
 	public synchronized SolveInfo solve(String st) throws MalformedGoalException {
 		try {
 			Parser p = new Parser(opManager, st);
@@ -388,12 +366,12 @@ public class Prolog {
 	}
 	
 	/**
-	 * Gets next solution
+	 * Gets next solution.
 	 *
 	 * @return the result of the demonstration
 	 * @throws NoMoreSolutionException if no more solutions are present
 	 * @see SolveInfo
-	 **/
+	 */
 	public synchronized SolveInfo solveNext() throws NoMoreSolutionException {
 		if (hasOpenAlternatives()) {
 			SolveInfo sinfo = engineManager.solveNext();
@@ -405,23 +383,22 @@ public class Prolog {
 	}
 	
 	/**
-	 * Halts current solve computation
+	 * Halts current solve computation.
 	 */
 	public void solveHalt() {
 		engineManager.solveHalt();
 	}
 	
 	/**
-	 * Accepts current solution
+	 * Accepts current solution.
 	 */
 	public synchronized void solveEnd() {
 		engineManager.solveEnd();
 	}
 	
-	
 	/**
 	 * Asks for the presence of open alternatives to be explored
-	 * in current demostration process.
+	 * in current demonstration process.
 	 *
 	 * @return true if open alternatives are present
 	 */
@@ -461,7 +438,7 @@ public class Prolog {
 	}
 	
 	/**
-	 * Identify functors
+	 * Identify functors.
 	 * 
 	 * @param term term to identify
 	 */
@@ -469,10 +446,9 @@ public class Prolog {
 		primitiveManager.identifyFunctor(term);
 	}
 	
-	
 	/**
 	 * Gets a term from a string, using the operators currently
-	 * defined by the engine
+	 * defined by the engine.
 	 *
 	 * @param st the string representing a term
 	 * @return the term parsed from the string
@@ -484,28 +460,24 @@ public class Prolog {
 	
 	/**
 	 * Gets the string representation of a term, using operators
-	 * currently defined by engine
+	 * currently defined by engine.
 	 *
-	 * @param term      the term to be represented as a string
+	 * @param term the term to be represented as a string
 	 * @return the string representing the term
 	 */
 	public synchronized String toString(Term term) {
 		return (term.toStringAsArgY(opManager, OperatorManager.OP_HIGH));
 	}
 	
-	
-	/**
-	 * Defines a new flag
-	 */
+	/** Defines a new flag. */
 	boolean defineFlag(String name, Struct valueList, Term defValue, boolean modifiable, String libName) {
 		return flagManager.defineFlag(name,valueList,defValue,modifiable,libName);
 	}
 	
-	
 	// spy interface ----------------------------------------------------------
 	
 	/**
-	 * Switches on/off the notification of spy information events
+	 * Switches on/off the notification of spy information events.
 	 *
 	 * @param state - true for enabling the notification of spy event
 	 */
@@ -514,7 +486,7 @@ public class Prolog {
 	}
 	
 	/**
-	 * Checks the spy state of the engine
+	 * Checks the spy state of the engine.
 	 *
 	 * @return true if the engine emits spy information
 	 */
@@ -522,26 +494,24 @@ public class Prolog {
 		return spy;
 	}
 	
-	
 	/**
-	 * Notifies a spy information event
+	 * Notifies a spy information event.
 	 */
 	protected void spy(String s) {
-		if (spy) {
+		if (spy)
 			notifySpy(new SpyEvent(this, s));
-		}
 	}
 	
 	/**
-	 * Notifies a spy information event
+	 * Notifies a spy information event.
 	 */
 	protected void spy(String s, Engine e) {
 		//System.out.println("spy: "+i+"  "+s+"  "+g);
 		if (spy) {
 			ExecutionContext ctx = e.currentContext;
-			int i=0;
+			int i = 0;
 			String g = "-";
-			if (ctx.fatherCtx != null){
+			if (ctx.fatherCtx != null) {
 				i = ctx.depth-1;
 				g = ctx.fatherCtx.currentGoal.toString();
 			}
@@ -549,9 +519,8 @@ public class Prolog {
 		}
 	}
 	
-	
 	/**
-	 * Switches on/off the notification of warning information events
+	 * Switches on/off the notification of warning information events.
 	 *
 	 * @param state - true for enabling warning information notification
 	 */
@@ -560,7 +529,7 @@ public class Prolog {
 	}
 	
 	/**
-	 * Checks if warning information are notified
+	 * Checks if warning information are notified.
 	 *
 	 * @return true if the engine emits warning information
 	 */
@@ -569,21 +538,17 @@ public class Prolog {
 	}
 	
 	/**
-	 * Notifies a warn information event
-	 *
+	 * Notifies a warn information event.
 	 *
 	 * @param m the warning message
 	 */
 	public void warn(String m) {
-		if (warning){
+		if (warning)
 			notifyWarning(new WarningEvent(this, m));
-			//log.warn(m);
-		}
 	}
 	
-	
 	/**
-	 * Produces an output information event
+	 * Produces an output information event.
 	 *
 	 * @param m the output string
 	 */
@@ -601,7 +566,6 @@ public class Prolog {
 	public synchronized void addOutputListener(OutputListener l) {
 		outputListeners.add(l);
 	}
-	
 	
 	/**
 	 * Adds a listener to theory events.
