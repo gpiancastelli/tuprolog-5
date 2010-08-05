@@ -175,23 +175,6 @@ public class Struct extends Term implements Iterable<Term> {
 		return args[index].getTerm();
 	}
 	
-	// checking type and properties of the Term
-	
-	/** is this term a prolog numeric term? */
-	public boolean isNumber() {
-		return false;
-	}
-	
-	/** is this term a struct  */
-	public boolean isStruct() {
-		return true;
-	}
-	
-	/** is this term a variable  */
-	public boolean isVar() {
-		return false;
-	}
-	
 	// check type services
 	
 	public boolean isAtomic() {

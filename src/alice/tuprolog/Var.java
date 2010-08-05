@@ -228,18 +228,6 @@ public class Var extends Term {
 	
 	//
 	
-	public boolean isNumber() {
-		return false;
-	}
-	
-	public boolean isStruct() {
-		return false;
-	}
-	
-	public boolean isVar() {
-		return true;
-	}
-	
 	public boolean isEmptyList() {
 		Term t=getTerm();
 		if (t==this) {

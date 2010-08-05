@@ -39,28 +39,8 @@ public abstract class Term {
 	
 	// checking type and properties of the Term
 	
-	/**
-	 * is this term a prolog numeric term?
-	 * @deprecated Use <tt>instanceof Number</tt> instead.
-	 */
-	public abstract boolean isNumber();
-	
-	/**
-	 * is this term a struct?
-	 * @deprecated Use <tt>instanceof Struct</tt> instead. 
-	 */
-	public abstract boolean isStruct();
-	
-	/**
-	 * is this term a variable?
-	 * @deprecated Use <tt>instanceof Var</tt> instead. 
-	 */
-	public abstract boolean isVar();
-	
 	/** is this term a null term?*/
 	public abstract boolean isEmptyList();
-	
-	//
 	
 	/** is this term a constant prolog term? */
 	public abstract boolean isAtomic();

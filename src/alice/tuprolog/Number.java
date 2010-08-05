@@ -73,21 +73,6 @@ public abstract class Number extends Term {
 	
 	// checking type and properties of the Term
 	
-	/** is this term a prolog numeric term? */
-	final public boolean isNumber() {
-		return true;
-	}
-	
-	/** is this term a struct  */
-	final public boolean isStruct() {
-		return false;
-	}
-	
-	/** is this term a variable  */
-	final public boolean isVar() {
-		return false;
-	}
-	
 	final public boolean isEmptyList() {
 		return false;
 	}
