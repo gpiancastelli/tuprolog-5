@@ -48,18 +48,18 @@ public class ExecutionContext {
 		this.id = id;
 	}
 	
+	public int getId() {
+		return id;
+	}
 	
-	public int getId() { return id; }
-	
-	
-	public String toString(){
+	@Override
+	public String toString() {
 		return "	     id: " + id + "\n" +
 		"     currentGoal:  " + currentGoal + "\n" +
 		"     clause:       " + clause + "\n" +
 		"     subGoalStore: " + goalsToEval + "\n" +
 		"     trailingVars: " + trailingVars + "\n";
 	}
-	
 	
 	/*
 	 * Methods for spyListeners
@@ -122,6 +122,5 @@ public class ExecutionContext {
 					e.currentContext.fatherCtx :
 					e.currentContext;
 	}
-	
 	
 }

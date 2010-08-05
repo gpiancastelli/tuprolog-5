@@ -278,6 +278,7 @@ public class IOLibrary extends Library {
 		return unify(num, new Int(gen.nextInt(arg.intValue())));
 	}
 	
+	@Override
 	public String getTheory() {
 		return
 		"consult(File) :- text_from_file(File,Text), add_theory(Text).\n" +

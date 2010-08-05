@@ -26,10 +26,8 @@ import java.util.Map;
  * an upper case letter) or the anonymous ('_') name.
  *
  * @see Term
- *
  */
 public class Var extends Term {
-	
 	
 	final static String ANY = "_";
 	
@@ -37,10 +35,12 @@ public class Var extends Term {
 	private String name;
 	private String completeName;
 	
-	private Term   link;		    /* link is used for unification process */
-	private long   timestamp;		/* timestamp is used for fix vars order */
-	private int    id;			/* id of ExecCtx owners of this var util for renaming*/
-	
+	/** link is used for unification process */
+	private Term  link;
+	/** timestamp is used for fix variables order */
+	private long timestamp;
+	/** id of ExecCtx owners of this variable, useful for renaming */
+	private int id;	
 	
 	/**
 	 * Creates a variable identified by a name.
@@ -57,8 +57,7 @@ public class Var extends Term {
 		if (n.equals(ANY)) {
 			name = null;
 			completeName = null;
-		} else if (Character.isUpperCase(n.charAt(0))||
-				(n.startsWith(ANY))) {
+		} else if (Character.isUpperCase(n.charAt(0)) || (n.startsWith(ANY))) {
 			name = n;
 			completeName = n;
 		} else {
@@ -66,11 +65,10 @@ public class Var extends Term {
 		}
 	}
 	
-	
 	/**
-	 * Creates an anonymous variable
+	 * Creates an anonymous variable.
 	 *
-	 *  This is equivalent to build a variable with name _
+	 * This is equivalent to build a variable with name "_".
 	 */
 	public Var() {
 		name = null;
@@ -79,7 +77,6 @@ public class Var extends Term {
 		id = ORIGINAL;
 		timestamp = 0;
 	}
-	
 	
 	/**
 	 * Creates a internal engine variable.
@@ -102,7 +99,7 @@ public class Var extends Term {
 	final static int PROGRESSIVE = -2;
 	
 	/**
-	 * Rename variable (assign completeName) 
+	 * Rename variable (assign completeName). 
 	 */
 	void rename(int idExecCtx, int count) {
 		id = idExecCtx;
@@ -113,11 +110,10 @@ public class Var extends Term {
 		if (id == PROGRESSIVE) completeName = "_"+count;
 	}
 	
-	
 	/**
 	 * Gets a copy of this variable.
 	 *
-	 * if the variable is not present in the list passed as argument,
+	 * If the variable is not present in the list passed as argument,
 	 * a copy of this variable is returned and added to the list. If instead
 	 * a variable with the same time identifier is found in the list,
 	 * then the variable in the list is returned.
@@ -135,7 +131,6 @@ public class Var extends Term {
 		} else
 			return tt.copy(vMap, idExecCtx);
 	}
-	
 	
 	/**
 	 * Gets a copy of this variable.
@@ -164,29 +159,20 @@ public class Var extends Term {
 		return v;
 	}
 	
-	
-	/**
-	 * De-unify the variable
-	 */
+	/** De-unify the variable. */
 	public void free() {
 		link = null;
 	}
 	
-	
-	/**
-	 * De-unify the variables of list
-	 */
+	/** De-unify the variables in the list. */
 	public static void free(List<Var> varsUnified) {
 		for (Var v : varsUnified)
 			v.free();
 	}
 	
-	
-	/**
-	 * Gets the name of the variable
-	 */
+	/** Gets the name of the variable. */
 	public String getName() {
-		if (name!=null) {
+		if (name != null) {
 			return completeName;
 		} else {
 			//return ANY+timestamp;
@@ -194,11 +180,9 @@ public class Var extends Term {
 		}
 	}
 	
-	/**
-	 * Gets the name of the variable
-	 */
+	/** Gets the name of the variable. */
 	public String getOriginalName() {
-		if (name!=null) {
+		if (name != null) {
 			return name;
 		} else {
 			//return ANY+timestamp;
@@ -206,27 +190,24 @@ public class Var extends Term {
 		}
 	}
 	
-	
 	/**
-	 *  Gets the term which is referred by the variable.
+	 * Gets the term which is referred by the variable.
 	 *
-	 *  For unbound variable it is the variable itself, while
-	 *  for bound variable it is the bound term.
+	 * For unbound variable it is the variable itself, while
+	 * for bound variable it is the bound term.
 	 */
 	public Term getTerm() {
 		Term tt = this;
 		Term t  = link;
 		while (t != null ) {
 			tt = t;
-			if (t instanceof Var) {
-				t  = ((Var)t).link;
-			} else {
+			if (t instanceof Var)
+				t  = ((Var) t).link;
+			else
 				break;
-			}
 		}
 		return tt;
 	}
-	
 	
 	/**
 	 *  Gets the term which is direct referred by the variable.
@@ -235,16 +216,12 @@ public class Var extends Term {
 		return link;
 	}
 	
-	/**
-	 * Set the term which is direct bound
-	 */
+	/** Set the term which is direct bound. */
 	void setLink(Term l) {
 		link = l;
 	}
 	
-	/**
-	 * Set the timestamp
-	 */
+	/** Set the timestamp. */
 	void setTimestamp(long t) {
 		timestamp = t;
 	}
@@ -318,26 +295,19 @@ public class Var extends Term {
 	
 	//
 	
-	/**
-	 * Tests if this variable is ANY
-	 */
+	/** Tests if this variable is ANY. */
 	public boolean isAnonymous() {
 		return name == null;
 	}
 	
-	/**
-	 * Tests if this variable is bound
-	 *
-	 */
+	/** Tests if this variable is bound. */
 	public boolean isBound() {
 		return link != null;
 	}
 	
-	
 	/**
-	 * finds variable occurrence in a Struct, doing occur-check.
-	 * (was called findIn)
-	 * @param vl TODO
+	 * Finds variable occurrence in a Struct, doing occur-check.
+	 * (It was called findIn.)
 	 */
 	private boolean occurCheck(List<Var> vl, Struct t) {
 		int arity = t.getArity();
@@ -373,11 +343,10 @@ public class Var extends Term {
 		}
 	}
 	
-	
 	//
 	
 	/**
-	 * var unification.
+	 * Variable unification.
 	 * <p>
 	 * First, verify the Term eventually already unified with the same Var
 	 * if the Term exist, unify var with that term, in order to handle situation
@@ -438,21 +407,6 @@ public class Var extends Term {
 		}
 	}
 	
-	
-	/**
-	 * Gets a copy of this variable
-	 */
-	/*    public Term copy(int idExecCtx) {
-	 Term tt = getTerm();
-	 if(tt == this) {
-	 if(idExecCtx > 0 && id > 0) thisCopy++;
-	 return new Var(name,idExecCtx,thisCopy,antialias,timestamp);
-	 } else {
-	 return (tt.copy(idExecCtx));
-	 }
-	 }
-	 */
-	
 	public boolean isGreater(Term t) {
 		Term tt = getTerm();
 		if (tt == this) {
@@ -480,6 +434,7 @@ public class Var extends Term {
 	 *
 	 * For bounded variables, the string is <Var Name>/<bound Term>.
 	 */
+	@Override
 	public String toString() {
 		Term tt = getTerm();
 		if (name != null) {
@@ -497,12 +452,10 @@ public class Var extends Term {
 		}
 	}
 	
-	
 	/**
 	 * Gets the string representation of this variable, providing
 	 * the string representation of the linked term in the case of
-	 * bound variable
-	 *
+	 * bound variable.
 	 */
 	public String toStringFlattened() {
 		Term tt = getTerm();

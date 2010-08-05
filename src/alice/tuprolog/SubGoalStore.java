@@ -1,6 +1,5 @@
 package alice.tuprolog;
 
-
 public class SubGoalStore {
 	
 	private SubGoalTree goals;
@@ -10,35 +9,28 @@ public class SubGoalStore {
 	
 	private DefaultSubGoalId curSGId;
 		
-	
-	
 	public SubGoalStore() {
 		commaStruct = goals = new SubGoalTree();
 		index = 0;
 		curSGId = null;
 	}
 	
-	
-	/**
-	 * 
-	 */
 	public boolean load(SubGoalTree subGoals) {
 		commaStruct = goals = subGoals;
 		return true;
 	}
 	
 	/**
-	 * Ripristina ClauseStore allo stato i-esimo
+	 * Return ClauseStore to the i-th state.
 	 */
 	public Term backTo(SubGoalId identifier) {
-		popSubGoal( (DefaultSubGoalId) identifier );
+		popSubGoal((DefaultSubGoalId) identifier);
 		index--;
 		return fetch();
 	}
 	
-	
 	public void pushSubGoal(SubGoalTree subGoals) {
-		curSGId = new DefaultSubGoalId(curSGId ,commaStruct, index);
+		curSGId = new DefaultSubGoalId(curSGId, commaStruct, index);
 		commaStruct = subGoals;
 		index = 0;
 	}
@@ -49,9 +41,8 @@ public class SubGoalStore {
 		curSGId = id.getParent();
 	}
 	
-	
 	/**
-	 * Restituisce la clausola da caricare
+	 * Returns the clause to load.
 	 */
 	public Term fetch() {
 		if (index >= commaStruct.size()) {
@@ -74,23 +65,21 @@ public class SubGoalStore {
 	}
 	
 	/**
-	 * Indice del correntemente in esecuzione
+	 * Index of the goal currently being executed.
 	 */
 	public SubGoalId getCurrentGoalId() {
 		return new DefaultSubGoalId(curSGId, commaStruct, index);
 	}
 	
-	
 	public boolean haveSubGoals() {
 		return index <= goals.size();
 	}
 	
-	
+	@Override
 	public String toString() {
 		return "goals: "+goals+" "+
 		"index: "+index;
 	}
-	
 	
 	/*
 	 * Methods for spyListeners
@@ -103,6 +92,5 @@ public class SubGoalStore {
 	public int getIndexNextSubGoal() {
 		return index;
 	}
-
 
 }

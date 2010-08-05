@@ -15,13 +15,11 @@ public class ClauseStore {
 	private List<Var> vars;
 	private boolean haveAlternatives;
 	
-	
 	private ClauseStore(Term goal, List<Var> vars) {
 		this.goal = goal;
 		this.vars = vars;
 		clauses = null;
 	}
-	
 	
 	/**
 	 * Load a clause family.
@@ -35,12 +33,12 @@ public class ClauseStore {
 		return clauseStore;
 	}
 	
-	
 	/**
 	 * Return the clause to load.
 	 */
 	public ClauseInfo fetch() {
-		if (clauses == null) return null;
+		if (clauses == null)
+			return null;
 		deunify(vars);
 		if (!checkCompatibility(goal))
 			return null;
@@ -50,11 +48,9 @@ public class ClauseStore {
 		return clause;
 	}
 	
-	
 	public boolean haveAlternatives() {
 		return haveAlternatives;
 	}
-	
 	
 	/**
 	 * Verify if there is a term in compatibleGoals compatible with goal. 
@@ -68,7 +64,6 @@ public class ClauseStore {
 		reunify(vars, saveUnifications);
 		return found;
 	}
-	
 	
 	/**
 	 * Save bindings of variables to deunify
@@ -84,7 +79,6 @@ public class ClauseStore {
 		}
 		return saveUnifications;
 	}
-	
 	
 	/**
 	 * Restore previous unifications into variables.
@@ -103,7 +97,6 @@ public class ClauseStore {
 			it1.previous().setLink(it2.previous());
 	}
 	
-	
 	/**
 	 * Verify if a clause exists that is compatible with goal.
 	 * As a side effect, clauses that are not compatible get
@@ -121,13 +114,12 @@ public class ClauseStore {
 		return false;
 	}
 	
-	
+	@Override
 	public String toString() {
 		return "clauses: "+clauses+"\n"+
 		"goal: "+goal+"\n"+
 		"vars: "+vars+"\n";
 	}
-	
 	
 	/*
 	 * Methods for spyListeners
@@ -150,6 +142,5 @@ public class ClauseStore {
 	public List<Var> getVarsForMatch() {
 		return vars;
 	}
-	
 	
 }

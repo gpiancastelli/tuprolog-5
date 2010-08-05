@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 
  * @author Alex Benini
- *
  */
 public class StateRuleSelection extends State {
 	
@@ -31,6 +31,7 @@ public class StateRuleSelection extends State {
 		stateName = "Init";
 	}
 	
+	@Override
 	void doJob(Engine e) {
 		/*----------------------------------------------------
 		 * Identify compatibleGoals and

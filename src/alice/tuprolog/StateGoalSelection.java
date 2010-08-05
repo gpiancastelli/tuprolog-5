@@ -17,26 +17,18 @@
  */
 package alice.tuprolog;
 
-import alice.tuprolog.Struct;
-import alice.tuprolog.Term;
-
 /**
+ * 
  * @author Alex Benini
- *
  */
 public class StateGoalSelection extends State {
-	
-	
 	
 	public StateGoalSelection(EngineManager c) {
 		this.c = c;
 		stateName = "Call";
 	}
 	
-	
-	/* (non-Javadoc)
-	 * @see alice.tuprolog.AbstractRunState#doJob()
-	 */
+	@Override
 	void doJob(Engine e) {
 		Term curGoal = null;
 		while (curGoal == null) {
@@ -44,14 +36,14 @@ public class StateGoalSelection extends State {
 			if (curGoal==null){
 				// demo termination
 				if (e.currentContext.fatherCtx == null) {
-					//verify ChoicePoint
+					// verify ChoicePoint
 					e.nextState = (e.choicePointSelector.existChoicePoint())? c.END_TRUE_CP : c.END_TRUE;
 					return;
 				}
-				// Caso di rimozione di un contesto di esecuzione
+				// Case: removing an execution context
 				e.currentContext = e.currentContext.fatherCtx;
 			} else {
-				// Caso di individuazione curGoal
+				// Case: identify curGoal
 				Term goal_app = curGoal.getTerm();
 				if (!(goal_app instanceof Struct)) {
 					e.nextState = c.END_FALSE;
@@ -60,7 +52,7 @@ public class StateGoalSelection extends State {
 
 				// Code inserted to allow evaluation of meta-clause
 				// such as p(X) :- X. When evaluating directly terms,
-				// they are coverted to execution of a call/1 predicate.
+				// they are converted to execution of a call/1 predicate.
 				// This enables the dynamic linking of built-ins for
 				// terms coming from outside the demonstration context.
 				if (curGoal != goal_app)
@@ -70,7 +62,7 @@ public class StateGoalSelection extends State {
 				e.nextState = c.GOAL_EVALUATION;
 				return;
 			}			
-		}//while
+		} // end while
 	}
 	
 }

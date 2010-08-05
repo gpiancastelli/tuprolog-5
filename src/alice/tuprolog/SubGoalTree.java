@@ -1,5 +1,8 @@
 package alice.tuprolog;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 
 public class SubGoalTree extends AbstractSubGoalTree implements Iterable<AbstractSubGoalTree> {
@@ -33,9 +36,15 @@ public class SubGoalTree extends AbstractSubGoalTree implements Iterable<Abstrac
 		return terms.size();
 	}
 	
-	public boolean isLeaf() { return false; }
-	public boolean isRoot() { return true; }
+	public boolean isLeaf() {
+		return false;
+	}
 	
+	public boolean isRoot() {
+		return true;
+	}
+	
+	@Override
 	public String toString() {
 		String result = " [ ";
 		Iterator<AbstractSubGoalTree> i = terms.iterator();

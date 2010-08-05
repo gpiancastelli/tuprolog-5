@@ -20,50 +20,43 @@ package alice.tuprolog;
 import java.util.List;
 
 /**
- *
- * Int class represents the integer prolog data type
- *
+ * Int class represents the integer Prolog data type.
  */
 public class Int extends Number {
 	
-	private int      value;
+	private int value;
 	
 	public Int(int v) {
 		value = v;
 	}
 	
 	/**
-	 *  Returns the value of the Integer as int
-	 *
+	 * Returns the value of the Integer as int.
 	 */
 	final public int intValue() {
 		return value;
 	}
 	
 	/**
-	 *  Returns the value of the Integer as float
-	 *
+	 * Returns the value of the Integer as float.
 	 */
 	final public float floatValue() {
 		return (float) value;
 	}
 	
 	/**
-	 *  Returns the value of the Integer as double
-	 *
+	 * Returns the value of the Integer as double.
 	 */
 	final public double doubleValue() {
 		return (double) value;
 	}
 	
 	/**
-	 *  Returns the value of the Integer as long
-	 *
+	 * Returns the value of the Integer as long.
 	 */
 	final public long longValue() {
 		return value;
 	}
-	
 	
 	/** is this term a prolog integer term? */
 	final public boolean isInteger() {
@@ -124,7 +117,6 @@ public class Int extends Number {
 		return false;
 	}
 	
-	
 	/**
 	 * Returns true if this integer term is grater that the term provided.
 	 * For number term argument, the int value is considered.
@@ -172,6 +164,7 @@ public class Int extends Number {
 			}
 	}
 	
+	@Override
 	public String toString() {
 		return Integer.toString(value);
 	}

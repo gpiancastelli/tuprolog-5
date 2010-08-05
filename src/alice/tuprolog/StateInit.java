@@ -20,22 +20,18 @@ package alice.tuprolog;
 import alice.tuprolog.Struct;
 
 /**
+ * Initial state of demonstration.
+ * 
  * @author Alex Benini
- *
- * Initial state of demostration
  */
 public class StateInit extends State {
-	
 	
 	public StateInit(EngineManager c) {
 		this.c = c;
 		stateName = "Goal";
 	}
 	
-	
-	/* (non-Javadoc)
-	 * @see alice.tuprolog.AbstractRunState#doJob()
-	 */
+	@Override
 	void doJob(Engine e) {
 		e.prepareGoal();
 		
@@ -48,7 +44,6 @@ public class StateInit extends State {
 		
 		/* Initialize VM environment */
 		e.initialize(eCtx);
-		
 		
 		/* Set the future state */
 		e.nextState = c.GOAL_SELECTION;

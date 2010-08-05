@@ -20,10 +20,9 @@ package alice.tuprolog;
 import java.util.List;
 
 /**
- *
  * SolveInfo class represents the result of a solve
  * request made to the engine, providing information
- * about the solution
+ * about the solution.
  * 
  * @author Alex Benini
  */
@@ -45,8 +44,7 @@ public class SolveInfo  {
 	private Struct goal;
 	private List<Var> bindings;
 	
-	
-	SolveInfo(Term initGoal){
+	SolveInfo(Term initGoal) {
 		query = initGoal;
 		isSuccess = false;
 	}
@@ -60,7 +58,7 @@ public class SolveInfo  {
 	}
 	
 	/**
-	 * Checks if the solve request was successful
+	 * Checks if the solve request was successful.
 	 *
 	 * @return true if the solve was successful
 	 */
@@ -69,7 +67,7 @@ public class SolveInfo  {
 	}
 	
 	/**
-	 * Checks if the solve request was halted
+	 * Checks if the solve request was halted.
 	 *
 	 * @return true if the solve was successful
 	 */
@@ -78,7 +76,7 @@ public class SolveInfo  {
 	}
 	
 	/**
-	 * Checks if the solve request was halted
+	 * Checks if the solve request was halted.
 	 *
 	 * @return true if the solve was successful
 	 */
@@ -87,7 +85,7 @@ public class SolveInfo  {
 	}
 	
 	/**
-	 * Gets the query
+	 * Gets the query.
 	 * 
 	 * @return the query
 	 */
@@ -95,12 +93,10 @@ public class SolveInfo  {
 		return query;
 	}
 	
-	
 	/**
-	 *  Gets the solution of the request
+	 * Gets the solution of the request.
 	 *
-	 *  @exception NoSolutionException if the solve request has not
-	 *             solution
+	 * @exception NoSolutionException if the solve request has no solution
 	 */
 	public Term  getSolution() throws NoSolutionException {
 		if (isSuccess)
@@ -111,8 +107,8 @@ public class SolveInfo  {
 		
 	/**
 	 * Gets the list of the variables in the solution.
-	 * @return the array of variables.
 	 * 
+	 * @return the array of variables.
 	 * @throws NoSolutionException if current solve information
 	 * does not concern a successful 
 	 */
@@ -154,7 +150,8 @@ public class SolveInfo  {
 	 * 
 	 * For successful demonstrations, the representation concerns variables
 	 * with bindings. For failed demo, the method returns false string.
-	 */    
+	 */
+	@Override
 	public String toString() {
 		if (isSuccess) {
 			StringBuilder sb = new StringBuilder("yes");

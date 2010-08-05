@@ -51,6 +51,7 @@ class OneWayList {
 		return tail.get(index-1);
 	}
 
+	@Override
 	public String toString() {
 		String elem;
 		if (head == null)

@@ -21,8 +21,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * Primitive class
- * referring to a built-in predicate or functor
+ * Primitive class referring to a built-in predicate or functor.
  *
  * @see Struct
  */
@@ -41,7 +40,6 @@ public class PrimitiveInfo {
 	private Term[] primitive_args;
 	private String primitive_key;
 	
-	
 	public PrimitiveInfo(int type, String key, Library lib, Method m, int arity) throws NoSuchMethodException {
 		if (m == null)
 			throw new NoSuchMethodException();
@@ -52,16 +50,14 @@ public class PrimitiveInfo {
 		primitive_args = new Term[arity];
 	}
 	
-	
 	/**
-	 * Method to invalidate primitives. It's called just mother library removed
+	 * Method to invalidate primitives. It's called just mother library removed.
 	 */
 	public String invalidate() {
 		String key = primitive_key;
 		primitive_key = null;
 		return key;
 	}
-	
 	
 	public String getKey() {
 		return primitive_key;
@@ -79,7 +75,6 @@ public class PrimitiveInfo {
 		return (type == PREDICATE);
 	}
 	
-	
 	public int getType() {
 		return type;
 	}
@@ -87,7 +82,6 @@ public class PrimitiveInfo {
 	public IPrimitives getSource() {
 		return source;
 	}
-	
 	
 	/**
 	 * Evaluates the primitive as a directive.
@@ -101,9 +95,8 @@ public class PrimitiveInfo {
 		return ((Boolean) method.invoke(source, (Object[]) primitive_args)).booleanValue();
 	}
 	
-	
 	/**
-	 * evaluates the primitive as a predicate
+	 * Evaluates the primitive as a predicate.
 	 * @throws Exception if invocation primitive failure
 	 */
 	public boolean evalAsPredicate(Struct g) throws Throwable {
@@ -117,9 +110,8 @@ public class PrimitiveInfo {
 		}
 	}
 	
-	
 	/**
-	 * evaluates the primitive as a functor
+	 * Evaluates the primitive as a functor.
 	 */
 	public Term evalAsFunctor(Struct g) {
 		try {
@@ -131,8 +123,7 @@ public class PrimitiveInfo {
 		}
 	}
 	
-	
-	
+	@Override
 	public String toString() {
 		return "[ primitive: method " + method.getName() + " - " +
 		       primitive_args + " - N args: " + primitive_args.length +

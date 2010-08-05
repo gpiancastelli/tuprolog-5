@@ -20,8 +20,8 @@ package alice.tuprolog;
 import java.util.List;
 
 /**
+ * 
  * @author Alex Benini
- *
  */
 public class StateBacktrack extends State {
 	
@@ -30,6 +30,7 @@ public class StateBacktrack extends State {
 		stateName = "Back";
 	}
 	
+	@Override
 	void doJob(Engine e) {
 		ChoicePointContext curChoice = e.choicePointSelector.fetch();
 		

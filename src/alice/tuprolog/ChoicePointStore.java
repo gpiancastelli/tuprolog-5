@@ -73,6 +73,7 @@ public class ChoicePointStore {
 //		}
 //	}
 	
+	@Override
 	public String toString(){
 		return pointer + "\n";
 	}

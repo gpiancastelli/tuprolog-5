@@ -44,7 +44,6 @@ public class ClauseInfo {
 	/** if the clause is part of a theory in a library (null if not) */
 	String libName;
 	
-	
 	// used by Find
 	/**
 	 * building a valid clause with a time stamp = original time stamp + NumVar in clause
@@ -55,7 +54,6 @@ public class ClauseInfo {
 		body = extractBody(clause.getArg(1));
 		libName = lib;
 	}
-	
 	
 	/**
 	 * Gets a clause from a generic Term
@@ -86,43 +84,39 @@ public class ClauseInfo {
 		parent.addChild(body);
 	}
 	
-	
 	/**
-	 * Gets the string representation
-	 * recognizing operators stored by
-	 * the operator manager
+	 * Gets the string representation recognizing operators stored by
+	 * the operator manager.
 	 */
 	public String toString(OperatorManager op) {
 		int p;
 		if ((p = op.opPrio(":-","xfx")) >= OperatorManager.OP_LOW) {
-			String st=indentPredicatesAsArgX(clause.getArg(1),op,p);
-			String head = clause.getArg(0).toStringAsArgX(op,p);
-			if (st.equals("true")) {
+			String st = indentPredicatesAsArgX(clause.getArg(1), op, p);
+			String head = clause.getArg(0).toStringAsArgX(op, p);
+			if (st.equals("true"))
 				return head +".\n";
-			} else {
+			else
 				return (head + " :-\n\t" + st +".\n");
-			}
 		}
 		
 		if ((p = op.opPrio(":-","yfx")) >= OperatorManager.OP_LOW) {
-			String st=indentPredicatesAsArgX(clause.getArg(1),op,p);
-			String head = clause.getArg(0).toStringAsArgY(op,p);
-			if (st.equals("true")) {
+			String st = indentPredicatesAsArgX(clause.getArg(1), op, p);
+			String head = clause.getArg(0).toStringAsArgY(op, p);
+			if (st.equals("true"))
 				return head +".\n";
-			} else {
+			else
 				return (head + " :-\n\t" + st +".\n");
-			}
 		}
 		
 		if ((p = op.opPrio(":-","xfy")) >= OperatorManager.OP_LOW) {
-			String st=indentPredicatesAsArgY(clause.getArg(1),op,p);
-			String head = clause.getArg(0).toStringAsArgX(op,p);
-			if (st.equals("true")) {
+			String st = indentPredicatesAsArgY(clause.getArg(1), op, p);
+			String head = clause.getArg(0).toStringAsArgX(op, p);
+			if (st.equals("true"))
 				return head +".\n";
-			} else {
+			else
 				return (head + " :-\n\t" + st +".\n");
-			}
 		}
+		
 		return (clause.toString());
 	}
 	
@@ -187,58 +181,49 @@ public class ClauseInfo {
 		return bodyCopy;
 	}
 	
-	
-	
 	/**
 	 * Gets the string representation with default operator representation
 	 */
+	@Override
 	public String toString() {
-		// default prio: xfx
-		String st=indentPredicates(clause.getArg(1));
-		return( clause.getArg(0).toString() + " :-\n\t"+st+".\n");
+		// default priority: xfx
+		String st = indentPredicates(clause.getArg(1));
+		return clause.getArg(0).toString() + " :-\n\t" + st + ".\n";
 	}
 	
 	static private String indentPredicates(Term t) {
 		if (t instanceof Struct) {
-			Struct co=(Struct)t;
-			if (co.getName().equals(",")){
-				return co.getArg(0).toString()+",\n\t"+indentPredicates(co.getArg(1));
-			} else {
+			Struct co = (Struct) t;
+			if (co.getName().equals(","))
+				return co.getArg(0).toString() + ",\n\t" + indentPredicates(co.getArg(1));
+			else
 				return t.toString();
-			}
-		} else {
+		} else
 			return t.toString();
-		}
 	}
 	
-	static private String indentPredicatesAsArgX(Term t,OperatorManager op,int p) {
+	static private String indentPredicatesAsArgX(Term t, OperatorManager op, int p) {
 		if (t instanceof Struct) {
-			Struct co=(Struct)t;
-			if (co.getName().equals(",")) {
-				return co.getArg(0).toStringAsArgX(op,p)+",\n\t"+
-				"("+indentPredicatesAsArgX(co.getArg(1),op,p)+")";
-			} else {
+			Struct co = (Struct) t;
+			if (co.getName().equals(","))
+				return co.getArg(0).toStringAsArgX(op, p) + ",\n\t" +
+				       "(" + indentPredicatesAsArgX(co.getArg(1), op, p) + ")";
+			else
 				return t.toStringAsArgX(op,p);
-			}
-		} else {
+		} else
 			return t.toStringAsArgX(op,p);
-		}
-		
 	}
 	
-	static private String indentPredicatesAsArgY(Term t,OperatorManager op,int p) {
+	static private String indentPredicatesAsArgY(Term t, OperatorManager op, int p) {
 		if (t instanceof Struct) {
-			Struct co=(Struct)t;
-			if (co.getName().equals(",")) {
-				return co.getArg(0).toStringAsArgY(op,p)+",\n\t"+
-				"("+indentPredicatesAsArgY(co.getArg(1),op,p)+")";
-			} else {
+			Struct co = (Struct) t;
+			if (co.getName().equals(","))
+				return co.getArg(0).toStringAsArgY(op, p) + ",\n\t" +
+				       "(" + indentPredicatesAsArgY(co.getArg(1), op, p) + ")";
+			else
 				return t.toStringAsArgY(op,p);
-			}
-		} else {
+		} else
 			return t.toStringAsArgY(op,p);
-		}
 	}
-	
 	
 }

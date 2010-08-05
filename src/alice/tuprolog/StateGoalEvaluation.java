@@ -18,6 +18,7 @@
 package alice.tuprolog;
 
 /**
+ * 
  * @author Alex Benini
  */
 public class StateGoalEvaluation extends State {
@@ -27,12 +28,10 @@ public class StateGoalEvaluation extends State {
 		stateName = "Eval";
 	}
 	
-	/* (non-Javadoc)
-	 * @see alice.tuprolog.AbstractRunState#doJob()
-	 */
+	@Override
 	void doJob(Engine e) {
 		if (e.currentContext.currentGoal.isPrimitive()) {
-			//Recupero primitiva
+			// Get the primitive
 			PrimitiveInfo primitive = e.currentContext.currentGoal.getPrimitive();
 			try {
 				e.nextState =
@@ -41,11 +40,11 @@ public class StateGoalEvaluation extends State {
 			} catch (HaltException he) {
 				e.nextState = c.END_HALT;
 			} catch (Throwable t) {
-				//TODO Gestire le eccezioni in prolog
+				// TODO Manage exceptions in Prolog
 				t.printStackTrace();
 				e.nextState = c.END_HALT;
 			}
-			//Incremento il counter dei passi di dimostrazione
+			// Increment the demonstration steps counter
 			e.nDemoSteps++;
 		} else
 			e.nextState = c.RULE_SELECTION;

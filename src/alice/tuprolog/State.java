@@ -18,9 +18,9 @@
 package alice.tuprolog;
 
 /**
+ * Template for states of Core Engine.
+ * 
  * @author Alex Benini
- *
- * Template for states of Core Engine
  */
 abstract class State {
 	
@@ -29,6 +29,7 @@ abstract class State {
 	
 	abstract void doJob(Engine e);
 	
+	@Override
 	public String toString() {
 		return stateName;
 	}

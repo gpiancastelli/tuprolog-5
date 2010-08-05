@@ -20,9 +20,7 @@ package alice.tuprolog;
 import java.util.List;
 
 /**
- *
- * Double class represents the double prolog data type
- *
+ * Double class represents the double Prolog data type.
  */
 public class Double extends Number {
 	
@@ -33,35 +31,32 @@ public class Double extends Number {
 	}
 	
 	/**
-	 *  Returns the value of the Double as int
+	 *  Returns the value of the Double as int.
 	 */
 	final public int intValue() {
 		return (int) value;
 	}
 	
 	/**
-	 *  Returns the value of the Double as float
-	 *
+	 *  Returns the value of the Double as float.
 	 */
 	final public float floatValue() {
 		return (float) value;
 	}
 	
 	/**
-	 *  Returns the value of the Double as double
-	 *
+	 *  Returns the value of the Double as double.
 	 */
 	final public double doubleValue() {
 		return value;
 	}
 	
 	/**
-	 *  Returns the value of the Double as long
+	 *  Returns the value of the Double as long.
 	 */
 	final public long longValue() {
 		return (long) value;
 	}
-	
 	
 	/** is this term a prolog integer term? */
 	final public boolean isInteger() {
@@ -169,6 +164,7 @@ public class Double extends Number {
 			}
 	}
 	
+	@Override
 	public String toString() {
 		return java.lang.Double.toString(value);
 	}

@@ -20,7 +20,7 @@ package alice.tuprolog;
 import java.util.HashMap;
 
 /**
- * This class represents a prolog Flag
+ * This class represents a Prolog flag.
  */
 class Flag {
 	
@@ -49,14 +49,15 @@ class Flag {
 		value = defValue;
 	}
 	
-	protected Flag() {}
-	
+	protected Flag() {
+	}
 	
 	/**
-	 * Gets a deep copy of the flag
+	 * Gets a deep copy of the flag.
 	 *
 	 * @return a copy of the flag
 	 */
+	@Override
 	public Object clone() {
 		Flag f = new Flag();
 		f.name = name;
@@ -69,21 +70,20 @@ class Flag {
 	}
 	
 	/**
-	 * Checks if a value is valid according to flag description
+	 * Checks if a value is valid according to flag description.
 	 *
 	 * @param value the possible value of the flag
 	 * @return flag validity
 	 */
 	public boolean isValidValue(Term value) {
-		for (Term t : valueList) {
+		for (Term t : valueList)
 			if (value.match(t))
 				return true;
-		}
 		return false;
 	}
 	
 	/**
-	 * Gets the name of the flag
+	 * Gets the name of the flag.
 	 *
 	 * @return the name
 	 */
@@ -92,7 +92,7 @@ class Flag {
 	}
 	
 	/**
-	 * Gets the list of flag possible values
+	 * Gets the list of flag possible values.
 	 *
 	 * @return a Prolog list
 	 */
@@ -101,7 +101,7 @@ class Flag {
 	}
 	
 	/**
-	 * Sets the value of a flag
+	 * Sets the value of a flag.
 	 *
 	 * @param value new value of the flag
 	 * @return true if the value is valid
@@ -110,13 +110,12 @@ class Flag {
 		if (isValidValue(value) && modifiable) {
 			this.value = value;
 			return true;
-		} else {
+		} else
 			return false;
-		}
 	}
 	
 	/**
-	 * Gets the current value of the flag
+	 * Gets the current value of the flag.
 	 *
 	 * @return flag current value
 	 */
@@ -125,7 +124,7 @@ class Flag {
 	}
 	
 	/**
-	 * Checks if the value is modifiable
+	 * Checks if the value is modifiable.
 	 * @return
 	 */
 	public boolean isModifiable() {
@@ -134,7 +133,7 @@ class Flag {
 	
 	/**
 	 * Gets the name of the library where
-	 * the flag has been defined
+	 * the flag has been defined.
 	 *
 	 * @return the library name
 	 */

@@ -20,11 +20,7 @@ package alice.tuprolog;
 import java.util.List;
 
 /**
- *
- * Float class represents the float prolog data type
- *
- *
- *
+ * Float class represents the float Prolog data type.
  */
 public class Float extends Number {
 	
@@ -35,37 +31,32 @@ public class Float extends Number {
 	}
 	
 	/**
-	 *  Returns the value of the Float as int
-	 *
+	 * Returns the value of the Float as int.
 	 */
 	final public int intValue() {
 		return (int) value;
 	}
 	
 	/**
-	 *  Returns the value of the Float as float
-	 *
+	 * Returns the value of the Float as float.
 	 */
 	final public float floatValue() {
 		return value;
 	}
 	
 	/**
-	 *  Returns the value of the Float as double
-	 *
+	 * Returns the value of the Float as double.
 	 */
 	final public double doubleValue() {
 		return value;
 	}
 	
 	/**
-	 *  Returns the value of the Float as long
-	 *
+	 * Returns the value of the Float as long.
 	 */
 	final public long longValue() {
 		return (long) value;
 	}
-	
 	
 	/** is this term a prolog integer term? */
 	final public boolean isInteger() {
@@ -171,6 +162,7 @@ public class Float extends Number {
 			}
 	}
 	
+	@Override
 	public String toString() {
 		return java.lang.Float.toString(value);
 	}

@@ -30,13 +30,13 @@ public class Struct extends Term implements Iterable<Term> {
 	
 	/** name of the structure */
 	private String name;
-	/** args array */
+	/** arguments array */
 	private Term[] args;
 	/** arity **/
 	private int arity;
 	/** to speedup hash map operation */
 	private String predicateIndicator;
-	/** primitive behaviour */
+	/** primitive behavior */
 	private transient PrimitiveInfo primitive;
 	/** it indicates if the term is resolved */
 	private boolean resolved=false;
@@ -55,7 +55,7 @@ public class Struct extends Term implements Iterable<Term> {
 	}
 	
 	/**
-	 * Builds a structure representing an empty list
+	 * Builds a structure representing an empty list.
 	 */
 	public Struct() {
 		this("[]", 0);
@@ -63,7 +63,7 @@ public class Struct extends Term implements Iterable<Term> {
 	}
 	
 	/**
-	 * Builds a list providing head and tail
+	 * Builds a list providing head and tail.
 	 */
 	public Struct(Term h, Term t) {
 		this(".", 2);
@@ -72,7 +72,7 @@ public class Struct extends Term implements Iterable<Term> {
 	}
 	
 	/**
-	 * Builds a list specifying the elements
+	 * Builds a list specifying the elements.
 	 */
 	public Struct(Term[] args) {
 		this(args, 0);
@@ -92,7 +92,7 @@ public class Struct extends Term implements Iterable<Term> {
 	}
 	
 	/**
-	 * Builds a compound, with a linked list of arguments
+	 * Builds a compound, with a linked list of arguments.
 	 */
 	Struct(String f, LinkedList<Term> args) {
 		name = f;
@@ -134,22 +134,21 @@ public class Struct extends Term implements Iterable<Term> {
 	}
 	
 	/**
-	 * Gets the number of elements of
-	 * this structure
+	 * Gets the number of elements of this structure.
 	 */
 	public int getArity() {
 		return arity;
 	}
 	
 	/**
-	 * Gets the functor name  of this structure
+	 * Gets the functor name of this structure.
 	 */
 	public String getName() {
 		return name;
 	}
 	
 	/**
-	 * Gets the i-th element of this structure
+	 * Gets the i-th element of this structure.
 	 *
 	 * No bound check is done
 	 */
@@ -158,24 +157,23 @@ public class Struct extends Term implements Iterable<Term> {
 	}
 	
 	/**
-	 * Sets the i-th element of this structure
+	 * Sets the i-th element of this structure.
 	 *
-	 * (Only for internal service)
+	 * (Only for internal service).
 	 */
 	void setArg(int index, Term argument) {
 		args[index] = argument;
 	}
 	
 	/**
-	 * Gets the i-th element of this structure
+	 * Gets the i-th element of this structure.
 	 *
 	 * No bound check is done. It is equivalent to
-	 * <code>getArg(index).getTerm()</code>
+	 * <code>getArg(index).getTerm()</code>.
 	 */
 	public Term getTerm(int index) {
 		return args[index].getTerm();
 	}
-	
 	
 	// checking type and properties of the Term
 	
@@ -193,7 +191,6 @@ public class Struct extends Term implements Iterable<Term> {
 	public boolean isVar() {
 		return false;
 	}
-	
 	
 	// check type services
 	
@@ -223,7 +220,7 @@ public class Struct extends Term implements Iterable<Term> {
 	}
 	
 	/**
-	 * Check is this struct is clause or directive
+	 * Check is this struct is clause or directive.
 	 */
 	public boolean isClause() {
 		return(name.equals(":-") && arity > 1 && args[0].getTerm() instanceof Struct);
@@ -237,40 +234,34 @@ public class Struct extends Term implements Iterable<Term> {
 	//
 	
 	/**
-	 * Gets an argument inside this structure, given its name
+	 * Gets an argument inside this structure, given its name.
 	 * 
 	 * @param name name of the structure 
 	 * @return the argument or null if not found
 	 */
 	public Struct getArg(String name) {
-		if (arity == 0) {
+		if (arity == 0)
 			return null;
-		}
-		for (int i=0; i<args.length; i++) {
+		for (int i = 0; i < args.length; i++)
 			if (args[i] instanceof Struct) {
 				Struct s = (Struct) args[i];
-				if (s.getName().equals(name)) {
+				if (s.getName().equals(name))
 					return s;
-				}
 			}
-		}
-		for (int i=0; i<args.length; i++) {
+		for (int i = 0; i < args.length; i++)
 			if (args[i] instanceof Struct) {
 				Struct s = (Struct)args[i];
 				Struct sol = s.getArg(name);
-				if (sol!=null) {
+				if (sol != null)
 					return sol;
-				}
 			}
-		}
 		return null;
 	}
-	
 	
 	//
 	
 	/**
-	 * Test if a term is greater than other
+	 * Test if a term is greater than other.
 	 */
 	public boolean isGreater(Term t) {
 		t = t.getTerm();
@@ -298,9 +289,8 @@ public class Struct extends Term implements Iterable<Term> {
 		return false;
 	}
 	
-	
 	/**
-	 * Test if a term is equal to other
+	 * Test if a term is equal to other.
 	 */
 	public boolean isEqual(Term t) {
 		t = t.getTerm();
@@ -323,9 +313,8 @@ public class Struct extends Term implements Iterable<Term> {
 	
 	//
 	
-	
 	/**
-	 * Gets a copy of this structure
+	 * Gets a copy of this structure.
 	 * @param vMap is needed for register occurrence of same variables
 	 */
 	Term copy(Map<Var, Var> vMap, int idExecCtx) {
@@ -341,7 +330,7 @@ public class Struct extends Term implements Iterable<Term> {
 	
 	
 	/**
-	 * Gets a copy of this structure
+	 * Gets a copy of this structure.
 	 * @param vMap is needed for register occurrence of same variables
 	 */
 	Term copy(Map<Var, Var> vMap, Map<Var, Var> substMap) {
@@ -357,7 +346,7 @@ public class Struct extends Term implements Iterable<Term> {
 	
 	
 	/**
-	 * resolve term
+	 * Resolve term.
 	 */
 	long resolveTerm(long count) {
 		if (resolved)
@@ -370,7 +359,7 @@ public class Struct extends Term implements Iterable<Term> {
 	
 	
 	/**
-	 * Resolve name of terms
+	 * Resolve name of terms.
 	 * @param vl list of variables resolved
 	 * @param count start timestamp for variables of this term
 	 * @return next timestamp for other terms
@@ -484,7 +473,6 @@ public class Struct extends Term implements Iterable<Term> {
 		return new StructIterator(this);
 	}
 	
-	
 	// hidden services
 	
 	/**
@@ -498,11 +486,10 @@ public class Struct extends Term implements Iterable<Term> {
 		return new Struct(new Struct(name),t);
 	}
 	
-	
 	/**
-	 * Gets a flat Struct from this structure considered as a List
+	 * Gets a flat Struct from this structure considered as a List.
 	 *
-	 * If this structure is not a list, null object is returned
+	 * If this structure is not a list, null object is returned.
 	 */
 	Struct fromList() {
 		Term ft = args[0].getTerm();
@@ -519,9 +506,8 @@ public class Struct extends Term implements Iterable<Term> {
 		return new Struct(((Struct) ft).name, al);
 	}
 	
-	
 	/**
-	 * Appends an element to this structure supposed to be a list
+	 * Appends an element to this structure supposed to be a list.
 	 */
 	public void append(Term t) {
 		if (isEmptyList()) {
@@ -536,9 +522,8 @@ public class Struct extends Term implements Iterable<Term> {
 		}
 	}
 	
-	
 	/**
-	 * Inserts (at the head) an element to this structure supposed to be a list
+	 * Inserts (as head) an element to this structure supposed to be a list.
 	 */
 	void insert(Term t) {
 		Struct co=new Struct();
@@ -551,7 +536,7 @@ public class Struct extends Term implements Iterable<Term> {
 	//
 	
 	/**
-	 * Try to unify two terms
+	 * Try to unify two terms.
 	 * @param t the term to unify
 	 * @param vl1 list of variables unified
 	 * @param vl2 list of variables unified
@@ -576,28 +561,27 @@ public class Struct extends Term implements Iterable<Term> {
 		return false;
 	}
 	
-	
-	/** dummy method */
+	/* dummy method */
 	public void free() {}
 	
 	//
 	
 	/**
-	 * Set primitive behaviour associated at structure
+	 * Set primitive behavior associated at structure.
 	 */
 	void setPrimitive(PrimitiveInfo b) {
 		primitive = b;
 	}
 	
 	/**
-	 * Get primitive behaviour associated at structure
+	 * Get primitive behavior associated at structure.
 	 */
 	public PrimitiveInfo getPrimitive() {
 		return primitive;
 	}
 	
 	/**
-	 * Check if this term is a primitive struct
+	 * Check if this term is a primitive struct.
 	 */
 	public boolean isPrimitive() {
 		return primitive != null;
@@ -606,11 +590,12 @@ public class Struct extends Term implements Iterable<Term> {
 	//
 	
 	/**
-	 * Gets the string representation of this structure
+	 * Gets the string representation of this structure.
 	 *
 	 * Specific representations are provided for lists and atoms.
 	 * Names starting with upper case letter are enclosed in apices.
 	 */
+	@Override
 	public String toString() {
 		// empty list case
 		if (isEmptyList()) return "[]";
@@ -705,7 +690,8 @@ public class Struct extends Term implements Iterable<Term> {
 		}
 	}
 	
-	String toStringAsArg(OperatorManager op,int prio,boolean x) {
+	@Override
+	String toStringAsArg(OperatorManager op, int prio, boolean x) {
 		int      p = 0;
 		String   v = "";
 		
@@ -798,6 +784,7 @@ public class Struct extends Term implements Iterable<Term> {
 		return v;
 	}
 	
+	@Override
 	public Term iteratedGoalTerm() {
 		if (name.equals("^") && arity == 2) {
 			Term goal = getTerm(1);

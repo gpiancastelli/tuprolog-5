@@ -12,11 +12,17 @@ public class SubGoalElement extends AbstractSubGoalTree {
 		return term;
 	}
 	
-	public boolean isLeaf() { return true; }
-	public boolean isRoot() { return false; }
+	public boolean isLeaf() {
+		return true;
+	}
 	
+	public boolean isRoot() {
+		return false;
+	}
 	
+	@Override
 	public String toString() {
 		return term.toString();
 	}
+
 }

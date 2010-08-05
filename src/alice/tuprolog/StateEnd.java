@@ -21,9 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Alex Benini
- *
  * End state of demonstration.
+ * 
+ * @author Alex Benini
  */
 public class StateEnd extends State {
 	
@@ -51,11 +51,13 @@ public class StateEnd extends State {
 		return vars;
 	}
 	
+	@Override
 	void doJob(Engine e) {
 		vars = new ArrayList<Var>();
 		goal = (Struct) e.startGoal.copyResult(e.goalVars, vars);
 	}
 	
+	@Override
 	public String toString() {
 		switch (endState) {
 		case EngineManager.FALSE:

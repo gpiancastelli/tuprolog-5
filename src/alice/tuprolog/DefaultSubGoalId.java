@@ -2,8 +2,8 @@ package alice.tuprolog;
 
 /**
  * Identifier of single subGoal during the demo.
+ * 
  * @author Alex Benini
- *
  */
 public class DefaultSubGoalId implements SubGoalId {
 	
@@ -29,8 +29,7 @@ public class DefaultSubGoalId implements SubGoalId {
 		return index;
 	}
 	
-	
-	
+	@Override	
 	public String toString() {
 		return root.getChild(index).toString();
 	}

@@ -23,13 +23,12 @@ import java.util.Iterator;
 
 /**
  * This class represents prolog theory which can be provided
- * to a prolog engine.
+ * to a Prolog engine.
  *
  * Actually theory incapsulates only textual representation
- * of prolog theories, without doing any check about validity
+ * of Prolog theories, without doing any check about validity.
  *
  * @see Prolog
- *
  */
 public class Theory {
 
@@ -37,7 +36,7 @@ public class Theory {
 	private Struct clauseList;
 
 	/**
-	 * Creates a theory getting its source text from an input stream
+	 * Creates a theory getting its source text from an input stream.
 	 *
 	 * @param is the input stream acting as source
 	 */
@@ -48,7 +47,7 @@ public class Theory {
 	}
 
 	/**
-	 * Creates a theory from its source text
+	 * Creates a theory from its source text.
 	 *
 	 * @param theory the source text
 	 * @throws s InvalidTheoryException if theory is null
@@ -57,7 +56,7 @@ public class Theory {
 		if (theory == null) {
 			throw new InvalidTheoryException();
 		}
-		this.theory=theory;
+		this.theory = theory;
 	}
 	
 	Theory() {
@@ -65,15 +64,14 @@ public class Theory {
 	}
 
 	/**
-	 * Creates a theory from a clause list
+	 * Creates a theory from a clause list.
 	 *
 	 * @param clauseList the source text
 	 * @throws s InvalidTheoryException if clauseList is null or is not a prolog list
 	 */
 	public Theory(Struct clauseList) throws InvalidTheoryException {
-		if (clauseList==null || !clauseList.isList()) {
+		if (clauseList == null || !clauseList.isList())
 			throw new InvalidTheoryException();
-		}
 		this.clauseList = clauseList;
 	}
 	
@@ -116,9 +114,7 @@ public class Theory {
 	}
 
 	/**
-	 * Checks if the theory has been built
-	 * from a text or a clause list
-	 *
+	 * Checks if the theory has been built from a text or a clause list.
 	 */
 	boolean isTextual() {
 		return theory != null;
@@ -128,9 +124,9 @@ public class Theory {
 		return clauseList;
 	}
 
+	@Override
 	public String toString() {
 		return theory != null ? theory : clauseList.toString();
 	}
-
 
 }

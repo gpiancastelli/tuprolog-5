@@ -29,6 +29,7 @@ public class DCGLibrary extends Library {
 	public DCGLibrary() {
 	}
 	
+	@Override
 	public String getTheory() {
 		return
 		":- op(1200, xfx, '-->'). \n" +

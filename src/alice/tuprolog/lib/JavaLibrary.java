@@ -70,9 +70,7 @@ public class JavaLibrary extends Library {
 	/** progressive counter used to identify registered objects */
 	private int id = 0;
 	
-	/**
-	 * library theory
-	 */
+	@Override
 	public String getTheory() {
 		return
 		//
@@ -104,7 +102,7 @@ public class JavaLibrary extends Library {
 		"java_object_string(Object,String):-    Object <- toString returns String.    \n";
 	}
 	
-	
+	@Override
 	public void dismiss() {
 		currentObjects.clear();
 		currentObjectsInverse.clear();
@@ -117,6 +115,7 @@ public class JavaLibrary extends Library {
 		staticObjectsInverse.clear();
 	}
 	
+	@Override
 	public void onSolveBegin(Term goal) {
 		//id = 0;
 		currentObjects.clear();
@@ -124,9 +123,6 @@ public class JavaLibrary extends Library {
 		for (Map.Entry<Object, Struct> en : staticObjectsInverse.entrySet())
 			bindDynamicObject(en.getValue(), en.getKey());
 		preregisterObjects();
-	}
-	
-	public void onSolveEnd() {
 	}
 	
 	/**
@@ -404,7 +400,6 @@ public class JavaLibrary extends Library {
 			return false;
 		}
 	}
-	
 	
 	/*
 	 * set the field value of an object
@@ -931,7 +926,6 @@ public class JavaLibrary extends Library {
 		return true;
 	}
 	
-	
 	/** parses return value of a method invocation */
 	private boolean parseResult(Term id, Object obj) {
 		if (obj == null) {
@@ -1082,8 +1076,6 @@ public class JavaLibrary extends Library {
 			}
 		}
 	}
-	
-	
 	
 	/**
 	 * Registers an object only for the running query life-time
@@ -1402,7 +1394,6 @@ public class JavaLibrary extends Library {
 		return true;
 	}
 	
-	
 	// Checks compatibility also considering explicit type conversion.
 	// The method returns the argument values, since they could be changed
 	// after a type conversion.
@@ -1480,6 +1471,7 @@ class Signature {
 		return values;
 	}
 	
+	@Override
 	public String toString() {
 		String st = "";
 		for (int i = 0; i < types.length; i++) {

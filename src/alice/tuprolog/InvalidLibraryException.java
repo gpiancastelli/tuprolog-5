@@ -50,10 +50,12 @@ public class InvalidLibraryException extends PrologException {
 		return pos;
 	}
 	
+	@Override
 	public String getMessage() {
 		return toString();
 	}
 	
+	@Override
 	public String toString() {
 		return "InvalidLibraryException: " + libraryName + " at " + line + ":" + pos;
 	}

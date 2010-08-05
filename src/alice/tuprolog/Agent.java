@@ -90,7 +90,7 @@ public class Agent {
 	/**
 	 * Starts agent execution
 	 */
-	final  public void spawn() {
+	final public void spawn() {
 		new Agent.AgentThread(this).start();
 	}
 	
@@ -153,7 +153,6 @@ public class Agent {
 	    throw new FileNotFoundException();
 	}
 
-
 	final class AgentThread extends Thread {
 		Agent agent;
 		
@@ -161,11 +160,11 @@ public class Agent {
 			this.agent = agent;
 		}
 		
+		@Override
 		final public void run() {
 			agent.body();
 		}
 	}
-	
 	
 	public static void main(String args[]) {
 		if (args.length == 1 || args.length == 2) {

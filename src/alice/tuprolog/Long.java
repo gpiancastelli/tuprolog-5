@@ -20,11 +20,7 @@ package alice.tuprolog;
 import java.util.List;
 
 /**
- *
- * Long class represents the long prolog data type
- *
- *
- *
+ * Long class represents the long Prolog data type.
  */
 public class Long extends Number {
 	
@@ -35,37 +31,32 @@ public class Long extends Number {
 	}
 	
 	/**
-	 *  Returns the value of the Integer as int
-	 *
+	 *  Returns the value of the Integer as int.
 	 */
 	final public int intValue() {
 		return (int) value;
 	}
 	
 	/**
-	 *  Returns the value of the Integer as float
-	 *
+	 * Returns the value of the Integer as float.
 	 */
 	final public float floatValue() {
 		return (float) value;
 	}
 	
 	/**
-	 *  Returns the value of the Integer as double
-	 *
+	 * Returns the value of the Integer as double.
 	 */
 	final public double doubleValue() {
 		return (double) value;
 	}
 	
 	/**
-	 *  Returns the value of the Integer as long
-	 *
+	 * Returns the value of the Integer as long.
 	 */
 	final public long longValue() {
 		return value;
 	}
-	
 	
 	/** is this term a prolog integer term? */
 	final public boolean isInteger() {
@@ -171,6 +162,7 @@ public class Long extends Number {
 			}
 	}
 	
+	@Override
 	public String toString() {
 		return java.lang.Long.toString(value);
 	}

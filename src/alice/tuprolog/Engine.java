@@ -44,7 +44,6 @@ public class Engine {
 	boolean mustStop;
 	EngineManager manager;
 	
-	
 	public Engine(EngineManager manager, Term query) {
 		this.manager = manager;		
 		this.nextState = manager.INIT;
@@ -64,7 +63,7 @@ public class Engine {
 	}
 	
 	/**
-	 * Core of engine. Finite State Machine
+	 * Core of engine, Finite State Machine.
 	 */
 	StateEnd run() {
 		String action;
@@ -94,6 +93,7 @@ public class Engine {
 //		choicePointSelector.cut(currentContext.depth -1);
 //	}
 	
+	@Override
 	public String toString() {
 		try {
 			return "ExecutionStack: \n" + currentContext + "\n" +

@@ -613,7 +613,7 @@ public class BasicLibrary extends Library {
 		}
 	}
 	
-	
+	@Override
 	public String getTheory() {
 		return
 		//
@@ -719,81 +719,81 @@ public class BasicLibrary extends Library {
 		//
 		// All solutions predicates
 		//
-        "findall(Template, Goal, Instances) :- \n" +
-        "L = [], \n" +
-        "'$findall0'(Template, Goal, L), \n" +
-        "Instances = L. \n" +
-        "'$findall0'(Template, Goal, L) :- \n" +
-        "call(Goal), \n" +
-        "copy_term(Template, CL), \n" +
-        "'$append'(CL, L), \n" +
-        "fail. \n" +
-        "'$findall0'(_, _, _). \n" +
-        "variable_set(T, []) :- atomic(T), !. \n" +
-        "variable_set(T, [T]) :- var(T), !. \n" +
-        "variable_set([H | T], [SH | ST]) :- \n" + 
-        "variable_set(H, SH), variable_set(T, ST). \n" +
-        "variable_set(T, S) :- \n" +
-        "T =.. [_ | Args], variable_set(Args, L), flatten(L, FL), no_duplicates(FL, S), !. \n" +
-        "flatten(L, FL) :- '$flatten0'(L, FL), !. \n" +
-        "'$flatten0'(T, []) :- nonvar(T), T = []. \n" +
-        "'$flatten0'(T, [T]) :- var(T). \n" +
-        "'$flatten0'([H | T], [H | FT]) :- \n" +
-        "not(islist(H)), !, '$flatten0'(T, FT). \n" +
-        "'$flatten0'([H | T], FL) :- \n" +
-        "'$flatten0'(H, FH), '$flatten0'(T, FT), append(FH, FT, FL). \n" +
-        "islist([]). \n" +
-        "islist([_|L]):- islist(L). \n " +
-        "existential_variables_set(Term, Set) :- '$existential_variables_set0'(Term, Set), !. \n" +
-        "'$existential_variables_set0'(Term, []) :- var(Term), !. \n" +
-        "'$existential_variables_set0'(Term, []) :- atomic(Term), !. \n" +
-        "'$existential_variables_set0'(V ^ G, Set) :- \n" +
-        "variable_set(V, VS), '$existential_variables_set0'(G, EVS), append(VS, EVS, Set). \n" +
-        "'$existential_variables_set0'(Term, []) :- nonvar(Term), !. \n" +
-        "free_variables_set(Term, WithRespectTo, Set) :- \n" +
-        "variable_set(Term, VS), \n" +
-        "variable_set(WithRespectTo, VS1), existential_variables_set(Term, EVS1), append(VS1, EVS1, BV), \n" +
-        "list_difference(VS, BV, List), no_duplicates(List, Set), !. \n" +
-        "list_difference(List, Subtrahend, Difference) :- '$ld'(List, Subtrahend, Difference). \n" +
-        "'$ld'([], _, []). \n" +
-        "'$ld'([H | T], S, D) :- is_member(H, S), !, '$ld'(T, S, D). \n" +
-        "'$ld'([H | T], S, [H | TD]) :- '$ld'(T, S, TD). \n" +
-        "no_duplicates([], []). \n" +
-        "no_duplicates([H | T], L) :- is_member(H, T), !, no_duplicates(T, L). \n" +
-        "no_duplicates([H | T], [H | L]) :- no_duplicates(T, L). \n" +
-        "is_member(E, [H | _]) :- E == H, !. \n" +
-        "is_member(E, [_ | T]) :- is_member(E, T). \n" +
-        "'$wt_list'([], []). \n" +
-        "'$wt_list'([W + T | STail], [WW + T | WTTail]) :- copy_term(W, WW), '$wt_list'(STail, WTTail). \n" +
-        "'$s_next'(Witness, WT_List, S_Next) :- copy_term(Witness, W2), '$s_next0'(W2, WT_List, S_Next), !. \n" +
-        "bagof(Template, Goal, Instances) :- \n" +
-        "free_variables_set(Goal, Template, Set), \n" +
-        "Witness =.. [witness | Set], \n" +
-        "iterated_goal_term(Goal, G), \n" +
-        "findall(Witness + Template, G, S), \n" +
-        "'$bagof0'(Witness, S, Instances). \n" +
-        "'$bagof0'(_, [], _) :- !, fail. \n" +
-        "'$bagof0'(Witness, S, Instances) :- \n" +
-        "'$wt_list'(S, WT_List), \n" +
-        "'$wt_unify'(Witness, WT_List, T_List), \n" +
-        "Instances = T_List. \n" +
-        "'$bagof0'(Witness, S, Instances) :- \n" +
-        "'$wt_list'(S, WT_List), \n" +
-        "'$s_next'(Witness, WT_List, S_Next), \n" +
-        "'$bagof0'(Witness, S_Next, Instances). \n" +
-        "setof(Template, Goal, Instances) :- \n" +
-        "bagof(Template, Goal, List), \n" +
-        "quicksort(List, '@<', OrderedList), \n" +
-        "no_duplicates(OrderedList, Instances). \n" +
+		"findall(Template, Goal, Instances) :- \n" +
+		"L = [], \n" +
+		"'$findall0'(Template, Goal, L), \n" +
+		"Instances = L. \n" +
+		"'$findall0'(Template, Goal, L) :- \n" +
+		"call(Goal), \n" +
+		"copy_term(Template, CL), \n" +
+		"'$append'(CL, L), \n" +
+		"fail. \n" +
+		"'$findall0'(_, _, _). \n" +
+		"variable_set(T, []) :- atomic(T), !. \n" +
+		"variable_set(T, [T]) :- var(T), !. \n" +
+		"variable_set([H | T], [SH | ST]) :- \n" + 
+		"variable_set(H, SH), variable_set(T, ST). \n" +
+		"variable_set(T, S) :- \n" +
+		"T =.. [_ | Args], variable_set(Args, L), flatten(L, FL), no_duplicates(FL, S), !. \n" +
+		"flatten(L, FL) :- '$flatten0'(L, FL), !. \n" +
+		"'$flatten0'(T, []) :- nonvar(T), T = []. \n" +
+		"'$flatten0'(T, [T]) :- var(T). \n" +
+		"'$flatten0'([H | T], [H | FT]) :- \n" +
+		"not(islist(H)), !, '$flatten0'(T, FT). \n" +
+		"'$flatten0'([H | T], FL) :- \n" +
+		"'$flatten0'(H, FH), '$flatten0'(T, FT), append(FH, FT, FL). \n" +
+		"islist([]). \n" +
+		"islist([_|L]):- islist(L). \n " +
+		"existential_variables_set(Term, Set) :- '$existential_variables_set0'(Term, Set), !. \n" +
+		"'$existential_variables_set0'(Term, []) :- var(Term), !. \n" +
+		"'$existential_variables_set0'(Term, []) :- atomic(Term), !. \n" +
+		"'$existential_variables_set0'(V ^ G, Set) :- \n" +
+		"variable_set(V, VS), '$existential_variables_set0'(G, EVS), append(VS, EVS, Set). \n" +
+		"'$existential_variables_set0'(Term, []) :- nonvar(Term), !. \n" +
+		"free_variables_set(Term, WithRespectTo, Set) :- \n" +
+		"variable_set(Term, VS), \n" +
+		"variable_set(WithRespectTo, VS1), existential_variables_set(Term, EVS1), append(VS1, EVS1, BV), \n" +
+		"list_difference(VS, BV, List), no_duplicates(List, Set), !. \n" +
+		"list_difference(List, Subtrahend, Difference) :- '$ld'(List, Subtrahend, Difference). \n" +
+		"'$ld'([], _, []). \n" +
+		"'$ld'([H | T], S, D) :- is_member(H, S), !, '$ld'(T, S, D). \n" +
+		"'$ld'([H | T], S, [H | TD]) :- '$ld'(T, S, TD). \n" +
+		"no_duplicates([], []). \n" +
+		"no_duplicates([H | T], L) :- is_member(H, T), !, no_duplicates(T, L). \n" +
+		"no_duplicates([H | T], [H | L]) :- no_duplicates(T, L). \n" +
+		"is_member(E, [H | _]) :- E == H, !. \n" +
+		"is_member(E, [_ | T]) :- is_member(E, T). \n" +
+		"'$wt_list'([], []). \n" +
+		"'$wt_list'([W + T | STail], [WW + T | WTTail]) :- copy_term(W, WW), '$wt_list'(STail, WTTail). \n" +
+		"'$s_next'(Witness, WT_List, S_Next) :- copy_term(Witness, W2), '$s_next0'(W2, WT_List, S_Next), !. \n" +
+		"bagof(Template, Goal, Instances) :- \n" +
+		"free_variables_set(Goal, Template, Set), \n" +
+		"Witness =.. [witness | Set], \n" +
+		"iterated_goal_term(Goal, G), \n" +
+		"findall(Witness + Template, G, S), \n" +
+		"'$bagof0'(Witness, S, Instances). \n" +
+		"'$bagof0'(_, [], _) :- !, fail. \n" +
+		"'$bagof0'(Witness, S, Instances) :- \n" +
+		"'$wt_list'(S, WT_List), \n" +
+		"'$wt_unify'(Witness, WT_List, T_List), \n" +
+		"Instances = T_List. \n" +
+		"'$bagof0'(Witness, S, Instances) :- \n" +
+		"'$wt_list'(S, WT_List), \n" +
+		"'$s_next'(Witness, WT_List, S_Next), \n" +
+		"'$bagof0'(Witness, S_Next, Instances). \n" +
+		"setof(Template, Goal, Instances) :- \n" +
+		"bagof(Template, Goal, List), \n" +
+		"quicksort(List, '@<', OrderedList), \n" +
+		"no_duplicates(OrderedList, Instances). \n" +
 		//
 		// theory management predicates
 		//
-        "assert(C) :- assertz(C). \n" +
-        "retract(Rule) :- Rule = ':-'(Head, Body), !, clause(Head, Body), '$retract'(Rule). \n" +
-        "retract(Fact) :- clause(Fact, true), '$retract'(Fact). \n" +
-        "retractall(Head) :- findall(':-'(Head, Body), clause(Head, Body), L), '$retract_clause_list'(L), !. \n" +
-        "'$retract_clause_list'([]). \n" +
-        "'$retract_clause_list'([E | T]) :- !, '$retract'(E), '$retract_clause_list'(T). \n" +
+		"assert(C) :- assertz(C). \n" +
+		"retract(Rule) :- Rule = ':-'(Head, Body), !, clause(Head, Body), '$retract'(Rule). \n" +
+		"retract(Fact) :- clause(Fact, true), '$retract'(Fact). \n" +
+		"retractall(Head) :- findall(':-'(Head, Body), clause(Head, Body), L), '$retract_clause_list'(L), !. \n" +
+		"'$retract_clause_list'([]). \n" +
+		"'$retract_clause_list'([E | T]) :- !, '$retract'(E), '$retract_clause_list'(T). \n" +
 		//
 		// auxiliary predicates
 		//
