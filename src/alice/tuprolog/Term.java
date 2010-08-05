@@ -216,13 +216,6 @@ public abstract class Term {
 	}
 	
 	/**
-	 * @deprecated Use {@link Term#createTerm(String)} instead.
-	 */
-	public static Term parse(String st) {
-		return Term.createTerm(st);
-	}
-	
-	/**
 	 * Static service to create a Term from a string, providing an
 	 * external operator manager.
 	 * 
@@ -233,13 +226,6 @@ public abstract class Term {
 	 */
 	public static Term createTerm(String st, OperatorManager op) {
 		return Parser.parseSingleTerm(st, op);
-	}
-	
-	/**
-	 * @deprecated Use {@link Term#createTerm(String, OperatorManager)} instead.
-	 */
-	public static Term parse(String st, OperatorManager op) {
-		return Term.createTerm(st, op);
 	}
 	
 	/**
