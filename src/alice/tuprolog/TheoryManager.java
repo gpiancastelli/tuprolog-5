@@ -139,16 +139,12 @@ public class TheoryManager {
         	return list;
         }
         	
-        if (headt instanceof Var){
-//            List l = new LinkedList();
-//            for (Iterator iterator = clauseDBase.iterator(); iterator.hasNext();) {
-//                ClauseInfo ci =  (ClauseInfo) iterator.next();
-//                if(ci.dynamic)
-//                    l.add(ci);
-//            }
-//            return l;
-            throw new RuntimeException();
+        if (headt instanceof Var) {
+        	String m = "Cannot find a family of clauses corresponding " +
+        	           "to a variable. Pass a Struct instead.";
+        	throw new IllegalArgumentException(m);
         }
+        
         return new LinkedList<ClauseInfo>();
     }
 
