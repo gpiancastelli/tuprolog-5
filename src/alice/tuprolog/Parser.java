@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 import java.util.regex.Pattern;
 
 /**
@@ -55,6 +56,7 @@ public class Parser implements Iterable<Term> {
     private static class IdentifiedTerm {
         private int priority;
         private Term result;
+        
         public IdentifiedTerm(int priority, Term result) {
             this.priority = priority;
             this.result = result;
@@ -163,6 +165,10 @@ public class Parser implements Iterable<Term> {
         } catch (IOException ex) {
             throw new InvalidTermException("An I/O error occured");
         }
+    }
+    
+    public int getCurrentLine() {
+        return tokenizer.lineno();
     }
     
     // internal parsing procedures
@@ -450,10 +456,6 @@ public class Parser implements Iterable<Term> {
             return parseFloat(s);
         }
     }
-
-    public int getCurrentLine() {
-        return tokenizer.lineno();
-    }
     
     /**
      * @return true if the String could be a prolog atom
@@ -462,6 +464,71 @@ public class Parser implements Iterable<Term> {
         return atom.matcher(s).matches();
     }
     
-    static private Pattern atom = Pattern.compile("(!|[a-z][a-zA-Z_0-9]*)");
+    private static Pattern atom = Pattern.compile("(!|[a-z][a-zA-Z_0-9]*)");
+    
+    //
+    
+    /**
+     * This class represents an iterator of terms from Prolog text embedded
+     * in a parser. Note that this class resembles more a generator than an
+     * iterator type. In fact, both {@link TermIterator#next()} and
+     * {@link TermIterator#hasNext()} throws {@link InvalidTermException} if
+     * the next term they are trying to return or check for contains a syntax
+     * error; this is due to both methods trying to generate the next term
+     * instead of just returning it or checking for its existence from a pool
+     * of already produced terms.
+     */
+    private static class TermIterator implements Iterator<Term> {
+    	private Parser parser;
+    	private boolean hasNext;
+    	private Term next;
+    	
+    	TermIterator(Parser p) {
+    		parser = p;
+    		next = parser.nextTerm(true);
+    		hasNext = (next != null);	
+    	}
+    	
+    	@Override
+    	public Term next() {
+    		if (hasNext) {
+    			if (next == null) {
+    				next = parser.nextTerm(true);
+    				if (next == null)
+    					throw new NoSuchElementException();
+    			}
+    			hasNext = false;
+    			Term temp = next;
+    			next = null;
+    			return temp;
+    		} else
+    			if (hasNext()) {
+    				hasNext = false;
+    				Term temp = next;
+    				next = null;
+    				return temp;
+    			}
+    		throw new NoSuchElementException();
+    	}
+    	
+    	/**
+    	 * @throws InvalidTermException if, while the parser checks for the
+    	 * existence of the next term, a syntax error is encountered.
+    	 */
+    	@Override
+    	public boolean hasNext() {
+    		if (hasNext)
+    			return hasNext;
+    		next = parser.nextTerm(true);
+    		if (next != null)
+    			hasNext = true;
+    		return hasNext;
+    	}
+    	
+    	@Override
+    	public void remove() {
+    		throw new UnsupportedOperationException();
+    	}	
+    }
 
 }
