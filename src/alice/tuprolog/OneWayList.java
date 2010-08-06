@@ -3,39 +3,39 @@ package alice.tuprolog;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-class OneWayList {
+class OneWayList<E> {
 	
-	private Object head;
-	private OneWayList tail;
+	private E head;
+	private OneWayList<E> tail;
 	
-	public OneWayList(Object head, OneWayList tail) {
+	public OneWayList(E head, OneWayList<E> tail) {
 		this.head = head;
 		this.tail = tail;
 	}
-
-	public static OneWayList transform(List<?> list){
+	
+	public static <T> OneWayList<T> transform(List<T> list) {
 		if (list.isEmpty())
 			return null;
-		return new OneWayList(list.remove(0), transform(list));
+		return new OneWayList<T>(list.remove(0), transform(list));
 	}
 	
-	public Object getHead() {
+	public E getHead() {
 		return head;
 	}
 	
-	public void setHead(Object head) {
+	public void setHead(E head) {
 		this.head = head;
 	}
 
-	public OneWayList getTail() {
+	public OneWayList<E> getTail() {
 		return tail;
 	}
 	
-	public void setTail(OneWayList tail) {
+	public void setTail(OneWayList<E> tail) {
 		this.tail = tail;
 	}
 
-	public void addLast(OneWayList newTail) {
+	public void addLast(OneWayList<E> newTail) {
 		if (tail == null) {
 			tail = newTail;
 			return;
@@ -43,12 +43,12 @@ class OneWayList {
 		tail.addLast(newTail);
 	}
 	
-	public OneWayList get(int index) {
+	public OneWayList<E> get(int index) {
 		if (tail == null)
 			throw new NoSuchElementException();
 		if (index <= 0)
 			return this;
-		return tail.get(index-1);
+		return tail.get(index - 1);
 	}
 
 	@Override

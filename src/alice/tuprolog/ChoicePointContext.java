@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 
  * @author Alex Benini
  */
 public class ChoicePointContext {
@@ -30,7 +31,7 @@ public class ChoicePointContext {
 	ChoicePointContext prevChoicePointContext;
 	
 	SubGoalId indexSubGoal;
-	OneWayList varsToDeunify;
+	OneWayList<List<Var>> varsToDeunify;
 	
 	@Override
 	public String toString() {
@@ -55,13 +56,14 @@ public class ChoicePointContext {
 		return indexSubGoal;
 	}
 	
-	public List<Var> getVarsToDeunify() {
-		List<Var> l = new ArrayList<Var>();
-		OneWayList t = varsToDeunify;
+	public List<List<Var>> getVarsToDeunify() {
+		List<List<Var>> l = new ArrayList<List<Var>>();
+		OneWayList<List<Var>> t = varsToDeunify;
 		while (t != null) {
-			l.add((Var) t.getHead());
+			l.add(t.getHead());
 			t = t.getTail();
 		}
 		return l;
 	}
+	
 }

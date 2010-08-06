@@ -54,29 +54,23 @@ public class StateBacktrack extends State {
 		
 		// ensure coherence in execution stack
 		ExecutionContext curCtx = e.currentContext;
-		OneWayList pointer = curCtx.trailingVars;
-		OneWayList stopDeunify = curChoice.varsToDeunify;
-		
-		// Unchecked cast from Object, but safe (thanks, OneWayList!)
-		@SuppressWarnings("unchecked")
+		OneWayList<List<Var>> pointer = curCtx.trailingVars;
+		OneWayList<List<Var>> stopDeunify = curChoice.varsToDeunify;
 		List<Var> varsToDeunify = (List<Var>) stopDeunify.getHead();
-		
 		Var.free(varsToDeunify);
 		varsToDeunify.clear();
+		
 		SubGoalId fatherIndex;
 		// bring parent contexts to a previous state in the demonstration
 		do {
 			// deunify variables in sibling contexts
 			while (pointer != stopDeunify) {
-				// Unchecked cast from Object, but safe (thanks, OneWayList!)
-				@SuppressWarnings("unchecked")
-				List<Var> varsList = (List<Var>) pointer.getHead();
-				
-				Var.free(varsList);
+				Var.free(pointer.getHead());
 				pointer = pointer.getTail();
 			}
 			curCtx.trailingVars = pointer;
-			if (curCtx.fatherCtx == null) break;
+			if (curCtx.fatherCtx == null)
+				break;
 			stopDeunify = curCtx.fatherVarsList;
 			fatherIndex = curCtx.fatherGoalId;
 			curCtx = curCtx.fatherCtx;

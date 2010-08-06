@@ -46,7 +46,7 @@ public class StateRuleSelection extends State {
 			/* from normal evaluation */
 			fromBacktracking = false;
 			List<Var> varsList = new ArrayList<Var>();
-			e.currentContext.trailingVars = new OneWayList(varsList, e.currentContext.trailingVars);
+			e.currentContext.trailingVars = new OneWayList<List<Var>>(varsList, e.currentContext.trailingVars);
 			clauseStore = ClauseStore.build(goal, varsList, c.find(goal));
 			if (clauseStore == null) {
 				e.nextState = c.BACKTRACK;
@@ -99,12 +99,8 @@ public class StateRuleSelection extends State {
 		}
 			
 		Struct curGoal = curCtx.currentGoal;
-		
-		// Unchecked cast from Object, but safe (thanks, OneWayList!)
-		@SuppressWarnings("unchecked")
 		List<Var> unifiedVars = (List<Var>) e.currentContext.trailingVars.getHead();
-		
-		curGoal.unify(unifiedVars,unifiedVars,ec.headClause);
+		curGoal.unify(unifiedVars, unifiedVars, ec.headClause);
 		
 		ec.haveAlternatives = clauseStore.haveAlternatives();
 		

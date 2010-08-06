@@ -157,7 +157,7 @@ public abstract class Term {
 			ExecutionContext ec = engine.getCurrentContext();
 			if (ec != null) {
 				// Update trailingVars
-				ec.trailingVars = new OneWayList(v1, ec.trailingVars);
+				ec.trailingVars = new OneWayList<List<Var>>(v1, ec.trailingVars);
 				// Renaming after unify because its utility regards not the engine but the user
 //				int id = (engine.env == null) ? Var.PROGRESSIVE : engine.env.nDemoSteps;
 //				int count = 0;

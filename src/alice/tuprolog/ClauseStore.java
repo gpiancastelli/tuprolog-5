@@ -10,7 +10,7 @@ import java.util.ListIterator;
  */
 public class ClauseStore {
 	
-	private OneWayList clauses;
+	private OneWayList<ClauseInfo> clauses;
 	private Term goal;
 	private List<Var> vars;
 	private boolean haveAlternatives;
@@ -127,9 +127,9 @@ public class ClauseStore {
 	
 	public List<ClauseInfo> getClauses() {
 		List<ClauseInfo> l = new ArrayList<ClauseInfo>();
-		OneWayList t = clauses;
+		OneWayList<ClauseInfo> t = clauses;
 		while (t != null) {
-			l.add((ClauseInfo) t.getHead());
+			l.add(t.getHead());
 			t = t.getTail();
 		}
 		return l;

@@ -37,8 +37,8 @@ public class ExecutionContext {
 	Struct clause;
 	Struct headClause;
 	SubGoalStore goalsToEval;
-	OneWayList trailingVars;
-	OneWayList fatherVarsList;
+	OneWayList<List<Var>> trailingVars;
+	OneWayList<List<Var>> fatherVarsList;
 	
 	ChoicePointContext choicePointAfterCut;
 		
@@ -89,11 +89,11 @@ public class ExecutionContext {
 		return goalsToEval;
 	}
 	
-	public List<Var> getTrailingVars() {
-		List<Var> l = new ArrayList<Var>();
-		OneWayList t = trailingVars;
+	public List<List<Var>> getTrailingVars() {
+		List<List<Var>> l = new ArrayList<List<Var>>();
+		OneWayList<List<Var>> t = trailingVars;
 		while (t != null) {
-			l.add((Var) t.getHead());
+			l.add(t.getHead());
 			t = t.getTail();
 		}
 		return l;		
