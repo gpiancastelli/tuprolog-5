@@ -203,12 +203,6 @@ public class BasicLibrary extends Library {
 	// term type inspection
 	//
 	
-	@Predicate("constant/1")
-	public boolean isConstant(Term t) {
-		t = t.getTerm();
-		return (t.isAtomic());
-	}
-	
 	@Predicate("number/1")
 	public boolean isNumber(Term t) {
 		return (t.getTerm() instanceof Number);
@@ -276,7 +270,7 @@ public class BasicLibrary extends Library {
 	// term/expression comparison
 	//
 	
-	@Predicate("expression_equality/2")
+	@Predicate("=:=/2")
 	public boolean expressionEquality(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
@@ -292,7 +286,12 @@ public class BasicLibrary extends Library {
 		}
 	}
 	
-	@Predicate("expression_greater_than/2")
+	@Predicate("=\\=/2")
+	public boolean expressionInequality(Term arg0, Term arg1) {
+		return !expressionEquality(arg0, arg1);
+	}
+	
+	@Predicate(">/2")
 	public boolean expressionGreaterThan(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
@@ -301,7 +300,7 @@ public class BasicLibrary extends Library {
 		return expressionGreaterThan((alice.tuprolog.Number) val0, (alice.tuprolog.Number) val1);
 	}
 	
-	@Predicate("expression_less_or_equal_than/2")
+	@Predicate("=</2")
 	public boolean expressionLessOrEqualThan(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
@@ -318,7 +317,7 @@ public class BasicLibrary extends Library {
 		}
 	}
 	
-	@Predicate("expression_less_than/2")
+	@Predicate("</2")
 	public boolean expressionLessThan(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
@@ -327,7 +326,7 @@ public class BasicLibrary extends Library {
 		return expressionLessThan((alice.tuprolog.Number) val0, (alice.tuprolog.Number) val1);
 	}
 	
-	@Predicate("expression_greater_or_equal_than/2")
+	@Predicate(">=/2")
 	public boolean expressionGreaterOrEqualThan(Term arg0, Term arg1) {
 		Term val0 = evalExpression(arg0);
 		Term val1 = evalExpression(arg1);
@@ -344,25 +343,40 @@ public class BasicLibrary extends Library {
 		}
 	}
 	
-	@Predicate("term_equality/2")
+	@Predicate("==/2")
 	public boolean termEquality(Term arg0, Term arg1) {
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
 		return arg0.isEqual(arg1);
 	}
 	
-	@Predicate("term_greater_than/2")
+	@Predicate("\\==/2")
+	public boolean termInequality(Term arg0, Term arg1) {
+		return !termEquality(arg0, arg1);
+	}
+	
+	@Predicate("@>/2")
 	public boolean termGreaterThan(Term arg0, Term arg1) {
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
 		return arg0.isGreater(arg1);
 	}
 	
-	@Predicate("term_less_than/2")
+	@Predicate("@=</2")
+	public boolean termLessOrEqualThan(Term arg0, Term arg1) {
+		return !termGreaterThan(arg0, arg1);
+	}
+	
+	@Predicate("@</2")
 	public boolean termLessThan(Term arg0, Term arg1) {
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
 		return !(arg0.isGreater(arg1) || arg0.isEqual(arg1));
+	}
+	
+	@Predicate("@>=/2")
+	public boolean termGreaterOrEqualThan(Term arg0, Term arg1) {
+		return !termLessThan(arg0, arg1);
 	}
 	
 	@Functor("+/1")
@@ -666,21 +680,6 @@ public class BasicLibrary extends Library {
 		//
 		"current_prolog_flag(Name,Value) :- get_prolog_flag(Name,Value),!.\n"+
 		"current_prolog_flag(Name,Value) :- flag_list(L), member(flag(Name,Value),L).\n"+
-		//
-		// expression/term comparison
-		//
-		"'=:='(X,Y):- expression_equality(X,Y). \n"+
-		"'=\\='(X,Y):- not expression_equality(X,Y). \n"+
-		"'>'(X,Y):- expression_greater_than(X,Y). \n"+
-		"'<'(X,Y):- expression_less_than(X,Y). \n"+
-		"'>='(X,Y):- expression_greater_or_equal_than(X,Y). \n"+
-		"'=<'(X,Y):- expression_less_or_equal_than(X,Y). \n"+
-		"'=='(X,Y):- term_equality(X,Y).\n"+
-		"'\\=='(X,Y):- not term_equality(X,Y).\n"+
-		"'@>'(X,Y):- term_greater_than(X,Y).\n"+
-		"'@<'(X,Y):- term_less_than(X,Y).\n"+
-		"'@>='(X,Y):- not term_less_than(X,Y).\n"+
-		"'@=<'(X,Y):- not term_greater_than(X,Y).\n"+
 		//
 		// meta-predicates
 		//

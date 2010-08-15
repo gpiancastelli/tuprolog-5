@@ -286,10 +286,6 @@ public class ISOLibrary extends Library {
 		":- flag(undefined_predicate, [error,fail,warning], fail, false).\n"+
 		":- flag(double_quotes, [atom,chars,codes], atom, false).\n"+
 		//
-		//
-		"bound(X):-ground(X).\n                                                                                  "+
-		"unbound(X):-not(ground(X)).\n                                                                          "+
-		//
 		"atom_concat(F,S,R) :- atom_chars(F,FL),atom_chars(S,SL),!,append(FL,SL,RS),atom_chars(R,RS).\n          " +
 		"atom_concat(F,S,R) :- atom_chars(R,RS),append(FL,SL,RS),atom_chars(F,FL),atom_chars(S,SL).\n            " +
 		"atom_codes(A,L):-atom_chars(A,L1),!,chars_codes(L1,L).\n"+
