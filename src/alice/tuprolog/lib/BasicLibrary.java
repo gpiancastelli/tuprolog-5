@@ -46,6 +46,105 @@ public class BasicLibrary extends Library {
 	//
 	
 	/**
+	 * Templates: functor(-nonvar, +atomic, +integer),
+	 *            functor(+nonvar, ?atomic, ?integer).
+	 * 
+	 * functor(Term, Name, Arity) is true iff:
+	 * <ul>
+     * <li>Term is a compound term with a functor whose identifier is Name
+     * and arity Arity, or</li>
+     * <li>Term is an atomic term equal to Name and Arity is 0.</li>
+     * </ul>
+	 */
+	@Predicate("functor/3")
+	public boolean functor(Term term, Term name, Term arity) {
+		Term t = term.getTerm();
+		if (t.isAtomic())
+			return unify(t, name) && unify (arity, new Int(0));
+		else if (t instanceof Struct) {
+			Struct s = (Struct) t;
+			return unify(new Struct(s.getName()), name) && unify(new Int(s.getArity()), arity); 
+		} else { // t is a variable
+			if (!(arity.getTerm() instanceof Int))
+				return false;
+			int a = ((Int) arity).intValue();
+			Term n = name.getTerm();
+			if (n.isAtomic() && a == 0)
+				return unify(t, n);
+			if (n.isAtom() && a > 0) {
+				Term[] args = new Term[a];
+				for (int i = 0; i < a; i++)
+					args[i] = new Var();
+				Struct compound = new Struct(((Struct) n).getName(), args);
+				return unify(t, compound);
+			}
+			return false;
+		}
+	}
+	
+	/**
+	 * Template: arg(+integer, +compound_term, ?term).
+	 * 
+	 * arg(N, Term, Arg) is true iff the Nth argument of Term is Arg.
+	 */
+	@Predicate("arg/3")
+	public boolean getArgument(Term number, Term compound, Term arg) {
+		if (!(number.getTerm() instanceof Int))
+			return false;
+		if (!(compound.getTerm() instanceof Struct))
+			return false;
+		int n = ((Int) number).intValue();
+		if (n <= 0)
+			return false;
+		Struct c = (Struct) compound.getTerm();
+		if (n > c.getArity())
+			return false;
+		return unify(arg, c.getArg(n - 1));
+	}
+	
+	@Predicate("=../2")
+	public boolean univ(Term term, Term elements) {
+		Term t = term.getTerm();
+		if (t.isAtomic())
+			return unify(elements, new Struct(new Term[] {t}));
+		else if (t.isCompound()) {
+			Struct compound = (Struct) t;
+			int arity = compound.getArity();
+			Term[] terms = new Term[arity + 1];
+			terms[0] = new Struct(compound.getName());
+			for (int i = 1; i <= arity; i++)
+				terms[i] = compound.getArg(i - 1);
+			return unify(elements, new Struct(terms));
+		} else { // t is a variable
+			Term l = elements.getTerm();
+			if (!l.isList())
+				return false;
+			Struct list = (Struct) l;
+			int size = list.listSize();
+			if (size == 1)
+				return unify(t, list.listHead());
+			else if (size > 1) {
+				Term h = list.listHead();
+				if (!h.isAtom())
+					return false;
+				Struct name = (Struct) h;
+				Term[] terms = new Term[size - 1];
+				int i = 0;
+				for (Term e : list.listTail()) {
+					terms[i] = e;
+					i++;
+				}
+				return unify(t, new Struct(name.getName(), terms));
+			} else
+				return false;
+		}
+	}
+	
+	//
+	// tuProlog-specific utility predicates
+	//
+	
+	/**
 	 * sets a new theory provided as a text
 	 */
 	@Predicate("set_theory/1")
@@ -683,14 +782,6 @@ public class BasicLibrary extends Library {
 		//
 		// meta-predicates
 		//
-		"'=..'(T, [T]) :- atomic(T), !. \n" +
-		"'=..'(T,L)    :- compound(T),!,'$tolist'(T,L). \n                                                          " +
-		"'=..'(T,L)    :- nonvar(L),'$fromlist'(T,L). \n                                                          " +
-	    "functor(Term, Name, Arity) :- atomic(Term), !, Name = Term, Arity = 0. \n" +
-		"functor(Term, Name, Arity) :- compound(Term), !, Term =.. [Name | Args], length(Args, Arity). \n" +
-		"functor(Term, Name, Arity) :- var(Term), atomic(Name), Arity == 0, !, Term = Name. \n" +
-		"functor(Term, Name, Arity) :- var(Term), atom(Name), I is Arity, integer(I), I > 0, newlist([], I, L), Term =.. [Name | L]. \n" +
-		"arg(N,C,T):- nonvar(N), C =.. [_|Args], element(N,Args,T).\n"+
 		"clause(H, B) :- L = [], '$find'(H, L), copy_term(L, LC), member((':-'(H, B)), LC). \n" +
 		//
 		// call/1 is coded both in Prolog, to feature the desired opacity
@@ -801,10 +892,10 @@ public class BasicLibrary extends Library {
 		"length(L, S) :- number(S), !, lengthN(L, S), !. \n" +
 		"length(L, S) :- var(S), lengthX(L, S). \n" +
 		"lengthN([],0). \n" +
-		"lengthN(_, N) :- N < 0, !, fail. \n" +
-		"lengthN([_|L], N) :- lengthN(L,M), N is M + 1. \n" +
+		"lengthN(_, N) :- '$negative'(N), !, fail. \n" +
+		"lengthN([_|L], N) :- lengthN(L,M), '$inc'(N, M). \n" +
 		"lengthX([],0). \n" +
-		"lengthX([_|L], N) :- lengthX(L,M), N is M + 1. \n" +
+		"lengthX([_|L], N) :- lengthX(L,M), '$inc'(N, M). \n" +
 		"append([],L2,L2). \n                                                                                    " +
 		"append([E|T1],L2,[E|T2]):- append(T1,L2,T2). \n                                                         " +
 		"reverse(L1,L2):- reverse0(L1,[],L2). \n                                                                 " +
@@ -813,10 +904,6 @@ public class BasicLibrary extends Library {
 		"delete(E,[],[]). \n                                                                                     " +
 		"delete(E,[E|T],L):- !,delete(E,T,L). \n                                                                 " +
 		"delete(E,[H|T],[H|L]):- delete(E,T,L). \n                                                               " +
-		"element(1,[E|L],E):- !. \n                                                                              " +
-		"element(N,[_|L],E):- M is N - 1,element(M,L,E). \n                                                      " +
-		"newlist(Ls,0,Ls):- !. \n                                                                                " +
-		"newlist(Ls,N,Ld):- M is N - 1,newlist([_|Ls],M,Ld). \n                                                  " +
 		"quicksort([],Pred,[]).                             \n" +
 		"quicksort([X|Tail],Pred,Sorted):-                  \n"+
 		"   split(X,Tail,Pred,Small,Big),                   \n"+
@@ -830,6 +917,26 @@ public class BasicLibrary extends Library {
 		"   split(X,Tail,Pred,Small,Big).                   \n"+
 		"split(X,[Y|Tail],Pred,[Y|Small],Big):-             \n"+
 		"   split(X,Tail,Pred,Small,Big).                   \n";
+	}
+	
+	// Internal Java predicates to avoid using arithmetic operators in BasicLibrary
+	
+	@Predicate("$negative/1")
+	public boolean negative(Term n) {
+		n = n.getTerm();
+		if (!(n instanceof Int))
+			return false;
+		int nValue = ((Int) n).intValue();
+		return nValue < 0;
+	}
+	
+	@Predicate("$inc/2")
+	public boolean increment(Term n, Term m) {
+		m = m.getTerm();
+		if (!(m instanceof Int))
+			return false;
+		int mValue = ((Int) m).intValue();
+		return unify(n, new Int(mValue + 1));
 	}
 	
 	// Internal Java predicates which are part of the bagof/3 and setof/3 algorithm
