@@ -67,7 +67,7 @@ public class BasicLibrary extends Library {
 		} else { // t is a variable
 			if (!(arity.getTerm() instanceof Int))
 				return false;
-			int a = ((Int) arity).intValue();
+			int a = ((Int) arity.getTerm()).intValue();
 			Term n = name.getTerm();
 			if (n.isAtomic() && a == 0)
 				return unify(t, n);
