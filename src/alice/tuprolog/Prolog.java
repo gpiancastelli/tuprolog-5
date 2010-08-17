@@ -79,9 +79,14 @@ public class Prolog {
 	 * IOLibrary, and JavaLibrary.
 	 */
 	public Prolog() {
-		this(false,true);
+		this(false, true);
 		try {
 			loadLibrary("alice.tuprolog.lib.BasicLibrary");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		try {
+			loadLibrary("alice.tuprolog.lib.MathLibrary");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

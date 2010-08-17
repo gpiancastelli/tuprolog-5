@@ -366,81 +366,8 @@ public class BasicLibrary extends Library {
 	}
 	
 	//
-	// term/expression comparison
+	// term comparison
 	//
-	
-	@Predicate("=:=/2")
-	public boolean expressionEquality(Term arg0, Term arg1) {
-		Term val0 = evalExpression(arg0);
-		Term val1 = evalExpression(arg1);
-		if (val0==null || val1==null || !(val0 instanceof Number) || !(val1 instanceof Number)) {
-			return false;
-		}
-		alice.tuprolog.Number val0n = (alice.tuprolog.Number) val0;
-		alice.tuprolog.Number val1n = (alice.tuprolog.Number) val1;
-		if (val0n.isInteger() && val1n.isInteger()) {
-			return (val0n.intValue() == val1n.intValue()) ? true : false;
-		} else {
-			return (val0n.doubleValue() == val1n.doubleValue()) ? true : false;
-		}
-	}
-	
-	@Predicate("=\\=/2")
-	public boolean expressionInequality(Term arg0, Term arg1) {
-		return !expressionEquality(arg0, arg1);
-	}
-	
-	@Predicate(">/2")
-	public boolean expressionGreaterThan(Term arg0, Term arg1) {
-		Term val0 = evalExpression(arg0);
-		Term val1 = evalExpression(arg1);
-		if (val0 == null || val1 == null || !(val0 instanceof Number) || !(val1 instanceof Number))
-			return false;
-		return expressionGreaterThan((alice.tuprolog.Number) val0, (alice.tuprolog.Number) val1);
-	}
-	
-	@Predicate("=</2")
-	public boolean expressionLessOrEqualThan(Term arg0, Term arg1) {
-		Term val0 = evalExpression(arg0);
-		Term val1 = evalExpression(arg1);
-		if (val0 == null || val1 == null || !(val0 instanceof Number) || !(val1 instanceof Number))
-			return false;
-		return !expressionGreaterThan((alice.tuprolog.Number) val0, (alice.tuprolog.Number) val1);
-	}
-
-	private boolean expressionGreaterThan(alice.tuprolog.Number num0, alice.tuprolog.Number num1) {
-		if (num0.isInteger() && num1.isInteger()) {
-			return num0.intValue() > num1.intValue();
-		} else {
-			return num0.doubleValue() > num1.doubleValue();
-		}
-	}
-	
-	@Predicate("</2")
-	public boolean expressionLessThan(Term arg0, Term arg1) {
-		Term val0 = evalExpression(arg0);
-		Term val1 = evalExpression(arg1);
-		if (val0 == null || val1 == null || !(val0 instanceof Number) || !(val1 instanceof Number))
-			return false;
-		return expressionLessThan((alice.tuprolog.Number) val0, (alice.tuprolog.Number) val1);
-	}
-	
-	@Predicate(">=/2")
-	public boolean expressionGreaterOrEqualThan(Term arg0, Term arg1) {
-		Term val0 = evalExpression(arg0);
-		Term val1 = evalExpression(arg1);
-		if (val0 == null || val1 == null || !(val0 instanceof Number) || !(val1 instanceof Number))
-			return false;
-		return !expressionLessThan((alice.tuprolog.Number) val0, (alice.tuprolog.Number) val1);
-	}
-
-	private boolean expressionLessThan(alice.tuprolog.Number num0, alice.tuprolog.Number num1) {
-		if (num0.isInteger() && num1.isInteger()) {
-			return num0.intValue() < num1.intValue();
-		} else {
-			return num0.doubleValue() < num1.doubleValue();
-		}
-	}
 	
 	@Predicate("==/2")
 	public boolean termEquality(Term arg0, Term arg1) {
@@ -478,33 +405,9 @@ public class BasicLibrary extends Library {
 		return !termLessThan(arg0, arg1);
 	}
 	
-	@Functor("+/1")
-	public Term expressionPlus(Term arg0) {
-		Term val0 = evalExpression(arg0);
-		if (val0!=null && val0 instanceof Number)
-			return val0;
-		else
-			return null;
-	}
-	
-	@Functor("-/1")
-	public Term expressionMinus(Term arg1) {
-		Term val0 = evalExpression(arg1);
-		if (val0!=null && val0 instanceof Number) {
-			alice.tuprolog.Number val0n = (alice.tuprolog.Number) val0;
-			if (val0n instanceof Int)
-				return new Int(val0n.intValue() * -1);
-			else if (val0n instanceof alice.tuprolog.Double)
-				return new alice.tuprolog.Double(val0n.doubleValue() * -1);
-			else if (val0n instanceof alice.tuprolog.Long)
-				return new alice.tuprolog.Long(val0n.longValue() * -1);
-			else if (val0n instanceof alice.tuprolog.Float)
-				return new alice.tuprolog.Float(val0n.floatValue() * -1);
-			else
-				return null;
-		} else
-			return null;
-	}
+	//
+	// bitwise number manipulation
+	//
 	
 	@Functor("\\/1")
 	public Term expressionBitwiseNot(Term arg0) {
@@ -512,98 +415,6 @@ public class BasicLibrary extends Library {
 		if (val0!=null && val0 instanceof Number)
 			return new Int(~((alice.tuprolog.Number) val0).intValue());
 		else
-			return null;
-	}
-	
-	alice.tuprolog.Number getIntegerNumber(long num) {
-		if (num > Integer.MIN_VALUE && num < Integer.MAX_VALUE)
-			return new Int((int) num);
-		else
-			return new alice.tuprolog.Long(num);
-	}
-	
-	@Functor("+/2")
-	public Term expressionPlus(Term arg0, Term arg1) {
-		Term val0 = evalExpression(arg0);
-		Term val1 = evalExpression(arg1);
-		if (val0!=null && val1!=null && val0 instanceof Number && (val1 instanceof Number)) {
-			alice.tuprolog.Number val0n = (alice.tuprolog.Number) val0;
-			alice.tuprolog.Number val1n = (alice.tuprolog.Number) val1;
-			if (val0n.isInteger() && (val1n.isInteger()))
-				return getIntegerNumber(val0n.longValue() + val1n.longValue());
-			else
-				return new alice.tuprolog.Double(val0n.doubleValue() + val1n.doubleValue());
-		} else
-			return null;
-	}
-	
-	@Functor("-/2")
-	public Term expressionMinus(Term arg0, Term arg1) {
-		Term val0 = evalExpression(arg0);
-		Term val1 = evalExpression(arg1);
-		if (val0!=null && val1!=null && val0 instanceof Number && (val1 instanceof Number)) {
-			alice.tuprolog.Number val0n = (alice.tuprolog.Number) val0;
-			alice.tuprolog.Number val1n = (alice.tuprolog.Number) val1;
-			if (val0n.isInteger() && (val1n.isInteger()))
-				return getIntegerNumber(val0n.longValue() - val1n.longValue());
-			else
-				return new alice.tuprolog.Double(val0n.doubleValue() - val1n.doubleValue());
-		} else
-			return null;
-	}
-	
-	@Functor("*/2")
-	public Term expressionMultiply(Term arg0, Term arg1) {
-		Term val0 = evalExpression(arg0);
-		Term val1 = evalExpression(arg1);
-		if (val0!=null && val1!=null && val0 instanceof Number && (val1 instanceof Number)) {
-			alice.tuprolog.Number val0n = (alice.tuprolog.Number) val0;
-			alice.tuprolog.Number val1n = (alice.tuprolog.Number) val1;
-			if (val0n.isInteger() && (val1n.isInteger()))
-				return getIntegerNumber(val0n.longValue() * val1n.longValue());
-			else
-				return new alice.tuprolog.Double(val0n.doubleValue() * val1n.doubleValue());
-		} else
-			return null;
-	}
-	
-	@Functor("//2")
-	public Term expressionDiv(Term arg0, Term arg1) {
-		Term val0 = evalExpression(arg0);
-		Term val1 = evalExpression(arg1);
-		if (val0 != null && val1 != null && val0 instanceof Number && val1 instanceof Number) {
-			Number val0n = (Number) val0;
-			Number val1n = (Number) val1;
-			alice.tuprolog.Double result = new alice.tuprolog.Double(val0n.doubleValue()/val1n.doubleValue());
-			if (val0n.isInteger() && val1n.isInteger())
-				return getIntegerNumber(result.longValue());
-			else
-				return result;
-		} else
-			return null;
-	}
-	
-	@Functor("///2")
-	public Term expressionIntegerDiv(Term arg0, Term arg1) {
-		Term val0 = evalExpression(arg0);
-		Term val1 = evalExpression(arg1);
-		if (val0 != null && val1 != null && val0 instanceof Number && (val1 instanceof Number)) {
-			alice.tuprolog.Number val0n = (alice.tuprolog.Number) val0;
-			alice.tuprolog.Number val1n = (alice.tuprolog.Number) val1;
-			return getIntegerNumber(val0n.longValue() / val1n.longValue());
-		} else
-			return null;
-	}
-	
-	@Functor("**/2")
-	public Term expressionPow(Term arg0, Term arg1) {
-		Term val0 = evalExpression(arg0);
-		Term val1 = evalExpression(arg1);
-		if (val0 != null && val1 != null && val0 instanceof Number && val1 instanceof Number) {
-			alice.tuprolog.Number val0n = (alice.tuprolog.Number) val0;
-			alice.tuprolog.Number val1n = (alice.tuprolog.Number) val1;
-			return new alice.tuprolog.Double(Math.pow(val0n.doubleValue(), val1n.doubleValue()));
-		} else
 			return null;
 	}
 	
@@ -690,42 +501,6 @@ public class BasicLibrary extends Library {
 			return false;
 	}
 	
-	@Predicate("num_atom/2")
-	public boolean numAtom(Term arg0,Term arg1) {
-		arg0 = arg0.getTerm();
-		arg1 = arg1.getTerm();
-		if (arg1 instanceof Var) {
-			if (!(arg0 instanceof Number))
-				return false;
-			alice.tuprolog.Number n0 = (alice.tuprolog.Number) arg0;
-			String st = null;
-			if (n0.isInteger())
-				st = new java.lang.Integer(n0.intValue()).toString();
-			else
-				st = new java.lang.Double(n0.doubleValue()).toString();
-			return unify(arg1,new Struct(st));
-		} else {
-			if (!arg1.isAtom())
-				return false;
-			String st = ((Struct) arg1).getName();
-			try {
-				if (st.startsWith("'") && st.endsWith("'"))
-					st = st.substring(1, st.length() - 1);
-			} catch (Exception ex) {}
-			Term term = null;
-			try {
-				term = new alice.tuprolog.Int(java.lang.Integer.parseInt(st));
-			} catch (Exception ex) {}
-			if (term == null)
-				try {
-					term = new alice.tuprolog.Double(java.lang.Double.parseDouble(((Struct)arg1).getName()));
-				} catch (Exception ex){}
-			if (term == null)
-				return false;
-			return unify(arg0,term);
-		}
-	}
-	
 	@Override
 	public String getTheory() {
 		return
@@ -750,30 +525,30 @@ public class BasicLibrary extends Library {
 		":- op(  700, xfx,  '@<'). \n"+
 		":- op(  700, xfx,  '@=<'). \n"+
 		":- op(  700, xfx,  '@>='). \n"+
-		":- op(  700, xfx,  '=:='). \n"+
-		":- op(  700, xfx,  '=\\='). \n"+
-		":- op(  700, xfx,  '>'). \n"+
-		":- op(  700, xfx,  '<'). \n"+
-		":- op(  700, xfx,  '=<'). \n"+
-		":- op(  700, xfx,  '>='). \n"+
+//		":- op(  700, xfx,  '=:='). \n"+
+//		":- op(  700, xfx,  '=\\='). \n"+
+//		":- op(  700, xfx,  '>'). \n"+
+//		":- op(  700, xfx,  '<'). \n"+
+//		":- op(  700, xfx,  '=<'). \n"+
+//		":- op(  700, xfx,  '>='). \n"+
 		//
 		":- op(  700, xfx,  'is'). \n"+
 		":- op(  700, xfx,  '=..'). \n"+
 		":- op(  500, yfx,  '+'). \n"+
-		":- op(  500, yfx,  '-'). \n"+
-		":- op(  500, yfx,  '/\\'). \n"+
-		":- op(  500, yfx,  '\\/'). \n"+
-		":- op(  400, yfx,  '*'). \n"+
-		":- op(  400, yfx,  '/'). \n"+
-		":- op(  400, yfx,  '//'). \n"+
+//		":- op(  500, yfx,  '-'). \n"+
+//		":- op(  500, yfx,  '/\\'). \n"+
+//		":- op(  500, yfx,  '\\/'). \n"+
+//		":- op(  400, yfx,  '*'). \n"+
+//		":- op(  400, yfx,  '/'). \n"+
+//		":- op(  400, yfx,  '//'). \n"+
 		":- op(  400, yfx,  '>>'). \n"+
 		":- op(  400, yfx,  '<<'). \n"+
-		":- op(  400, yfx,  'rem'). \n" +
-		":- op(  400, yfx,  'mod'). \n" +
-		":- op(  200, xfx,  '**'). \n"+
+//		":- op(  400, yfx,  'rem'). \n" +
+//		":- op(  400, yfx,  'mod'). \n" +
+//		":- op(  200, xfx,  '**'). \n"+
 		":- op(  200, xfy,  '^'). \n"+
 		":- op(  200, fy,   '\\'). \n"+
-		":- op(  200, fy,   '-'). \n"+
+//		":- op(  200, fy,   '-'). \n"+
 		//
 		// flag management
 		//

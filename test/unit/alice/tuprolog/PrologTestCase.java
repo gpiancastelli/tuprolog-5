@@ -15,8 +15,9 @@ public class PrologTestCase {
 	
 	@Test public void engineInitialization() {
 		Prolog engine = new Prolog();
-		assertEquals(4, engine.getCurrentLibraries().length);
+		assertEquals(5, engine.getCurrentLibraries().length);
 		assertNotNull(engine.getLibrary("alice.tuprolog.lib.BasicLibrary"));
+		assertNotNull(engine.getLibrary("alice.tuprolog.lib.MathLibrary"));
 		assertNotNull(engine.getLibrary("alice.tuprolog.lib.ISOLibrary"));
 		assertNotNull(engine.getLibrary("alice.tuprolog.lib.IOLibrary"));
 		assertNotNull(engine.getLibrary("alice.tuprolog.lib.JavaLibrary"));
