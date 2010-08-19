@@ -312,7 +312,7 @@ public class BuiltIn extends Library {
 		// look for clauses whose head unifies with arg0 and enqueue them to list arg1
 		arg0 = arg0.getTerm();
 		arg1 = arg1.getTerm();
-		if (!arg1.isList())
+		if (!arg1.isList() || arg0 instanceof Var)
 			return false;
 		for (ClauseInfo b : theoryManager.find(arg0))
 			if (match(arg0,b.getHead())) {
