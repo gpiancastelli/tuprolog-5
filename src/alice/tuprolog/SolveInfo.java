@@ -28,16 +28,7 @@ import java.util.List;
  */
 public class SolveInfo  {
 	
-	/*
-	 * possible values returned by step functions
-	 * and used as eval state flags
-	 */
-	static final int HALT    = EngineManager.HALT;
-	static final int FALSE   = EngineManager.FALSE;
-	static final int TRUE    = EngineManager.TRUE;
-	static final int TRUE_CP = EngineManager.TRUE_CP;
-	
-	private int     endState;
+	private Engine.State endState;
 	private boolean isSuccess;
 	
 	private Term query;
@@ -49,12 +40,12 @@ public class SolveInfo  {
 		isSuccess = false;
 	}
 	
-	SolveInfo(Term initGoal, Struct resultGoal, int resultDemo, List<Var> resultVars) {
+	SolveInfo(Term initGoal, Struct resultGoal, Engine.State resultDemo, List<Var> resultVars) {
 		query = initGoal;
 		goal = resultGoal;
 		bindings = resultVars;
 		endState = resultDemo;
-		isSuccess = (endState > FALSE);
+		isSuccess = endState == Engine.State.TRUE || endState == Engine.State.TRUE_CP;
 	}
 	
 	/**
@@ -72,7 +63,7 @@ public class SolveInfo  {
 	 * @return true if the solve was successful
 	 */
 	public boolean isHalted() {
-		return (endState == HALT);
+		return endState == Engine.State.HALT;
 	}
 	
 	/**
@@ -81,7 +72,7 @@ public class SolveInfo  {
 	 * @return true if the solve was successful
 	 */
 	public boolean hasOpenAlternatives() {
-		return (endState == TRUE_CP);
+		return endState == Engine.State.TRUE_CP;
 	}
 	
 	/**

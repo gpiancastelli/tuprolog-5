@@ -22,9 +22,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
+ * 
  * @author Alex Benini
- *
- * Core engine
  */
 public class EngineManager {
 	
@@ -41,36 +40,6 @@ public class EngineManager {
 	private LinkedList<Engine> stackEnv = new LinkedList<Engine>();
 	
 	private SolveInfo sinfo;
-	
-	/** States */
-	final State INIT;
-	final State GOAL_EVALUATION;
-	final State RULE_SELECTION;
-	final State GOAL_SELECTION;
-	final State BACKTRACK;
-	final State END_FALSE;
-	final State END_TRUE;
-	final State END_TRUE_CP;
-	final State END_HALT;
-	
-	public static final int HALT    = -1;
-	public static final int FALSE   =  0;
-	public static final int TRUE    =  1;
-	public static final int TRUE_CP =  2;
-	
-	public EngineManager() {
-		/* Instantiate states */
-		INIT            = new StateInit(this);
-		GOAL_EVALUATION = new StateGoalEvaluation(this);
-		RULE_SELECTION  = new StateRuleSelection(this);
-		GOAL_SELECTION  = new StateGoalSelection(this);
-		BACKTRACK       = new StateBacktrack(this);
-		END_FALSE       = new StateEnd(this,FALSE);
-		END_TRUE        = new StateEnd(this,TRUE);
-		END_TRUE_CP     = new StateEnd(this,TRUE_CP);
-		END_HALT        = new StateEnd(this,HALT);
-	}
-	
 	
 	/**
 	 * Configure this Manager
@@ -107,16 +76,11 @@ public class EngineManager {
 			
 			freeze();
 			env = new Engine(this, query);
-			StateEnd result = env.run();
+			sinfo = env.solve();
 			defreeze();
 			
-			sinfo = new SolveInfo(
-					query,
-					result.getResultGoal(),
-					result.getResultDemo(),
-					result.getResultVars()
-			);
-			if (!sinfo.hasOpenAlternatives()) solveEnd();
+			if (!sinfo.hasOpenAlternatives())
+				solveEnd();
 			return sinfo;
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -134,16 +98,10 @@ public class EngineManager {
 	public synchronized SolveInfo solveNext() throws NoMoreSolutionException {
 		if (hasOpenAlternatives()) {
 			refreeze();
-			env.nextState = BACKTRACK;
-			StateEnd result = env.run();
+			sinfo = env.solveNext();
 			defreeze();
-			sinfo = new SolveInfo(
-					env.query,
-					result.getResultGoal(),
-					result.getResultDemo(),
-					result.getResultVars()
-			);
-			if (!sinfo.hasOpenAlternatives()) solveEnd();
+			if (!sinfo.hasOpenAlternatives())
+				solveEnd();
 			return sinfo;
 		} else
 			throw new NoMoreSolutionException();
@@ -166,9 +124,11 @@ public class EngineManager {
 	}
 	
 	private void freeze() {
-		if(env == null) return;
+		if (env == null)
+			return;
 		try {
-			if (stackEnv.getLast() == env) return;
+			if (stackEnv.getLast() == env)
+				return;
 		} catch(NoSuchElementException e) {}
 		stackEnv.addLast(env);
 	}
@@ -180,7 +140,8 @@ public class EngineManager {
 	
 	private void defreeze() {
 		last_env = env;
-		if (stackEnv.isEmpty()) return;
+		if (stackEnv.isEmpty())
+			return;
 		env = stackEnv.removeLast();
 	}
 	
@@ -209,7 +170,7 @@ public class EngineManager {
 	}
 	
 	ExecutionContext getCurrentContext() {
-		return (env == null)? null : env.currentContext;
+		return (env == null) ? null : env.currentContext;
 	}
 	
 	/**
@@ -219,7 +180,8 @@ public class EngineManager {
 	 * @return true if open alternatives are present
 	 */
 	boolean hasOpenAlternatives() {
-		if (sinfo == null) return false;
+		if (sinfo == null)
+			return false;
 		return sinfo.hasOpenAlternatives();
 	}
 	
@@ -229,7 +191,8 @@ public class EngineManager {
 	 * @return true if the demonstration was stopped
 	 */
 	boolean isHalted() {
-		if (sinfo == null) return false;
+		if (sinfo == null)
+			return false;
 		return sinfo.isHalted();
 	}
 	
