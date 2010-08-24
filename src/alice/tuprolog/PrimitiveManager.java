@@ -53,17 +53,20 @@ public class PrimitiveManager {
 	}
 	
 	void createPrimitiveInfo(IPrimitives src) {
-		List<PrimitiveInfo>[] prims = src.getPrimitives();
-		for (PrimitiveInfo p : prims[PrimitiveInfo.DIRECTIVE])
-			directiveHashMap.put(p.getKey(), p);
-		for (PrimitiveInfo p : prims[PrimitiveInfo.PREDICATE])
-			predicateHashMap.put(p.getKey(), p);
-		for (PrimitiveInfo p : prims[PrimitiveInfo.FUNCTOR])
-			functorHashMap.put(p.getKey(), p);
+		Map<PrimitiveInfo.Type, List<PrimitiveInfo>> primitives = src.getPrimitives();
 		List<PrimitiveInfo> libraryPrimitives = new LinkedList<PrimitiveInfo>();
-		libraryPrimitives.addAll(prims[PrimitiveInfo.DIRECTIVE]);
-		libraryPrimitives.addAll(prims[PrimitiveInfo.PREDICATE]);
-		libraryPrimitives.addAll(prims[PrimitiveInfo.FUNCTOR]);
+		for (PrimitiveInfo p : primitives.get(PrimitiveInfo.Type.DIRECTIVE)) {
+			directiveHashMap.put(p.getKey(), p);
+			libraryPrimitives.add(p);
+		}
+		for (PrimitiveInfo p : primitives.get(PrimitiveInfo.Type.PREDICATE)) {
+			predicateHashMap.put(p.getKey(), p);
+			libraryPrimitives.add(p);
+		}
+		for (PrimitiveInfo p : primitives.get(PrimitiveInfo.Type.FUNCTOR)) {
+			functorHashMap.put(p.getKey(), p);
+			libraryPrimitives.add(p);
+		}
 		libHashMap.put(src, libraryPrimitives);
 	}
 	
@@ -87,7 +90,7 @@ public class PrimitiveManager {
 	 * @return term with the identified built-in directive
 	 */
 	public Term identifyDirective(Term term) {
-		identify(term, PrimitiveInfo.DIRECTIVE);
+		identify(term, PrimitiveInfo.Type.DIRECTIVE);
 		return term;
 	}
 	
@@ -113,14 +116,14 @@ public class PrimitiveManager {
 	}
 	
 	public void identifyPredicate(Term term) {
-		identify(term, PrimitiveInfo.PREDICATE);
+		identify(term, PrimitiveInfo.Type.PREDICATE);
 	}
 	
 	public void identifyFunctor(Term term) {
-		identify(term, PrimitiveInfo.FUNCTOR);
+		identify(term, PrimitiveInfo.Type.FUNCTOR);
 	}
 	
-	private void identify(Term term, int typeOfPrimitive) {
+	private void identify(Term term, PrimitiveInfo.Type typeOfPrimitive) {
 		if (term == null)
 			return;
 		term = term.getTerm();
@@ -133,25 +136,25 @@ public class PrimitiveManager {
 		//------------------------------------------
 		if (name.equals(",") || name.equals("':-'") || name.equals(":-")) {
 			for (int c = 0; c < arity; c++)
-				identify( t.getArg(c), PrimitiveInfo.PREDICATE);
+				identify(t.getArg(c), PrimitiveInfo.Type.PREDICATE);
 		} else
 			for (int c = 0; c < arity; c++)
-				identify( t.getArg(c), PrimitiveInfo.FUNCTOR);
+				identify(t.getArg(c), PrimitiveInfo.Type.FUNCTOR);
 		//------------------------------------------
 		//log.debug("Identification "+t);
 		PrimitiveInfo prim = null;
 		String key = name + "/" + arity;
 		
 		switch (typeOfPrimitive) {
-		case PrimitiveInfo.DIRECTIVE :
+		case DIRECTIVE :
 			prim = (PrimitiveInfo) directiveHashMap.get(key);	    		
 			//log.debug("Assign predicate "+prim+" to "+t);
 			break;
-		case PrimitiveInfo.PREDICATE :
+		case PREDICATE :
 			prim = (PrimitiveInfo) predicateHashMap.get(key);	    		
 			//log.debug("Assign predicate "+prim+" to "+t);
 			break;
-		case PrimitiveInfo.FUNCTOR :
+		case FUNCTOR :
 			prim = (PrimitiveInfo) functorHashMap.get(key);
 			//log.debug("Assign functor "+prim+" to "+t);
 			break;

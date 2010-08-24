@@ -19,7 +19,9 @@ package alice.tuprolog;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This abstract class is the base class for developing
@@ -148,14 +150,15 @@ public abstract class Library implements IPrimitives {
 	 * Gets the list of predicates defined in the library.
 	 */
 	@Override
-	public List<PrimitiveInfo>[] getPrimitives() {
+	public Map<PrimitiveInfo.Type, List<PrimitiveInfo>> getPrimitives() {
 		try {
 			Method[] mlist = this.getClass().getMethods();
 			
-			@SuppressWarnings("unchecked")
-			List<PrimitiveInfo>[] tablePrimitives = (List<PrimitiveInfo>[]) new List[] {
-				new ArrayList<PrimitiveInfo>(), new ArrayList<PrimitiveInfo>(), new ArrayList<PrimitiveInfo>()
-			};
+			Map<PrimitiveInfo.Type, List<PrimitiveInfo>> tablePrimitives =
+				new EnumMap<PrimitiveInfo.Type, List<PrimitiveInfo>>(PrimitiveInfo.Type.class);
+			tablePrimitives.put(PrimitiveInfo.Type.DIRECTIVE, new ArrayList<PrimitiveInfo>());
+			tablePrimitives.put(PrimitiveInfo.Type.PREDICATE, new ArrayList<PrimitiveInfo>());
+			tablePrimitives.put(PrimitiveInfo.Type.FUNCTOR, new ArrayList<PrimitiveInfo>());
 			
 			for (int i = 0; i < mlist.length; i++) {
 				Method method = mlist[i];
@@ -170,7 +173,7 @@ public abstract class Library implements IPrimitives {
 					}
 					Predicate annotation = method.getAnnotation(Predicate.class);
 					String name = annotation.value();
-					addValidMethod(tablePrimitives, PrimitiveInfo.PREDICATE, method, name);
+					addValidMethod(tablePrimitives, PrimitiveInfo.Type.PREDICATE, method, name);
 				} 
 				
 				if (method.isAnnotationPresent(Functor.class)) {
@@ -182,7 +185,7 @@ public abstract class Library implements IPrimitives {
 					}
 					Functor annotation = method.getAnnotation(Functor.class);
 					String name = annotation.value();
-					addValidMethod(tablePrimitives, PrimitiveInfo.FUNCTOR, method, name);
+					addValidMethod(tablePrimitives, PrimitiveInfo.Type.FUNCTOR, method, name);
 				} 
 				
 				if (method.isAnnotationPresent(Directive.class)) {
@@ -194,7 +197,7 @@ public abstract class Library implements IPrimitives {
 					}
 					Directive annotation = method.getAnnotation(Directive.class);
 					String name = annotation.value();
-					addValidMethod(tablePrimitives, PrimitiveInfo.DIRECTIVE, method, name);
+					addValidMethod(tablePrimitives, PrimitiveInfo.Type.DIRECTIVE, method, name);
 				}
 			}
 			return tablePrimitives;
@@ -203,7 +206,8 @@ public abstract class Library implements IPrimitives {
 		}
 	}
 	
-	private void addValidMethod(List<PrimitiveInfo>[] table, int type, Method method, String name) {
+	private void addValidMethod(Map<PrimitiveInfo.Type, List<PrimitiveInfo>> table,
+                                PrimitiveInfo.Type type, Method method, String name) {
 		int index = name.lastIndexOf('/');
 		if (index != -1) {
 			Class<?>[] clist = method.getParameterTypes();
@@ -219,7 +223,7 @@ public abstract class Library implements IPrimitives {
 						}
 					if (valid) {
 						PrimitiveInfo p = new PrimitiveInfo(type, name, this, method, arity);
-						table[type].add(p);
+						table.get(type).add(p);
 					}
 				}
 			} catch (Exception e) {}

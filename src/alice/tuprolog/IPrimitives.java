@@ -18,6 +18,7 @@
 package alice.tuprolog;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Template for predicate.
@@ -28,6 +29,6 @@ public interface IPrimitives {
 	/**
 	 * gets the list of primitives defined in the library
 	 */
-	List<PrimitiveInfo>[] getPrimitives();
+	Map<PrimitiveInfo.Type, List<PrimitiveInfo>> getPrimitives();
 	
 }

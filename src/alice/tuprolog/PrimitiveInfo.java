@@ -27,11 +27,13 @@ import java.lang.reflect.Method;
  */
 public class PrimitiveInfo {
 	
-	public final static int DIRECTIVE  = 0;
-	public final static int PREDICATE  = 1;
-	public final static int FUNCTOR    = 2;
+	enum Type {
+		DIRECTIVE,
+		PREDICATE,
+		FUNCTOR
+	}
 	
-	private int type;
+	private Type type;
 	/** method to be call when evaluating the built-in*/
 	private Method method;
 	/** library object where the built-in is defined */
@@ -40,7 +42,7 @@ public class PrimitiveInfo {
 	private Term[] primitive_args;
 	private String primitive_key;
 	
-	public PrimitiveInfo(int type, String key, Library lib, Method m, int arity) throws NoSuchMethodException {
+	public PrimitiveInfo(Type type, String key, Library lib, Method m, int arity) throws NoSuchMethodException {
 		if (m == null)
 			throw new NoSuchMethodException();
 		this.type = type;
@@ -64,18 +66,18 @@ public class PrimitiveInfo {
 	}
 	
 	public boolean isDirective() {
-		return (type == DIRECTIVE);
+		return (type == Type.DIRECTIVE);
 	}
 	
 	public boolean isFunctor() {
-		return (type == FUNCTOR);
+		return (type == Type.FUNCTOR);
 	}
 	
 	public boolean isPredicate() {
-		return (type == PREDICATE);
+		return (type == Type.PREDICATE);
 	}
 	
-	public int getType() {
+	public Type getType() {
 		return type;
 	}
 	
