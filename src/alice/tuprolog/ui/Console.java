@@ -20,7 +20,7 @@ import alice.tuprolog.event.SpyListener;
 import alice.tuprolog.event.WarningEvent;
 import alice.tuprolog.event.WarningListener;
 
-public class CUIConsole extends Automaton implements OutputListener, SpyListener, WarningListener {
+public class Console extends Automaton implements OutputListener, SpyListener, WarningListener {
 
     BufferedReader  stdin;
     Prolog          engine;
@@ -30,7 +30,7 @@ public class CUIConsole extends Automaton implements OutputListener, SpyListener
         "tuProlog " + Prolog.getVersion() + " - DEIS, Università di Bologna a Cesena\n"+
         new java.util.Date();
        
-    public CUIConsole(String[] args) {
+    public Console(String[] args) {
 
         if (args.length>1) {
             System.err.println("args: { theory file }");
@@ -42,17 +42,16 @@ public class CUIConsole extends Automaton implements OutputListener, SpyListener
         engine.addWarningListener(this);
         engine.addOutputListener(this);
         engine.addSpyListener(this);
-        if (args.length>0) {
+        if (args.length > 0)
             try {
                 engine.setTheory(new Theory(new FileInputStream(args[0])));
-            } catch (InvalidTheoryException ex){
+            } catch (InvalidTheoryException ex) {
                 System.err.println("invalid theory - line: "+ex.line);
                 System.exit(-1);
             } catch (Exception ex){
                 System.err.println("invalid theory.");
                 System.exit(-1);
             }
-        }
     }
 
     @Override
@@ -62,11 +61,11 @@ public class CUIConsole extends Automaton implements OutputListener, SpyListener
     }
 
     public void goalRequest() {
-        String goal="";
-        while (goal.equals("")){
+        String goal = "";
+        while (goal.equals("")) {
             System.out.print("\n?- ");
             try {
-				goal=stdin.readLine();
+				goal = stdin.readLine();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -85,19 +84,18 @@ public class CUIConsole extends Automaton implements OutputListener, SpyListener
         	} else
         		if (!engine.hasOpenAlternatives()) {
         			String binds = info.toString();
-        			if (binds.equals("")) {
+        			if (binds.equals(""))
         				System.out.println("yes.");
-        			} else {
+        			else
         				System.out.println(solveInfoToString(info) + "\nyes.");
-        			}
         			become("goalRequest");
         		} else {
         			String bindings = solveInfoToString(info); 
         			System.out.print((bindings == "" ? "true" : bindings) + " ? ");
         			become("getChoice");
         		}
-        } catch (MalformedGoalException ex){
-            System.out.println("syntax error in goal:\n"+goal);
+        } catch (MalformedGoalException ex) {
+            System.out.println("syntax error in goal:\n" + goal);
             become("goalRequest");
         }
     }
@@ -107,9 +105,7 @@ public class CUIConsole extends Automaton implements OutputListener, SpyListener
     	try {
 			for (Iterator<Var> i = result.getBindingVars().iterator(); i.hasNext();) {
 				Var v = (Var) i.next();
-				if (v != null &&
-					!v.isAnonymous() &&
-					v.isBound() &&
+				if (v != null && !v.isAnonymous() && v.isBound() &&
 					(!(v.getTerm() instanceof Var) || (!((Var) (v.getTerm())).getName().startsWith("_")))) {
 					s += v.getName() + " / " + v.getTerm();
 					if (i.hasNext())
@@ -123,24 +119,23 @@ public class CUIConsole extends Automaton implements OutputListener, SpyListener
     public void getChoice() {
         String choice = "";
         try {
-            while (true){
+            while (true) {
                 choice = stdin.readLine();
                 if (!choice.equals(";") && !choice.equals(""))
-                    System.out.println("\nAction ( ';' for more choices, otherwise <return> ) ");
+                    System.out.println("\nAction ( ';' for more choices, otherwise <return> )");
                 else
                     break;
             }
-        } catch (IOException ex) {
-        }
+        } catch (IOException ex) {}
         if (!choice.equals(";")) {
 		    System.out.println("yes.");
 		    engine.solveEnd();
 		    become("goalRequest");
-		} else {
+		} else
 		    try {
 		    	System.out.println();
 		        info = engine.solveNext();
-		        if (!info.isSuccess()){
+		        if (!info.isSuccess()) {
 		            System.out.println("no.");
 		            become("goalRequest");
 		        } else {
@@ -152,7 +147,6 @@ public class CUIConsole extends Automaton implements OutputListener, SpyListener
 		        System.out.println("no.");
 		        become("goalRequest");
 		    }
-		}
     }
 
     @Override
@@ -171,7 +165,7 @@ public class CUIConsole extends Automaton implements OutputListener, SpyListener
     }
 
     public static void main(String[] args) {
-        new Thread(new CUIConsole(args)).start();
+        new Thread(new Console(args)).start();
     }
 
 }

@@ -52,7 +52,7 @@
 				<include name="**/*.png" />
 			</fileset>
 			<manifest>
-				<attribute name="Main-Class" value="alice.tuprolog.ui.CUIConsole" />
+				<attribute name="Main-Class" value="alice.tuprolog.ui.Console" />
 			</manifest>
 		</jar>
 		<delete dir="${build.dir}"/>
